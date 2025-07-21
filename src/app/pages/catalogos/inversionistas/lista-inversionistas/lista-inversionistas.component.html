@@ -19,7 +19,7 @@
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+               <th pSortableColumn="key">ID <p-sortIcon field="key"></p-sortIcon></th>
                 <th pSortableColumn="nombre">Marca <p-sortIcon field="nombre"></p-sortIcon>
                     <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'nombre')" class="w-full" /> -->
                 </th>
@@ -50,7 +50,7 @@
                         (click)="link(data.id)"></button>
 
                     <button pButton icon="pi pi-trash" class="p-button-sm p-button-rounded p-button-danger"
-                        (click)="confirmDelete(data)"></button>
+                        (click)="confirmDelete(data.id)"></button>
                 </td>
             </tr>
         </ng-template>

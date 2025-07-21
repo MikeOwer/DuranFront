@@ -82,6 +82,7 @@ export class InversionistaComponent implements OnInit {
       password: new FormControl(''),
       celular: new FormControl(''),
       telefono: new FormControl(''),
+      key: new FormControl('', Validators.required)
     });
 
 
@@ -143,6 +144,7 @@ export class InversionistaComponent implements OnInit {
       phone_number: this.form.value.telefono,
       cellphone_number: this.form.value.celular,
       balance: this.form.value.saldo,
+      key: this.form.value.key
     }
 
     if (this.idData) {

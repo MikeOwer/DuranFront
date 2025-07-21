@@ -34,14 +34,20 @@
                         </p-inputgroup>
                         <p-inputgroup>
                             <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText [(ngModel)]="data.key" formControlName="key" autocomplete="new-password"
+                                placeholder="key" />
+                        </p-inputgroup>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
                                 <i class="pi pi-envelope"></i>
                             </p-inputgroup-addon>
                             <input pInputText [(ngModel)]="data.email" formControlName="email"
                                 autocomplete="new-password" placeholder="Email" />
                         </p-inputgroup>
-                    </div>
-                    <div class="flex flex-col md:flex-row gap-6">
-                        
                         <p-inputgroup>
                             <p-inputgroup-addon>
                                 <i class="pi pi-mobile"></i>

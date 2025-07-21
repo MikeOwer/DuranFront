@@ -57,7 +57,7 @@ export class ListaInversionistasComponent implements OnInit {
     });*/
 
     this.service.get(`investor_catalog`, {}, true).subscribe({
-       next: (data) => {
+       next: (data: any) => {
         console.log(data);
         this.data = data.data;
       }
@@ -66,8 +66,14 @@ export class ListaInversionistasComponent implements OnInit {
     this.generalSocketService.onEvent('investor-catalog', (event: any) => {
       console.log('Evento recibido desde servicio:', event);
       if (event.action === 'created') {
+        console.log('Create');
         this.data = [...this.data, event.data];
+      }else if (event.action === 'deleted') {
+        console.log('Delete');
+        const idEliminado = event.data.id;
+        this.data = this.data.filter(item => item.id !== idEliminado);
       }
+      
     });
   }
 
@@ -99,17 +105,10 @@ export class ListaInversionistasComponent implements OnInit {
   }
 
   confirmDelete(item: any) {
-    this.confirmationService.confirm({
-      message: '¿Estás seguro de eliminar?',
-      header: 'Confirmación',
-      icon: 'pi pi-exclamation-triangle',
-      accept: async () => {
-        await this.realtimeService.deleteRecord(item.collectionName, item.id);
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Eliminado',
-          detail: 'Eliminado con exito'
-        });
+     console.log(item);
+    this.service.delete(`investor_catalog`, item).subscribe({
+      next: (res: any) => {
+        console.log(res);
       }
     });
   }
