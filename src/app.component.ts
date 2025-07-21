@@ -6,16 +6,16 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { GeneralWebsocketService } from './app/layout/service/general-websocket.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './app/layout/interceptors/auth.interceptor'; 
+import { AuthInterceptor } from './app/layout/interceptors/auth.interceptor';
 import { ApiServiceService } from './app/layout/service/api-service.service';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterModule,CommonModule,ToastModule],
+    imports: [RouterModule, CommonModule, ToastModule],
     providers: [
         MessageService,
-        WebsocketService, 
+        WebsocketService,
         GeneralWebsocketService,
         {
             provide: HTTP_INTERCEPTORS,
@@ -38,21 +38,22 @@ export class AppComponent {
         this.generalSocketService.initPusher('customer-guarantee');
         this.generalSocketService.initPusher('pagos-realizados');
         this.generalSocketService.initPusher('investor-catalog');
+        this.generalSocketService.initPusher('credito');
 
 
     }
 
     ngOnInit() {
         this.apiService.getMe().subscribe({
-        next: (res: any) => {
-            console.log('Usuario cargado: ', res.user);
-        },
-        error: (err) => {
-            console.log('No autenticado, se redirige por interceptor');
-            console.log('Error:',err);
-            this.router.navigate(['./auth/login']);
-        } 
+            next: (res: any) => {
+                console.log('Usuario cargado: ', res.user);
+            },
+            error: (err) => {
+                console.log('No autenticado, se redirige por interceptor');
+                console.log('Error:', err);
+                this.router.navigate(['./auth/login']);
+            }
         });
     }
-    
+
 }

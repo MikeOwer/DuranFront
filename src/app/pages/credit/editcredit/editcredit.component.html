@@ -149,17 +149,21 @@
         <form [formGroup]="formStep3">
           <div class="p-fluid grid">
             <div style="display: flex; justify-content: flex-end;">
-              
+
               @if(data.etapa === 'cotizacion'){
-              <p-button class="p-button-rounded"  label="Aprobacion" (onClick)="onAcceptCredit()"></p-button>
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded"  label="Cancelar" (onClick)="onCancelCredit()"></p-button>
+              <p-button class="p-button-rounded" label="Aprobacion" (onClick)="onAcceptCredit()"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Cancelar"
+                (onClick)="onCancelCredit()"></p-button>
               } @else if(data.etapa === 'aprobacion'){
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded " label="Aprobar"  (onClick)="onApproveCredit(true)"></p-button>
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded"  label="Degradar" (onClick)="onApproveCredit(false)"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded " label="Aprobar"
+                (onClick)="onApproveCredit(true)"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Degradar"
+                (onClick)="onApproveCredit(false)"></p-button>
               } @else if(data.etapa === 'aprobado'){
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded"  label="Cancelar" (onClick)="onCancelCredit()"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Cancelar"
+                (onClick)="onCancelCredit()"></p-button>
               }
-              
+
             </div>
             <div class="field col-12 md:col-6 mb-3">
               <p-inputGroup>
@@ -212,11 +216,33 @@
               </p-inputGroup>
             </div>
 
-            <div class="field col-12 md:col-6 mb-3">
-              <p-inputGroup>
-                <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
-                <p-datepicker id="fecha_inicial" formControlName="fecha_inicial" placeholder=" Fecha Inicial" />
-              </p-inputGroup>
+            <div class="field col-12 md:col-6 mb-3 flex gap-2">
+              <div class="flex-1">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
+                  <p-datepicker id="fecha_inicial" formControlName="fecha_inicial" placeholder=" Fecha Inicial" />
+                </p-inputGroup>
+              </div>
+
+              <!-- Aprovacion stage only selectors -->
+              @if(data.etapa === 'aprobacion'){
+              <div class="flex-1">
+                <div class="w-72">
+                  <p-dropdown [options]="sucursales" optionLabel="nombre" placeholder="Selecciona una sucursal"
+                    formControlName="sucursalSeleccionada" optionValue="id" [showClear]="true"
+                    (onChange)="onSucursalChange($event)">
+                  </p-dropdown>
+                </div>
+              </div>
+              <div class="flex-1">
+                <div class="w-72">
+                  <p-dropdown [options]="inversionistas" optionLabel="name" placeholder="Selecciona un inversionista"
+                    formControlName="inversionistaSeleccionado" optionValue="id" [showClear]="true"
+                    optionDisabled="nada" (onChange)="onInversionistaChange($event)">
+                  </p-dropdown>
+                </div>
+              </div>
+              }
             </div>
           </div>
         </form>

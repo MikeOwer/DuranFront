@@ -27,18 +27,18 @@ export class AppMenu {
             {
                 label: 'Funciones',
                 items: [
-                    { label: 'pagos extraordinarios', icon: 'pi pi-compass', routerLink: ['./pagos-extraordinarios']},
-                    { label: 'Caja', icon: 'pi pi-shopping-cart', routerLink: ['./caja']},
+                    { label: 'pagos extraordinarios', icon: 'pi pi-compass', routerLink: ['./pagos-extraordinarios'] },
+                    { label: 'Caja', icon: 'pi pi-shopping-cart', routerLink: ['./caja'] },
                     { label: 'Clientes', icon: 'pi pi-users', routerLink: ['./clientes/lista'] },
                     { label: 'Credito', icon: 'pi pi-credit-card', routerLink: ['./credito'] },
-                    { label: 'Historial de actividades', icon: 'pi pi-history', routerLink: ['./historial']},
+                    { label: 'Historial de actividades', icon: 'pi pi-history', routerLink: ['./historial'] },
                     { label: 'Historial de cartera', icon: 'pi pi-wallet', routerLink: ['./cartera'] },
                     { label: 'Inversionistas', icon: 'pi pi-building', routerLink: ['./ver-inversionistas'] },
                     { label: 'Bancos', icon: 'pi pi-money-bill', routerLink: ['./bancos'] },
                     {
                         label: 'Catalogos', icon: 'pi pi-book', routerLink: ['./catalogos'],
                         items: [
-                            { label: 'Sucursales', icon: 'pi pi-home', routerLink: ['./catalogos/sucursales/lista'] },
+                            //{ label: 'Sucursales', icon: 'pi pi-home', routerLink: ['./catalogos/sucursales/lista'] },
                             { label: 'Vehiculos', icon: 'pi pi-car', routerLink: ['./catalogos/vehiculos/lista'] },
                             { label: 'Inversionistas', icon: 'pi pi-building-columns', routerLink: ['./catalogos/inversionistas/lista'] }
                         ]
@@ -49,7 +49,7 @@ export class AppMenu {
                             { label: 'Usuarios', icon: 'pi pi-user', routerLink: ['./configuracion/usuarios/lista'] },
                         ]
                     },
-                    { label: 'Pagos', icon: 'pi pi-compass', routerLink: ['./pagos']}
+                    { label: 'Pagos', icon: 'pi pi-compass', routerLink: ['./pagos'] }
                 ]
             }
         ];

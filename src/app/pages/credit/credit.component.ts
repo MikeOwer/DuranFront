@@ -13,6 +13,7 @@ import { ToastModule } from "primeng/toast";
 import { Subscription, forkJoin } from "rxjs";
 import { DialogModule } from 'primeng/dialog';
 import { ServicioGeneralService } from "../../layout/service/servicio-general/servicio-general.service";
+import { GeneralWebsocketService } from "../../layout/service/general-websocket.service";
 
 @Component({
   selector: "app-credit",
@@ -60,7 +61,8 @@ export class CreditComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private router: Router,
     private activatedRouter: ActivatedRoute,
-    private servicioGeneral: ServicioGeneralService
+    private servicioGeneral: ServicioGeneralService,
+    private generalSocketService: GeneralWebsocketService,
   ) { }
 
   ngOnInit() {
@@ -77,7 +79,7 @@ export class CreditComponent implements OnInit {
         console.log(response);
       }
     ))*/
-    
+
 
     this.servicioGeneral.get('credito', {}, true).subscribe((creditos: any) => {
       forkJoin({
@@ -97,17 +99,28 @@ export class CreditComponent implements OnInit {
           };
         });
 
-        console.log('datos completos de credito en onInit de credit component',this.data);
+        console.log('datos completos de credito en onInit de credit component', this.data);
       });
 
     });
 
+    this.generalSocketService.onEvent('credito', (event: any) => {
+      console.log('Evento recibido desde servicio:', event);
+      if (event.action === 'created') {
+        this.data = [...this.data, event.data];
+      } else if (event.action === 'deleted') {
+        console.log('Delete');
+        const idEliminado = event.data.id;
+        this.data = this.data.filter(item => item.id !== idEliminado);
+      }
+    });
+
 
   }
-//Cambios aqui -----------------------------------------------------------------------------------------------------------------------
-  link(id: any = undefined,tipo: string = 'nuevo') {
+  //Cambios aqui -----------------------------------------------------------------------------------------------------------------------
+  link(id: any = undefined, tipo: string = 'nuevo') {
     if (id) {
-      console.log('Id en creditComponent',id);
+      console.log('Id en creditComponent', id);
       this.router.navigate([this.urlPage + tipo + id]);
     } else {
       console.log(this.urlPage + 'nuevo/')

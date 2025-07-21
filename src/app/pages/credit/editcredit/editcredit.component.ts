@@ -22,6 +22,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ServicioGeneralService } from '../../../layout/service/servicio-general/servicio-general.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from '../../../layout/service/auth.service';
+import { GeneralWebsocketService } from "../../../layout/service/general-websocket.service";
+
 
 @Component({
   selector: 'app-editcredit',
@@ -63,6 +65,7 @@ export class EditcreditComponent implements OnInit {
   data: any = {};
   dataApprove: any = {};
   idData?: number;
+  creditoChannelName: string = 'credito';
   urlPage: string = './dashboard/credito';
   titulo: string = 'Crédito'
   items: any[] = [
@@ -85,6 +88,11 @@ export class EditcreditComponent implements OnInit {
   vehiculoSeleccionado: any;
   modo: 'nuevo' | 'cotizar' | 'editar' = 'nuevo';
 
+  sucursales: any[] = [];
+  sucursalSeleccionada: any = null;
+  inversionistas: any[] = [];
+  inversionistaSeleccionado: any = null;
+
   constructor(
     private fb: FormBuilder,
     private servicio: DatarealtimeService,
@@ -94,16 +102,31 @@ export class EditcreditComponent implements OnInit {
     private servicioGeneral: ServicioGeneralService,
     private sanitizer: DomSanitizer,
     private routerUrl: Router,
-    public authService: AuthService
+    public authService: AuthService,
+    private generalWebsocketService: GeneralWebsocketService,
   ) { }
 
   ngOnInit(): void {
+
+    this.generalWebsocketService.initPusher(this.creditoChannelName);
     const url = this.routerUrl.url;
 
     if (url.includes('cotizar')) {
       this.modo = 'cotizar';
     } else if (url.includes('editar')) {
       this.modo = 'editar';
+      this.servicioGeneral.get('sucursal', {}, false).subscribe({
+        next: (data) => {
+          this.sucursales = data.data;
+          console.log('Sucursales:', this.sucursales);
+        }
+      })
+      this.servicioGeneral.get('investor_catalog', {}, false).subscribe({
+        next: (data) => {
+          this.inversionistas = data.data;
+          console.log('Inversionistas:', this.inversionistas);
+        }
+      })
     } else {
       this.modo = 'nuevo';
     }
@@ -149,6 +172,8 @@ export class EditcreditComponent implements OnInit {
       enganche: new FormControl('', Validators.required),
       tasa_fmd: new FormControl('', Validators.required),
       fecha_inicial: new FormControl('', Validators.required),
+      sucursalSeleccionada: new FormControl('1', Validators.required),
+      inversionistaSeleccionado: new FormControl('1', Validators.required),
     });
 
     this.formMarca = this.fb.group({
@@ -196,7 +221,7 @@ export class EditcreditComponent implements OnInit {
 
     if (this.form.valid && this.formStep2.valid && this.formStep3.valid && this.formMarca.valid) {
       try {
-        console.log('Data completa en submitForm de editCreditComponent:',this.data);
+        console.log('Data completa en submitForm de editCreditComponent:', this.data);
 
         /* // 1. Actualizar cliente
         await this.servicioGeneral.update('customers', this.data.customer_id, {
@@ -234,11 +259,13 @@ export class EditcreditComponent implements OnInit {
           enganche: this.formStep3.value.enganche,
           tasa_fmd: this.formStep3.value.tasa_fmd,
           fecha_inicial: this.formStep3.value.fecha_inicial.toISOString().split('T')[0],
+          sucursal_id: this.formStep3.value.sucursalSeleccionada,
+          investor_catalog_id: this.formStep3.value.inversionistaSeleccionado,
         };
 
         // 4. Crear o actualizar el crédito
         if (this.idData) {
-          console.log('El id en editCreditComponent para probar',this.idData);
+          console.log('El id en editCreditComponent para probar', this.idData);
           this.data.etapa = 'cotizacion'; // Hardcodeo de nuevo, ver como manejarlo despues
           this.servicioGeneral.update(this.model, this.idData, this.data, true).subscribe({
             next: (data: any) => {
@@ -257,19 +284,20 @@ export class EditcreditComponent implements OnInit {
               });
             }
           });
+
+          this.servicioGeneral.get(`credito/${this.idData}`, {}, false).subscribe({
+            next: (data: any) => {
+              console.log('Datos del crédito actualizado:', data);
+            },
+          });
         } else {
           this.modo === 'cotizar' ? this.data.etapa = 'cotizacion' : this.data.etapa = 'aprobacion';
           this.data.codigo = 10000;
-          //Inicia el hardcodeo temporal, falta agregar que en nuevo/ se debe poner el id de inversionista y sucursal
-          this.data.investor_catalog_id = 1;
-          this.data.sucursal_id = 1;
-          //delete this.data.avales;
-          //delete this.data.disabled;
-          ///////////////////////////////////////////////////////////////////////////////////////////////////////////          
-          const vehiclePrice = {price: this.formMarca.value.monto}
-          console.log('VehicleID en credito',this.data.vehicle_id);
-          
-          this.servicioGeneral.update('vehicles/price/'+this.data.vehicle_id,this.data.vehicle_id, vehiclePrice, false).subscribe({
+
+          const vehiclePrice = { price: this.formMarca.value.monto }
+          console.log('VehicleID en credito', this.data.vehicle_id);
+
+          this.servicioGeneral.update('vehicles/price/' + this.data.vehicle_id, this.data.vehicle_id, vehiclePrice, false).subscribe({
             next: (data: any) => {
             },
             error: (err: any) => {
@@ -277,7 +305,7 @@ export class EditcreditComponent implements OnInit {
             }
           })
 
-          console.log('El id en editCreditComponent para probar el post',this.data);
+          console.log('El id en editCreditComponent para probar el post', this.data);
           this.servicioGeneral.post(this.model, this.data, true).subscribe({
             next: (data: any) => {
               console.log('Datos completos: ', data);
@@ -339,6 +367,22 @@ export class EditcreditComponent implements OnInit {
       this.avales = aval.data;
       this.showGuarantorDialog = true;
     });
+  }
+
+  onSucursalChange(event: any) {
+    this.sucursalSeleccionada = event.value;
+    this.formStep3.patchValue({
+      sucursalSeleccionada: this.sucursalSeleccionada
+    })
+    console.log('formStep3 onSucursalChange:', this.formStep3.value);
+  }
+
+  onInversionistaChange(event: any) {
+    this.inversionistaSeleccionado = this.inversionistas.find((i: any) => i.id == event.value);
+    this.formStep3.patchValue({
+      inversionistaSeleccionado: this.inversionistaSeleccionado,
+    });
+    console.log('Inversionista seleccionado:', this.inversionistaSeleccionado);
   }
 
   async seleccionarCliente(cliente: any) {
@@ -431,7 +475,7 @@ export class EditcreditComponent implements OnInit {
             guarantee: guarantee || null
           };
 
-          console.log('datos completos de credito en onInit de edit credit component',this.data);
+          console.log('datos completos de credito en onInit de edit credit component', this.data);
           this.form.patchValue({
             nombre: this.data.cliente.name,
             direction: this.data.cliente.address,
@@ -454,7 +498,9 @@ export class EditcreditComponent implements OnInit {
             plazo: this.data.plazo,
             tasa_fmd: this.data.tasa_fmd,
             enganche: this.data.enganche,
-            fecha_inicial: this.data.fecha_inicial
+            fecha_inicial: this.data.fecha_inicial,
+            sucursalSeleccionada: this.data.sucursal_id,
+            inversionistaSeleccionado: this.data.investor_catalog_id,
           });
         });
       });
@@ -501,15 +547,15 @@ export class EditcreditComponent implements OnInit {
   }
 
   //Prueba de rutas para actualizar etapas en creditos
-  onApproveCredit(isApprove: boolean):void{
+  onApproveCredit(isApprove: boolean): void {
     const url = this.model + '/approve';
     const etapa = isApprove ? 'aprobado' : 'cotizacion';
-    const stageData = {'etapa':etapa}
-    if(this.idData){
+    const stageData = { 'etapa': etapa }
+    if (this.idData) {
       console.log('Entra al credito aprobado');
-      console.log('DatosEtapa: ',stageData);
+      console.log('DatosEtapa: ', stageData);
       console.log('IdEtapa: ', this.idData);
-      console.log('Datos completos para ver la etapa:',this.data);
+      console.log('Datos completos para ver la etapa:', this.data);
       this.servicioGeneral.update(url, this.idData, stageData, true).subscribe({
         next: (data: any) => {
           this.messageService.add({
@@ -533,8 +579,8 @@ export class EditcreditComponent implements OnInit {
   onAcceptCredit(): void {
     this.dataApprove = {
       etapa: 'aprobacion',
-      investor_catalog_id: 1,
-      sucursal_id: 1,
+      investor_catalog_id: this.inversionistaSeleccionado ? this.inversionistaSeleccionado.id : 1, // Hardcodeo temporal
+      sucursal_id: this.sucursalSeleccionada ? this.sucursalSeleccionada.id : 1,
     }
     this.servicioGeneral.update(this.model, this.data.id, this.dataApprove, true).subscribe({
       next: (data: any) => {
