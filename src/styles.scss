@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+@use './tailwind.css';
+@use './assets/layout/layout.scss';
+@use 'primeicons/primeicons.css';
+@use './assets/demo/demo.scss';
+
+.btn-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h4,
+h5,
+h6 {
+    margin-bottom: 0px !important;
+}
+
+.toolbar2 {
+    margin-bottom: 2rem !important;
+}
+
+
+.logo-login {
+    width: 100px;
+    margin: 0rem auto 1rem;
+}
+
+.p-toolbar {
+    border: none !important;
+}

@@ -1,0 +1,36 @@
+<a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    (click)="onBack()">
+    regresar
+</a>
+<form [formGroup]="form" (submit)="submitData()" class="card" [autocomplete]="'off'">
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-xl flex-col">{{titulo}}</div>
+            <button type="submit" pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                Guardar {{texto}}
+            </button>
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-sm flex-col">Información</div>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6">
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.nombre" formControlName="nombre" autocomplete="new-password"
+                    placeholder="Nombre" />
+            </p-inputgroup>
+            <p-inputgroup *ngIf="idData">
+                <p-select [options]="estatus" [(ngModel)]="data.disabled" formControlName="disabled" optionLabel="name"
+                    optionValue="value" placeholder="Estatus" />
+            </p-inputgroup>
+        </div>
+    </div>
+</form>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

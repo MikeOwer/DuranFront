@@ -1,0 +1,136 @@
+<div class="card flex flex-col gap-14">
+
+    <p-toolbar class="gap-10">
+
+        <ng-template #start>
+            <div class="flex flex-col items-center text-center">
+                <h1 class="font-semibold text-xl">{{ titulo }}</h1>
+                <p>fecha de filtrado de - a -</p>
+            </div>
+        </ng-template>
+        <div class="flex items-center gap-3">
+            <p-dropdown [options]="inversionistas" [(ngModel)]="inversionistaSeleccionado" optionLabel="nombre"
+                optionValue="id" placeholder="Seleccionar inversionista" (onChange)="filtrarClientesPorInversionista()"
+                [showClear]="true" class="w-full md:w-20rem"></p-dropdown>
+
+
+        </div>
+        <ng-template #end>
+            <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
+                class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()">
+            </button>
+
+            <input pInputText class="custom-input mr-2" type="text" name="buscador" placeholder="Buscar"
+                [(ngModel)]="globalFilter" [ngModelOptions]="{ standalone: true }" (input)="onFilterGlobal($event)" />
+
+            <button pButton label="Aplicar pagos" (click)="onActivarPagos()"></button> <!-- Boton de prueba -->
+
+            <p-multiSelect class="w-full md:w-20rem" [options]="columnas" [(ngModel)]="columnasVisibles"
+                optionLabel="header" placeholder="Mostrar columnas" display="chip">
+            </p-multiSelect>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="data" stripedRows [paginator]="true" [rows]="10"
+        [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5, 10, 20]"
+        [scrollable]="true" scrollDirection="horizontal" scrollHeight="flex">
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngIf="mostrarColumna('nombre')" pSortableColumn="nombre" pFrozenColumn [style.width]="'100px'"
+                    class="sortable-header">
+                    <span class="th-content">
+                        Cliente <p-sortIcon field="nombre"></p-sortIcon>
+                    </span>
+                </th>
+                <th *ngIf="mostrarColumna('id')" pSortableColumn="id"> <span class="th-content">
+                        Código <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('tipoCredito')" pSortableColumn="email"> <span class="th-content">
+                        Crédito inicial <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('monto')" pSortableColumn="email"> <span class="th-content">
+                        Tipo de crédito <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('plazo')" pSortableColumn="email"> <span class="th-content">
+                        Plazo <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('fechaPago')" pSortableColumn="celular"><span class="th-content">
+                        Día de pago <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('capital')" pSortableColumn="apellido"><span class="th-content">
+                       Capital <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('saldo')" pSortableColumn="saldo_inicial"><span class="th-content">
+                       Saldo inicial <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('interes')" pSortableColumn="interes"> <span class="th-content">
+                       Interés <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('iva')" pSortableColumn="iva"><span class="th-content">
+                       IVA <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('tm')" pSortableColumn="tm"> <span class="th-content">
+                       TM <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('capital_cobrado')" pSortableColumn="capital_cobrado">
+                    <span class="th-content">
+                       Capital cobrado <p-sortIcon field="nombre"></p-sortIcon>
+                    </span>
+                </th>
+                <th *ngIf="mostrarColumna('interes_cobrado')" pSortableColumn="interes_cobrado">
+                    <span class="th-content">
+                       Interés cobrado <p-sortIcon field="nombre"></p-sortIcon>
+                    </span>
+                </th>
+                <th *ngIf="mostrarColumna('total_cobrado')" pSortableColumn="total_cobrado"><span class="th-content">
+                       Total cobrado  <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('saldo_final')" pSortableColumn="saldo_final"><span class="th-content">
+                       Saldo final <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('comprobacion')" pSortableColumn="comprobacion"><span class="th-content">
+                       Comprobación <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+                <th *ngIf="mostrarColumna('observaciones')" pSortableColumn="observaciones"><span class="th-content">
+                       Observaciones <p-sortIcon field="nombre"></p-sortIcon>
+                    </span></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-data>
+            <tr>
+                <td *ngIf="mostrarColumna('nombre')" pFrozenColumn [style.width]="'100px'" style="white-space: nowrap;">
+                    {{ data.cliente }}</td>
+                <td *ngIf="mostrarColumna('id')" style="white-space: nowrap;">{{data.codigo}}</td>
+                <td *ngIf="mostrarColumna('creditoinicial')" style="white-space: nowrap;">{{
+                    data.credito_inicial }}</td>
+                <td *ngIf="mostrarColumna('tipoCredito')" style="white-space: nowrap;">{{
+                    data.tipo_credito }}</td>
+                <td *ngIf="mostrarColumna('plazo')" style="white-space: nowrap;">{{ data.plazo }}</td>
+                <td *ngIf="mostrarColumna('fechaPago')" style="white-space: nowrap;">{{
+                    data.dia_pago }}</td>
+                <td *ngIf="mostrarColumna('capital')" style="white-space: nowrap;">{{ data.capital }}
+                </td>
+                <td *ngIf="mostrarColumna('interes')" style="white-space: nowrap;">{{ data.interes}}
+                </td>
+                <td *ngIf="mostrarColumna('iva')" style="white-space: nowrap;">{{ data.iva }}</td>
+                <td *ngIf="mostrarColumna('saldo')" style="white-space: nowrap;">{{ data.saldo_inicial
+                    }}</td>
+                <td *ngIf="mostrarColumna('tm')" style="white-space: nowrap;">{{ data.tm }}</td>
+                <td *ngIf="mostrarColumna('capital_cobrado')" style="white-space: nowrap;">{{ data.capital_cobrado }}
+                </td>
+                <td *ngIf="mostrarColumna('interes_cobrado')" style="white-space: nowrap;">{{ data.interes_cobrado }}
+                </td>
+                <td *ngIf="mostrarColumna('total_cobrado')" style="white-space: nowrap;">{{ data.total_cobrado }}</td>
+                <td *ngIf="mostrarColumna('saldo_final')" style="white-space: nowrap;">{{ data.saldo_final }}</td>
+                <td *ngIf="mostrarColumna('comprobacion')" style="white-space: nowrap;">{{ data.comprobacion }}</td>
+                <td *ngIf="mostrarColumna('observaciones')" style="white-space: nowrap;">{{ data.observaciones }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

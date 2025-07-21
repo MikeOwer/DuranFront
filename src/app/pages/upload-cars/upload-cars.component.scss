@@ -1,0 +1,74 @@
+.custom-uploader {
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  height: 300px;
+  position: relative;
+  text-align: center;
+  transition: border-color 0.3s;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-uploader:hover {
+  border-color: #2196f3;
+  background-color: #f0f8ff;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-placeholder .icon {
+  font-size: 6rem;
+  color: #2196f3;
+  margin-bottom: 1rem;
+}
+
+.upload-placeholder p {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+.image-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 10;
+  display: flex;
+  &:hover {
+    background-color: rgba(202, 36, 36, 0.8);
+}
+}
+
+

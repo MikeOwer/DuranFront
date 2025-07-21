@@ -1,0 +1,75 @@
+<a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    (click)="onBack()">
+    regresar
+</a>
+<form [formGroup]="form" (submit)="submitData()" class="card" [autocomplete]="'off'">
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-xl flex-col">{{titulo}}</div>
+            <button type="submit" pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                Guardar {{texto}}
+            </button>
+        </div>
+    </div>
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Informacion</p-tab>
+            <p-tab value="1">Creditos activos</p-tab>
+            <p-tab value="2">Historial</p-tab>
+            <p-tab value="3">Cortes</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <div class="flex flex-col gap-6 w-full">
+                    <div class="flex justify-between">
+                        <div class="font-semibold text-sm flex-col">Información</div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-72">
+                            <p-dropdown 
+                                [options]="bancos" 
+                                optionLabel="account_number"
+                                optionValue="id"
+                                placeholder="Selecciona un banco"
+                                formControlName="bancoSeleccionado"
+                                [showClear]="true"
+                                (onChange)="mostrarCambio()">
+                            </p-dropdown>
+                        </div>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText formControlName="descripcion"
+                                autocomplete="new-password" placeholder="Descripcion" />
+                        </p-inputgroup>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-dollar"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText formControlName="cantidad"
+                                autocomplete="new-password" placeholder="Cantidad" type="number" min="0"/>
+                        </p-inputgroup>
+                        <p-inputgroup>
+                            <p-select [options]="tipo" formControlName="tipo" optionLabel="name"
+                            optionValue="value" placeholder="Tipo de transaccion" />
+                        </p-inputgroup>
+                    </div>
+                </div>
+
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <div class="flex justify-between">
+                    <div class="font-semibold text-sm flex-col"></div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6 mb-3">
+                </div>
+            </p-tabpanel>
+            <p-tabpanel value="2">
+
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</form>

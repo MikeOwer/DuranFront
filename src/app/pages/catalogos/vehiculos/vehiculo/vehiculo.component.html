@@ -1,0 +1,99 @@
+<a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    (click)="onBack()">
+    regresar
+</a>
+<form [formGroup]="form" (submit)="submitData()" class="card" [autocomplete]="'off'">
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-xl flex-col">{{titulo}}</div>
+            <button type="submit" pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                Guardar {{texto}}
+            </button>
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-sm flex-col">Información</div>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6">
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.marca" formControlName="marca" autocomplete="new-password"
+                    placeholder="Marca" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.modelo" formControlName="modelo" autocomplete="new-password"
+                    placeholder="Modelo" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.tipo" formControlName="tipo" autocomplete="new-password"
+                    placeholder="Tipo" />
+            </p-inputgroup>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6">
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.vin" formControlName="vin" autocomplete="new-password"
+                    placeholder="# VIN" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <p-select [options]="duenios" [(ngModel)]="data.numero_duenos" formControlName="numero_duenos"
+                    optionLabel="name" optionValue="value" placeholder="# dueños" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.anio" formControlName="anio" autocomplete="new-password"
+                    placeholder="Año" />
+            </p-inputgroup>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6">
+            <p-inputgroup>
+                <input pInputText [(ngModel)]="data.nombre_ultimo_duenio" formControlName="nombre_ultimo_duenio"
+                    autocomplete="new-password" placeholder="Ultimo dueño" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <input pInputText [(ngModel)]="data.origen" formControlName="origen" autocomplete="new-password"
+                    placeholder="Origen" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <p-select [options]="estatus" [(ngModel)]="data.disabled" formControlName="disabled" optionLabel="name"
+                    optionValue="value" placeholder="Estatus" />
+            </p-inputgroup>
+        </div>
+        <div class="flex flex-col md:flex-row gap-">
+            <p-inputgroup>
+                <input pInputText [(ngModel)]="data.km" formControlName="km"
+                    autocomplete="new-password" placeholder="Kilometraje" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <input pInputText [(ngModel)]="data.precio" formControlName="precio" autocomplete="new-password"
+                    placeholder="Precio" />
+            </p-inputgroup>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6">
+            <p-inputgroup>
+                <input pInputText [(ngModel)]="data.numero_motor" formControlName="numero_motor"
+                    autocomplete="new-password" placeholder="Numero de motor" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <input pInputText [(ngModel)]="data.numero_serie" formControlName="numero_serie"
+                    autocomplete="new-password" placeholder="Numero de serie" />
+            </p-inputgroup>
+        </div>
+    </div>
+</form>
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

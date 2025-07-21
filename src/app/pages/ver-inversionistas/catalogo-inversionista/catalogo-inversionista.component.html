@@ -1,0 +1,56 @@
+<div class="card flex flex-col gap-14">
+    <p-toolbar class="gap-10">
+        <div class="flex flex-col">
+            <h1 class="font-semibold text-xl">{{ titulo }}</h1>
+            <p>fecha de filtrado de - a -</p>
+        </div>
+        <ng-template #end>
+            <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
+                class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
+            <input pInputText class="custom-input mr-2" type="text" name="buscador" placeholder="Buscar"
+                [(ngModel)]="globalFilter" [ngModelOptions]="{standalone: true}" (input)="onFilterGlobal($event)" />
+
+
+        </ng-template>
+    </p-toolbar>
+    <div #start>
+        <button pButton type="button" icon="pi pi-arrow-left" label="Regresar" class="p-button-secondary"
+            (click)="goBack()"></button>
+    </div>
+
+
+    <p-table #dt [value]="data" [paginator]="true" [rows]="10" stripedRows
+        [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="nombre">Nombre del cliente<p-sortIcon field="nombre"></p-sortIcon>
+                </th>
+                <th pSortableColumn="tipo_credito">Tipo de crédito<p-sortIcon field="tipo_credito"></p-sortIcon>
+                </th>
+                <th pSortableColumn="plazos">Plazos<p-sortIcon field="plazos"></p-sortIcon>
+                </th>
+                <th pSortableColumn="credito">Crédito<p-sortIcon field="credito"></p-sortIcon>
+                </th>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-data>
+            <ng-container *ngFor="let credito of data.creditos">
+                <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ credito.vehiculo?.brand }} 
+                    {{ credito.vehiculo.model}}</td>
+                <td>{{ credito.plazo }}</td>
+                <td>{{ credito.monto }}</td>
+            </tr>
+            </ng-container>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

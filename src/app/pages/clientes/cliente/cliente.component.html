@@ -1,0 +1,279 @@
+<a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    style="display: inline-flex; align-items: center; gap: 0.5rem" (click)="onBack()">
+    Regresar
+</a>
+
+<form [formGroup]="form" (submit)="submitData()" class="card" [autocomplete]="'off'">
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-xl flex-col">{{titulo}}</div>
+            <button type="submit" pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                Guardar {{texto}}
+            </button>
+        </div>
+    </div>
+
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Informacion</p-tab>
+            <p-tab value="1">Avales</p-tab>
+            <p-tab value="2">Creditos</p-tab>
+            <p-tab value="3">Subir fotos</p-tab>
+            <p-tab value="4">Historial de actividad</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <div class="flex flex-col gap-6 w-full">
+                    <div class="flex justify-between">
+                        <div class="font-semibold text-sm flex-col">Información</div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText autocomplete="new-password"  
+                                placeholder="Nombre" formControlName="nombre"/>
+                        </p-inputgroup>
+
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText autocomplete="new-password" formControlName="apellido"
+                                placeholder="Apellido" />
+                        </p-inputgroup>
+
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-envelope"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText autocomplete="new-password" formControlName="email" placeholder="Email" />
+                        </p-inputgroup>
+                    </div>
+                    <p-inputgroup>
+                        <p-inputgroup-addon>
+                            <i class="pi pi-user"></i>
+                        </p-inputgroup-addon>
+                        <input pInputText autocomplete="new-password" formControlName="Direction"
+                            placeholder="Dirección" />
+                    </p-inputgroup>
+
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div *ngIf="idData" class="w-full">
+                            <p-dropdown [options]="estatus" optionLabel="name" optionValue="value"
+                                placeholder="Selecciona un estatus" inputId="estatus" />
+                        </div>
+
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-mobile"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText autocomplete="new-password" formControlName="celular"
+                                placeholder="Celular" />
+                        </p-inputgroup>
+
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-mobile"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText autocomplete="new-password" formControlName="telefono"
+                                placeholder="Telefono" />
+                        </p-inputgroup>
+                    </div>
+                </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="1">
+                <div class="flex justify-between">
+                    <div class="font-semibold text-sm flex-col">Datos de aval</div>
+                    <!-- <div class="flex gap-2 mb-2">
+                        <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded mr-2" severity="danger">
+                            Cancelar
+                        </button>
+                        <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                            {{'Agregar nuevo aval'}}
+                        </button>
+                    </div> -->
+                </div>
+
+                <div class="col-span-12 xl:col-span-8">
+                    <p-panel>
+                        <p-fluid [formGroup]="guarantorForm">
+                            <div class="grid grid-cols-2 gap-4">
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Nombre" formControlName="guarantorName"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Apellido" formControlName="guarantorLastName"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Dirección" formControlName="guarantorDirection"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Telefono" formControlName="guarantorcellphone"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-envelope"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Correo" formControlName="guarantoremail"/>
+                                </p-inputgroup>
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Telefono" formControlName="guarantormovil"/>
+                                </p-inputgroup>
+
+                            </div>
+                        </p-fluid>
+                    </p-panel>
+                </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="1">
+                <div class="flex justify-between">
+                    <div class="font-semibold text-sm flex-col">Datos del segundo aval</div>
+                    <!-- <div class="flex gap-2 mb-2">
+                        <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded mr-2" severity="danger">
+                            Cancelar
+                        </button>
+                        <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                            {{'Agregar nuevo aval'}}
+                        </button>
+                    </div> -->
+                </div>
+
+                <div class="col-span-12 xl:col-span-8">
+                    <p-panel>
+                        <p-fluid [formGroup]="guarantorForm2">
+                            <div class="grid grid-cols-2 gap-4">
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Nombre" formControlName="guarantorName2"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Apellido" formControlName="guarantorLastName2"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Dirección" formControlName="guarantorDirection2"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Telefono" formControlName="guarantorcellphone2"/>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-envelope"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Correo" formControlName="guarantoremail2"/>
+                                </p-inputgroup>
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
+                                    <input pInputText placeholder="Telefono" formControlName="guarantormovil2"/>
+                                </p-inputgroup>
+
+                            </div>
+                        </p-fluid>
+                    </p-panel>
+                </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="2">
+                <div class="flex justify-between">
+                    <div class="font-semibold text-sm flex-col">Crédito</div>
+                    <div class="flex gap-2 mb-2">
+                        <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded mr-2" severity="danger">
+                            Cancelar
+                        </button>
+                        <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                            {{'Agregar nuevo crédito'}}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-8">
+                    <p-panel>
+                        <p-fluid [formGroup]="creditForm">
+                            <div class="grid grid-cols-2 gap-4">
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText formControlName="monto" placeholder="Monto a Financiar" />
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                    <input pInputText formControlName="plazo" placeholder="Plazo" />
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
+                                    <input pInputText formControlName="enganche" placeholder="Enganche" />
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-datepicker formControlName="fecha1erPago" [showIcon]="true"
+                                        [iconDisplay]="'input'" [inputStyleClass]="'p-inputtext w-full'" dateFormat
+                                        inputId="fecha1erPago" placeholder="Fecha de 1er pago" />
+
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <input pInputText formControlName="FMD" placeholder="FMD" />
+                                    <p-inputgroup-addon><i>%</i></p-inputgroup-addon>
+                                </p-inputgroup>
+
+                                <p-inputgroup>
+                                    <p-checkbox formControlName="tasa" value="tasa" inputId="tasa" />
+                                    <label for="tasa" class="ml-2">IVA</label>
+                                </p-inputgroup>
+                            </div>
+                        </p-fluid>
+                    </p-panel>
+                </div>
+            </p-tabpanel>
+            <p-tabpanel value="3">
+                <div class="card">
+                    <p-fileUpload #fileUpload name="documentos" accept="image/*" maxFileSize="5000000" [auto]="false"
+                        [multiple]="true" [customUpload]="true" (uploadHandler)="uploadFiles($event)"
+                        (onSelect)="onFilesSelected($event)" (onClear)="onClearFiles()"
+                        chooseLabel="Seleccionar documentos" uploadLabel="Subir" cancelLabel="Cancelar"
+                        styleClass="custom-uploader" (onRemove)="onFileRemoved($event)">
+
+                        <ng-template pTemplate="content">
+                            <div *ngIf="uploadedFiles.length === 0" class="upload-placeholder">
+                                <i class="pi pi-cloud-upload icon"></i>
+                                <h5>Cargar documentos como INE, comprobante domiciliario, pasaporte, etc.</h5>
+                                <p>Arrastra los documentos aquí o haz clic para seleccionarlas</p>
+                            </div>
+
+                            <div *ngIf="uploadedFiles.length > 0" class="uploaded-images">
+                                <h3>Documentos subidos:</h3>
+                                <div class="grid-container">
+                                    <div class="image-wrapper" *ngFor="let file of uploadedFiles; let i = index">
+                                        <button class="delete-button" (click)="removeUploadedFileCallback(i)">
+                                            <i class="pi pi-times"></i>
+                                        </button>
+                                        <img [src]="file.objectURL" alt="Foto de carro" />
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-fileUpload>
+                </div>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</form>

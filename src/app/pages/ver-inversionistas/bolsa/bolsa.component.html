@@ -1,0 +1,150 @@
+<div class="card flex flex-col gap-14">
+    <p-toolbar class="gap-10">
+        <ng-template #start>
+            <h1 class="font-semibold text-xl">{{titulo}}</h1>
+        </ng-template>
+        <ng-template #end>
+            <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
+                class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
+            <input
+                pInputText
+                class="custom-input mr-2"
+                type="text"
+                name="buscador"
+                placeholder="Buscar"
+                [(ngModel)]="globalFilter"
+                [ngModelOptions]="{standalone: true}"
+                (input)="onFilterGlobal($event)"
+            />
+
+
+        </ng-template>
+    </p-toolbar>
+    <div #start>
+        <button pButton type="button" icon="pi pi-arrow-left" label="Regresar" class="p-button-secondary" (click)="goBack()"></button>
+    </div>
+    
+
+    <p-table #dt [value]="billing" [paginator]="true" [rows]="10"
+        stripedRows
+        [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date">Fecha <p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="concept">Concepto<p-sortIcon field="concept"></p-sortIcon>
+                </th>
+                <th pSortableColumn="capital_cobrado">Capital cobrado<p-sortIcon field="capital_cobrado"></p-sortIcon>
+                </th>
+                <th pSortableColumn="interes_cobrado">Interés cobrado<p-sortIcon field="interes_cobrado"></p-sortIcon>
+                </th>
+                <th pSortableColumn="iva">IVA<p-sortIcon field="iva"></p-sortIcon>
+                </th>
+                <th pSortableColumn="total">Total<p-sortIcon field="total"></p-sortIcon></th>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-billing>
+            <tr>
+                <td>{{ billing.fecha | date:'dd-MM-yyyy'}}</td>
+                <td>{{  billing.concepto }}</td>
+                <td>{{  billing.capital_cobrado  | currency}} </td>
+                <td>{{  billing.interes_cobrado | currency}}</td>
+                <td>{{  billing.IVA | currency}}</td>
+                <td>{{  billing.total_cobrado | currency}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+        <tr>
+            <td><strong>TOTAL</strong></td>
+            <td></td>
+            <td>{{ getTotal('capital_cobrado') | currency }}</td>
+            <td>{{ getTotal('interes_cobrado') | currency }}</td>
+            <td>{{ getTotal('IVA') | currency }}</td>
+            <td>{{ getTotal('total_cobrado') | currency }}</td>
+        </tr>
+  </ng-template>
+    </p-table>
+
+    <p-table #dt [value]="investments" [paginator]="true" [rows]="10"
+        stripedRows
+        [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date">Fecha <p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="concept">Concepto<p-sortIcon field="concept"></p-sortIcon>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th pSortableColumn="cantity">Cantidad<p-sortIcon field="cantity"></p-sortIcon></th>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-investments>
+            <tr>
+                <td>{{ investments.fecha | date:'dd-MM-yyyy'}}</td>
+                <td>{{  investments.nombre }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{  investments.cantidad | currency}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+        <tr>
+            <td><strong>TOTAL</strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ getTotalInvestments('cantidad') | currency }}</td>
+        </tr>
+  </ng-template>
+    </p-table>
+
+    <p-table #dt [value]="withdrawals" [paginator]="true" [rows]="10"
+        stripedRows
+        [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date">Fecha <p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="concept">Concepto<p-sortIcon field="concept"></p-sortIcon>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th pSortableColumn="cantity">Cantidad<p-sortIcon field="cantity"></p-sortIcon></th>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-withdrawals>
+            <tr>
+                <td>{{ withdrawals.fecha | date:'dd-MM-yyyy'}}</td>
+                <td>{{  withdrawals.concepto }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{  withdrawals.cantidad | currency}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+        <tr>
+            <td><strong>TOTAL</strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ getTotalWithdrawals('cantidad') | currency }}</td>
+        </tr>
+  </ng-template>
+    </p-table>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

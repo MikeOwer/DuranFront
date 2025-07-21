@@ -1,0 +1,48 @@
+<a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    (click)="onBack()">
+    regresar
+</a>
+<form [formGroup]="form" (submit)="submitData()" class="card" [autocomplete]="'off'">
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-xl flex-col">{{titulo}}</div>
+            <button type="submit" pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                Guardar {{texto}}
+            </button>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-6">
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.name" formControlName="name" autocomplete="new-password"
+                    placeholder="Usuario" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-envelope"></i>
+                </p-inputgroup-addon>
+                <input pInputText [(ngModel)]="data.email" formControlName="email" autocomplete="new-password"
+                    placeholder="Email" />
+            </p-inputgroup>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6">
+            <p-inputgroup *ngIf="idData">
+                <p-select [options]="estatus" [(ngModel)]="data.disabled" formControlName="disabled" optionLabel="name"
+                    optionValue="value" placeholder="Estatus" />
+            </p-inputgroup>
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <i class="pi pi-lock"></i>
+                </p-inputgroup-addon>
+                <input pInputText type="password" [(ngModel)]="pass" autocomplete="new-password"
+                    formControlName="password" placeholder="Password" />
+            </p-inputgroup>
+            <!-- <p-inputgroup>
+                    <p-select [options]="estatus" [(ngModel)]="data.verified" optionLabel="name"
+                        placeholder="Select a City" />
+                </p-inputgroup> -->
+        </div>
+    </div>
+</form>

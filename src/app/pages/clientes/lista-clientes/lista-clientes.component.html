@@ -1,0 +1,102 @@
+<div class="card flex flex-col gap-14"> 
+  <p-toolbar class="gap-10">
+    <ng-template #start>
+      <h1 class="font-semibold text-xl">{{titulo}}</h1>
+    </ng-template>
+    <ng-template #end>
+      <button
+        pButton
+        variant="text"
+        severity="secondary"
+        label="Limpiar filtros"
+        icon="pi pi-filter-slash"
+        class="p-button-sm p-button-rounded mr-2"
+        (click)="clearFilters()"
+      ></button>
+
+      <input
+        pInputText
+        class="mr-2"
+        type="text"
+        name="globalFilter"
+        placeholder="Buscar"
+        [(ngModel)]="globalFilter"
+        (input)="onFilterGlobal($event)"
+      />
+
+      <button
+        pButton
+        icon="pi pi-pencil"
+        class="p-button-sm p-button-rounded mr-2"
+        (click)="link()"
+      >
+        Nuevo {{ texto }}
+      </button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table #dt [value]="data" [paginator]="true" [rows]="10"
+           [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
+           currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]" 
+           selectionMode="single" [(selection)]="selectedProduct"
+           (onRowSelect)="onRowSelect($event)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+        <th pSortableColumn="email">Correo <p-sortIcon field="email"></p-sortIcon></th>
+        <th pSortableColumn="celular">Celular <p-sortIcon field="celular"></p-sortIcon></th>       
+        <th pSortableColumn="direction">Dirección <p-sortIcon field="direction"></p-sortIcon></th>
+        <th pSortableColumn="created">Creado <p-sortIcon field="created"></p-sortIcon></th>
+         <th pSortableColumn="telefono">Telefono <p-sortIcon field="telefono"></p-sortIcon></th> 
+        <th>Opciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-data>
+      <!-- Aquí está el cambio importante -->
+      <tr [pSelectableRow]="data">
+        <td>{{ data.id }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.phone_number }}</td>
+        <td>{{ data.address }}</td>
+        <td>{{ data.phone_number }}</td>
+        <td>{{ data.created_at | date }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2 mb-2" (click)="link(data.id)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-sm p-button-rounded p-button-danger mr-2 mb-2" (click)="confirmDelete(data.id)"></button>
+          <button pButton icon="pi pi-car" class="p-button-sm p-button-rounded mr-2 mb-2" (click)="verVehiculos(data.id)"></button>
+          <button pButton icon="pi pi-dollar" class="p-button-sm p-button-rounded mr-2 mb-2" (click)="verPagos(data.id)"></button>
+          <button pButton icon="pi pi-align-justify" class="p-button-sm p-button-rounded mr-2 mb-2" (click)="verObservaciones(data.id)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
+<p-dialog header="Documentos del Cliente" [(visible)]="displayDialog" [modal]="true" [style]="{width: '400px'}" [closable]="true" (onHide)="onDialogHide()">
+  <div *ngIf="selectedProduct">
+    <div *ngIf="selectedProduct.ine">
+      <h4>INE</h4>
+      <img 
+        *ngIf="selectedProduct?.ine"
+        [src]="getImageUrl(selectedProduct.ine)" 
+        alt="INE" 
+        style="max-width: 100%; max-height: 150px; object-fit: contain;" 
+      />
+    </div>
+
+    <div *ngIf="selectedProduct.comdomicilio" class="mt-4">
+      <h4>Comprobante de Domicilio</h4>
+      <img [src]="getImageUrl(selectedProduct.comdomicilio)" alt="Comprobante Domicilio" style="max-width: 100%; max-height: 150px; object-fit: contain;" />
+    </div>
+
+    <div *ngIf="selectedProduct.solicitudcredito" class="mt-4">
+      <h4>Solicitud de Crédito</h4>
+      <img [src]="getImageUrl(selectedProduct.solicitudcredito)" alt="Solicitud Crédito" style="max-width: 100%; max-height: 150px; object-fit: contain;" />
+    </div>
+  </div>
+</p-dialog>

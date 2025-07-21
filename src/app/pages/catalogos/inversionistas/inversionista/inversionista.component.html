@@ -1,0 +1,75 @@
+<a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    (click)="onBack()">
+    regresar
+</a>
+<form [formGroup]="form" (submit)="submitData()" class="card" [autocomplete]="'off'">
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex justify-between">
+            <div class="font-semibold text-xl flex-col">{{titulo}}</div>
+            <button type="submit" pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
+                Guardar {{texto}}
+            </button>
+        </div>
+    </div>
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Informacion</p-tab>
+            <p-tab value="1">Creditos activos</p-tab>
+            <p-tab value="2">Historial</p-tab>
+            <p-tab value="3">Cortes</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <div class="flex flex-col gap-6 w-full">
+                    <div class="flex justify-between">
+                        <div class="font-semibold text-sm flex-col">Información</div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText [(ngModel)]="data.name" formControlName="nombre"
+                                autocomplete="new-password" placeholder="Nombre" />
+                        </p-inputgroup>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-envelope"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText [(ngModel)]="data.email" formControlName="email"
+                                autocomplete="new-password" placeholder="Email" />
+                        </p-inputgroup>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-mobile"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText [(ngModel)]="data.cellphone_number" formControlName="celular"
+                                autocomplete="new-password" placeholder="Celular" />
+                        </p-inputgroup>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-mobile"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText [(ngModel)]="data.phone_number" formControlName="telefono"
+                                autocomplete="new-password" placeholder="Telefono" />
+                        </p-inputgroup>
+                    </div>
+                </div>
+
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <div class="flex justify-between">
+                    <div class="font-semibold text-sm flex-col"></div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6 mb-3">
+                </div>
+            </p-tabpanel>
+            <p-tabpanel value="2">
+
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</form>

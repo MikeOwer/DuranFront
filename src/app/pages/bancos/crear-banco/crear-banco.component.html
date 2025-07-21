@@ -1,0 +1,76 @@
+<h2>Crear Banco</h2>
+<button pButton 
+        type="button" 
+        label="Regresar" 
+        icon="pi pi-arrow-left" 
+        (click)="goBack()" 
+        class="p-button-secondary">
+</button>
+
+<form [formGroup]="form" (submit)="onSubmit()" class="card" [autocomplete]="'off'">
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Informacion</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <div class="flex flex-col gap-6 w-full">
+                    <div class="flex justify-between">
+                        <div class="font-semibold text-sm flex-col">Información</div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText formControlName="name"
+                                autocomplete="new-password" placeholder="Nombre" />
+                        </p-inputgroup>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText formControlName="account_name"
+                                autocomplete="new-password" placeholder="Nombre de cuenta" />
+                        </p-inputgroup>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText formControlName="account_last_name"
+                                autocomplete="new-password" placeholder="Apellido de cuenta" />
+                        </p-inputgroup>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText formControlName="account_number"
+                                autocomplete="new-password" placeholder="Numero de cuenta" />
+                        </p-inputgroup>
+                        <p-inputgroup>
+                            <p-inputgroup-addon>
+                                <i class="pi pi-user"></i>
+                            </p-inputgroup-addon>
+                            <input pInputText formControlName="balance"
+                                autocomplete="new-password" placeholder="Saldo" />
+                        </p-inputgroup>
+                    </div>
+                </div>
+
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <div class="flex justify-between">
+                    <div class="font-semibold text-sm flex-col"></div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6 mb-3">
+                </div>
+            </p-tabpanel>
+            <p-tabpanel value="2">
+
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+    <button pButton type="submit" [disabled]="form.invalid">Guardar</button>
+</form>

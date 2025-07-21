@@ -1,0 +1,305 @@
+<div class="card-container">
+  <a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    style="display: inline-flex; align-items: center; gap: 0.5rem" (click)="onBack()">
+    Regresar
+  </a>
+
+  <p-card class="clean-card" header="Subir Información del Auto">
+    <!-- Tabs de PrimeNG -->
+    <p-tabView [(activeIndex)]="activeIndex">
+      <!-- Tab 1: Información Básica -->
+      <p-tabPanel header="Información Aval">
+        <form [formGroup]="form">
+          <div class="p-fluid grid">
+            <div style="display: flex; justify-content: flex-end;">
+              <p-button class="p-button-rounded p-button-icon-only" (onClick)="onSearch()">
+                <i class="pi pi-search"></i>
+              </p-button>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                <input pInputText id="nombre" formControlName="nombre" placeholder=" Nombre" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                <input pInputText id="direction" formControlName="direction" placeholder=" Dirección" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                <input pInputText id="telefono" formControlName="telefono" placeholder=" Teléfono" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
+                <input pInputText id="correo" formControlName="correo" placeholder=" Correo" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                <input pInputText id="celular" formControlName="celular" placeholder=" Celular" />
+              </p-inputGroup>
+            </div>
+          </div>
+        </form>
+      </p-tabPanel>
+      <!-- Tab 2: Avales -->
+      <p-tabPanel header="Información Aval">
+        <form [formGroup]="formStep2">
+          <div class="p-fluid grid">
+            <div style="display: flex; justify-content: flex-end;">
+              <p-button class="p-button-rounded p-button-icon-only" (onClick)="onSearchGuaranties()">
+                <i class="pi pi-search"></i>
+              </p-button>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                <input pInputText id="nombreGuarantor" formControlName="nombreGuarantor" placeholder=" Nombre" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                <input pInputText id="directionGuarantor" formControlName="directionGuarantor"
+                  placeholder=" Dirección" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                <input pInputText id="telefonoGuarantor" formControlName="telefonoGuarantor" placeholder=" Teléfono" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
+                <input pInputText id="correoGuarantor" formControlName="correoGuarantor" placeholder=" Correo" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                <input pInputText id="celularGuarantor" formControlName="celularGuarantor" placeholder=" Celular" />
+              </p-inputGroup>
+            </div>
+          </div>
+        </form>
+      </p-tabPanel>
+      <!-- Tab 3: Datos de vehiculo -->
+      <p-tabPanel header="Datos del Vehículo">
+        <form [formGroup]="formMarca">
+          <div class="p-fluid grid">
+            <div style="display: flex; justify-content: flex-end;">
+              <p-button class="p-button-rounded p-button-icon-only" (onClick)="onSearchvehicules()">
+                <i class="pi pi-search"></i>
+              </p-button>
+            </div>
+            <div class="flex justify-center mb-4">
+              <img *ngIf="vehiculoSeleccionado?.fotos_vehiculos?.length" [src]="getImageUrl(vehiculoSeleccionado)"
+                alt="Vehículo seleccionado" class="rounded shadow"
+                style="width: 50rem; height: 30rem; object-fit: cover;">
+            </div>
+            <div class="field col-12 md:col-6 mb-3 mt-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                <input pInputText id="marca" formControlName="marca" placeholder=" Marca" />
+              </p-inputGroup>
+            </div>
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                <input pInputText id="modelo" formControlName="modelo" placeholder=" Modelo" />
+              </p-inputGroup>
+            </div>
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                <input pInputText id="anio" formControlName="anio" placeholder=" Año" />
+              </p-inputGroup>
+            </div>
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                <input pInputText id="monto" formControlName="monto" placeholder=" Monto" />
+              </p-inputGroup>
+            </div>
+          </div>
+        </form>
+      </p-tabPanel>
+
+      <!-- Tab 4: Datos Financieros -->
+      <p-tabPanel header="Datos Financieros">
+        <form [formGroup]="formStep3">
+          <div class="p-fluid grid">
+            <div style="display: flex; justify-content: flex-end;">
+              
+              @if(data.etapa === 'cotizacion'){
+              <p-button class="p-button-rounded"  label="Aprobacion" (onClick)="onAcceptCredit()"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded"  label="Cancelar" (onClick)="onCancelCredit()"></p-button>
+              } @else if(data.etapa === 'aprobacion'){
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded " label="Aprobar"  (onClick)="onApproveCredit(true)"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded"  label="Degradar" (onClick)="onApproveCredit(false)"></p-button>
+              } @else if(data.etapa === 'aprobado'){
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded"  label="Cancelar" (onClick)="onCancelCredit()"></p-button>
+              }
+              
+            </div>
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="interes" formControlName="interes" placeholder=" % Interes" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
+                <input pInputText id="plazo" formControlName="plazo" placeholder=" Plazo" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputgroup>
+                <p-checkbox formControlName="iva" inputId="iva" binary="true" />
+                <label for="tasa" class="ml-2">IVA</label>
+              </p-inputgroup>
+            </div>
+
+            <!--<div class="field col-12 md:col-6 mb-3">
+              <p-inputgroup>
+                <p-datepicker formControlName="fecha1erPago" [showIcon]="true" [iconDisplay]="'input'"
+                  [inputStyleClass]="'p-inputtext w-full'" dateFormat inputId="fecha1erPago"
+                  placeholder="Fecha de 1er pago" />
+
+              </p-inputgroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputgroup>
+                <input pInputText formControlName="FMD" placeholder="FMD" />
+                <p-inputgroup-addon><i>%</i></p-inputgroup-addon>
+              </p-inputgroup>
+            </div>-->
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="enganche" formControlName="enganche" placeholder=" Enganche" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="tasa_fmd" formControlName="tasa_fmd" placeholder=" FMD" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
+                <p-datepicker id="fecha_inicial" formControlName="fecha_inicial" placeholder=" Fecha Inicial" />
+              </p-inputGroup>
+            </div>
+          </div>
+        </form>
+      </p-tabPanel>
+    </p-tabView>
+
+    <div class="flex justify-content-end mt-5">
+      <button pButton label="Guardar" icon="pi pi-save" (click)="submitForm()" class="p-button-success"></button>
+    </div>
+
+    <!-- Dialogs -->
+    <p-dialog header="Buscar cliente" [(visible)]="clienteDialog" [modal]="true" [style]="{width: '60vw'}">
+      <div class="p-inputgroup mb-3">
+        <input type="text" pInputText [(ngModel)]="searchCliente" placeholder="Buscar cliente por nombre" />
+      </div>
+      <p-table [value]="clientes" [paginator]="true" [rows]="5" [globalFilterFields]="['name']"
+        [filters]="{ 'name': { value: searchCliente, matchMode: 'contains' } }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Acción</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cliente>
+          <tr>
+            <td>{{ cliente.name }}</td>
+            <td>{{ cliente.cellphone_number }}</td>
+            <td>
+              <button pButton type="button" label="Seleccionar" (click)="seleccionarCliente(cliente)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-dialog>
+
+    <p-dialog header="Selecciona uno o más avales" [(visible)]="showGuarantorDialog" [modal]="true"
+      [style]="{width: '40vw'}">
+      <p-table [value]="avales" selectionMode="multiple" [(selection)]="data.avales">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-aval>
+          <tr [pSelectableRow]="aval">
+            <td>{{ aval.name }}</td>
+            <td>{{ aval.cellphone_number }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <ng-template pTemplate="footer">
+        <div class="flex justify-content-between w-full button-modal-container">
+          <button pButton type="button" label="Añadir nuevo aval" icon="pi pi-plus" class="p-button-secondary"
+            (click)="onAddNewGuarantor()"></button>
+          <button pButton type="button" label="Aceptar" icon="pi pi-check"
+            (click)="onConfirmGuarantors(data.avales)"></button>
+        </div>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog header="Buscar vehiculos" [(visible)]="vehiculoDialog" [modal]="true" [style]="{width: '60vw'}">
+      <div class="p-inputgroup mb-3">
+        <input type="text" pInputText [(ngModel)]="searchVehiculo" placeholder="Buscar vehiculo por nombre" />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div *ngFor="let vehiculo of vehiculosFiltrados">
+
+          <p-card styleClass="mb-3 shadow-md p-2">
+            <img *ngIf="vehiculo.fotos_vehiculos?.length" [src]="getImageUrl(vehiculo)"
+              class="w-6rem h-6rem object-cover mb-2" style="aspect-ratio: 1 / 1;">
+            <div class="text-sm mb-2">
+              <strong>Marca:</strong> {{ vehiculo.brand }}<br>
+              <strong>Modelo:</strong> {{ vehiculo.model }}<br>
+              <strong>Año:</strong> {{ vehiculo.year }}
+            </div>
+
+            <button pButton type="button" label="Seleccionar" (click)="seleccionarVehiculo(vehiculo)"></button>
+          </p-card>
+
+        </div>
+      </div>
+    </p-dialog>
+  </p-card>
+</div>

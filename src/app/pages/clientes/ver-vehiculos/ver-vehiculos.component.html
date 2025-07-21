@@ -1,0 +1,52 @@
+<a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
+    (click)="onBack()">
+    regresar
+</a>
+
+<p-tabs value="0">
+    <p-tablist>
+        <p-tab value="0">Informacion</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+        <p-tabpanel value="0">
+            
+        <div class="card flex flex-col gap-14"> 
+            <p-table #dt [value]="vehiculos" [paginator]="true" [rows]="10">
+                <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="brand">Marca <p-sortIcon field="brand"></p-sortIcon></th>
+                    <th pSortableColumn="model">Modelo <p-sortIcon field="model"></p-sortIcon></th>
+                    <th pSortableColumn="type">Tipo <p-sortIcon field="type"></p-sortIcon></th>       
+                    <th pSortableColumn="year">Anio <p-sortIcon field="year"></p-sortIcon></th>
+                    <th pSortableColumn="price">Precio <p-sortIcon field="price"></p-sortIcon></th>
+                </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-data>
+                <!-- Aquí está el cambio importante -->
+                <tr [pSelectableRow]="data">
+                    <td>{{ data.id }}</td>
+                    <td>{{ data.brand }}</td>
+                    <td>{{ data.model }}</td>
+                    <td>{{ data.type }}</td>
+                    <td>{{ data.year }}</td>
+                    <td>{{ data.price }}</td>
+                </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        </p-tabpanel>
+        <p-tabpanel value="1">
+            <div class="flex justify-between">
+                <div class="font-semibold text-sm flex-col"></div>
+            </div>
+            <div class="flex flex-col md:flex-row gap-6 mb-3">
+            </div>
+        </p-tabpanel>
+        <p-tabpanel value="2">
+
+        </p-tabpanel>
+    </p-tabpanels>
+</p-tabs>

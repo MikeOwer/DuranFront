@@ -1,0 +1,29 @@
+<a type="button" pButton icon="pi pi-arrow-left" variant="text" severity="secondary"
+   class="p-button-sm mb-4" (click)="onBack()">
+  Regresar
+</a>
+
+<form [formGroup]="form" (ngSubmit)="submitPago()" class="card" autocomplete="off">
+  <div class="flex flex-col gap-6 w-full">
+    <div class="flex justify-between items-center">
+      <div class="font-semibold text-xl">Realizar pago</div>
+      <button type="submit" pButton icon="pi pi-check" class="p-button-sm p-button-rounded mr-2">
+        Aplicar Pago
+      </button>
+    </div>
+
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="pi pi-dollar"></i>
+      </p-inputgroup-addon>
+      <input pInputText placeholder="Monto del pago" formControlName="monto" />
+    </p-inputgroup>
+
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="pi pi-dollar"></i>
+      </p-inputgroup-addon>
+      <input pInputText placeholder="Concepto" formControlName="concepto" />
+    </p-inputgroup>
+  </div>
+</form>

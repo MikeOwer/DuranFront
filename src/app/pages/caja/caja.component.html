@@ -1,0 +1,68 @@
+<div class="card flex flex-col gap-14">
+    <p-toolbar class="gap-10">
+        <ng-template #start>
+            <h1 class="font-semibold text-xl">{{titulo}}</h1>
+        </ng-template>
+        <ng-template #end>
+            <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
+                class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
+            <input
+                pInputText
+                class="custom-input mr-2"
+                type="text"
+                name="buscador"
+                placeholder="Buscar"
+                [(ngModel)]="globalFilter"
+                [ngModelOptions]="{standalone: true}"
+                (input)="onFilterGlobal($event)"
+            />
+
+
+        </ng-template>
+    </p-toolbar>
+    <p-table #dt [value]="data" [paginator]="true" [rows]="10"
+        [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="cliente">Cleinte <p-sortIcon field="cliente"></p-sortIcon>
+                    <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'nombre')" class="w-full" /> -->
+                </th>
+                <th pSortableColumn="telefono">Telefono <p-sortIcon field="telefono"></p-sortIcon>
+                    <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'apellido')" class="w-full" /> -->
+                </th>
+                <th pSortableColumn="celular">Celular <p-sortIcon field="celular"></p-sortIcon>
+                    <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'email')" class="w-full" /> -->
+                </th>
+                <th pSortableColumn="creado">Creado <p-sortIcon field="creado"></p-sortIcon>
+                    <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'celular')" class="w-full" /> -->
+                </th>
+                <th pSortableColumn="monto">Monto <p-sortIcon field="monto"></p-sortIcon></th>
+                <th pSortableColumn="inversionista">Inversionista</th>
+                <th>Opciones</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-data>
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.expand.idcliente.nombre }}</td>
+                <td>{{data.expand.idcliente.telefono}}</td>
+                <td>{{ data.expand.idcliente.celular  }}</td>
+                <td>{{ data.updated }}</td>
+                <td>{{ data.monto }}</td>
+                <td>{{data.expand.idinversionista.nombre}}</td>
+                <td>
+                    <button pButton icon="pi pi-bars" severity="success" (click)="link(data.idcliente)" class="p-button-sm p-button-rounded  mr-2 p-button-info"
+                    ></button>
+                    <button pButton icon="pi pi-check-square" class="p-button-sm p-button-rounded  mr-2 p-button-info"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
