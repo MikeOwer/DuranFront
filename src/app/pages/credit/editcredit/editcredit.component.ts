@@ -374,15 +374,13 @@ export class EditcreditComponent implements OnInit {
     this.formStep3.patchValue({
       sucursalSeleccionada: this.sucursalSeleccionada
     })
-    console.log('formStep3 onSucursalChange:', this.formStep3.value);
   }
 
   onInversionistaChange(event: any) {
-    this.inversionistaSeleccionado = this.inversionistas.find((i: any) => i.id == event.value);
+    this.inversionistaSeleccionado = event.value;
     this.formStep3.patchValue({
       inversionistaSeleccionado: this.inversionistaSeleccionado,
     });
-    console.log('Inversionista seleccionado:', this.inversionistaSeleccionado);
   }
 
   async seleccionarCliente(cliente: any) {
