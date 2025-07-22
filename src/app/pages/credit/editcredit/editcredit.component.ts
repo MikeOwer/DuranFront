@@ -170,7 +170,7 @@ export class EditcreditComponent implements OnInit {
       plazo: new FormControl('', Validators.required),
       iva: new FormControl(false, Validators.required),
       enganche: new FormControl('', Validators.required),
-      tasa_fmd: new FormControl('', Validators.required),
+      tasa_fmd: new FormControl('5.00', Validators.required),
       fecha_inicial: new FormControl('', Validators.required),
       sucursalSeleccionada: new FormControl('1', Validators.required),
       inversionistaSeleccionado: new FormControl('1', Validators.required),
