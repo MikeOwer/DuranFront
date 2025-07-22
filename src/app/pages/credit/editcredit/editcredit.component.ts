@@ -181,6 +181,7 @@ export class EditcreditComponent implements OnInit {
       modelo: new FormControl('', Validators.required),
       anio: new FormControl('', Validators.required),
       monto: new FormControl('', Validators.required),
+      montoLista: new FormControl('', Validators.required),
     });
 
   }
@@ -405,7 +406,8 @@ export class EditcreditComponent implements OnInit {
       marca: vehiculo.brand,
       modelo: vehiculo.model,
       anio: vehiculo.year,
-      monto: vehiculo.price
+      monto: vehiculo.price,
+      montoLista: vehiculo.list_price
     });
     this.vehiculoid = vehiculo.id;
     this.vehiculoDialog = false;
