@@ -23,6 +23,7 @@ import { ServicioGeneralService } from '../../../layout/service/servicio-general
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from '../../../layout/service/auth.service';
 import { GeneralWebsocketService } from "../../../layout/service/general-websocket.service";
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 @Component({
@@ -46,8 +47,8 @@ import { GeneralWebsocketService } from "../../../layout/service/general-websock
     TabViewModule,
     DropdownModule,
     DatePickerModule,
-    CheckboxModule
-
+    CheckboxModule,
+    InputNumberModule
 
   ],
   templateUrl: './editcredit.component.html',
@@ -92,7 +93,27 @@ export class EditcreditComponent implements OnInit {
   sucursalSeleccionada: any = null;
   inversionistas: any[] = [];
   inversionistaSeleccionado: any = null;
+  estadosCiviles = [
+    { label: 'Soltero', value: 'soltero' },
+    { label: 'Casado', value: 'casado' },
+    { label: 'Divorciado', value: 'divorciado' },
+    { label: 'Viudo', value: 'viudo' }
+  ];
 
+  estadosCivilesAval = [
+    { label: 'Soltero', value: 'soltero' },
+    { label: 'Casado', value: 'casado' },
+    { label: 'Divorciado', value: 'divorciado' },
+    { label: 'Viudo', value: 'viudo' }
+  ];
+  opcionesDependientes = [
+    { label: 'Sí', value: 'si' },
+    { label: 'No', value: 'no' }
+  ];
+  tiposTrabajo = [
+    { label: 'Empleado', value: 'empleado' },
+    { label: 'Independiente', value: 'independiente' },
+  ];
   constructor(
     private fb: FormBuilder,
     private servicio: DatarealtimeService,
@@ -150,19 +171,56 @@ export class EditcreditComponent implements OnInit {
 
   initializeForms(): void {
     this.form = this.fb.group({
-      nombre: new FormControl('', Validators.required),
-      direction: new FormControl('', Validators.required),
-      telefono: new FormControl('', Validators.required),
-      correo: new FormControl('', Validators.required),
-      celular: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.required),
+      last_name: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
+      phone_number: new FormControl('', Validators.required),
+      cellphone_number: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+
+      marital_status: new FormControl(''),
+      marriage_regime: new FormControl(''),
+      marriage_place: new FormControl(''),
+      economic_dependents: new FormControl(''),
+      number_children: new FormControl(''),
+      job: new FormControl(''),
+
+      couple_name: new FormControl(''),
+      couple_phone_number: new FormControl(''),
+      couple_job: new FormControl(''),
+      couple_industry: new FormControl(''),
+      couple_monthly_income: new FormControl(''),
+
+      RFC: new FormControl(''),
+      company: new FormControl(''),
+      company_adress: new FormControl(''),
+      company_phone_number: new FormControl(''),
+      age: new FormControl(null),
+      city: new FormControl(''),
+      state: new FormControl(''),
+      type_housing: new FormControl(''),
+      residence_time: new FormControl(''),
+      monthly_income: new FormControl(''),
+      another_incomes: new FormControl(''),
+      job_seniority: new FormControl(''),
+      last_job: new FormControl(''),
+      last_job_seniority: new FormControl(''),
+      last_phone_number: new FormControl(''),
+      age_of_children: new FormControl(''),
+      CP: new FormControl(''),
+      isOwner: new FormControl(false),
     });
 
     this.formStep2 = this.fb.group({
-      nombreGuarantor: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.required),
       directionGuarantor: new FormControl('', Validators.required),
       telefonoGuarantor: new FormControl('', Validators.required),
       correoGuarantor: new FormControl('', Validators.required),
-      celularGuarantor: new FormControl('', Validators.required)
+      celularGuarantor: new FormControl('', Validators.required),
+      estadoCivilAval: [''],
+      dependientesEconomicosAvales: [''],
+      numeroDependientesAvales: [''],
+      tipoDeTrabajoAval: [''],
     });
 
     this.formStep3 = this.fb.group({
@@ -475,20 +533,53 @@ export class EditcreditComponent implements OnInit {
 
           console.log('datos completos de credito en onInit de edit credit component', this.data);
           this.form.patchValue({
-            nombre: this.data.cliente.name,
-            direction: this.data.cliente.address,
-            telefono: this.data.cliente.phone_number,
-            correo: this.data.cliente.email,
-            celular: this.data.cliente.cellphone_number,
+            name: this.data.cliente.name,
+            last_name: this.data.cliente.last_name,
+            address: this.data.cliente.address,
+            phone_number: this.data.cliente.phone_number,
+            cellphone_number: this.data.cliente.cellphone_number,
+            email: this.data.cliente.email,
+
+            marital_status: this.data.cliente.marital_status,
+            marriage_regime: this.data.cliente.marriage_regime,
+            marriage_place: this.data.cliente.marriage_place,
+            economic_dependents: this.data.cliente.economic_dependents,
+            number_children: this.data.cliente.number_children,
+            job: this.data.cliente.job,
+
+            couple_name: this.data.cliente.couple_name,
+            couple_phone_number: this.data.cliente.couple_phone_number,
+            couple_job: this.data.cliente.couple_job,
+            couple_industry: this.data.cliente.couple_industry,
+            couple_monthly_income: this.data.cliente.couple_monthly_income,
+
+            RFC: this.data.cliente.RFC,
+            company: this.data.cliente.company,
+            company_adress: this.data.cliente.company_adress,
+            company_phone_number: this.data.cliente.company_phone_number,
+            age: this.data.cliente.age,
+            city: this.data.cliente.city,
+            state: this.data.cliente.state,
+            type_housing: this.data.cliente.type_housing,
+            residence_time: this.data.cliente.residence_time,
+            monthly_income: this.data.cliente.monthly_income,
+            another_incomes: this.data.cliente.another_incomes,
+            job_seniority: this.data.cliente.job_seniority,
+            last_job: this.data.cliente.last_job,
+            last_job_seniority: this.data.cliente.last_job_seniority,
+            last_phone_number: this.data.cliente.last_phone_number,
+            age_of_children: this.data.cliente.age_of_children,
+            CP: this.data.cliente.CP,
+            isOwner: this.data.cliente.isOwner,
           });
 
-          this.formStep2.patchValue({
+          /* this.formStep2.patchValue({
             nombreGuarantor: this.data.guarantee.name,
             directionGuarantor: this.data.guarantee.address,
             telefonoGuarantor: this.data.guarantee.phone_number,
             correoGuarantor: this.data.guarantee.email,
             celularGuarantor: this.data.guarantee.cellphone_number
-          });
+          }); */
 
           this.formStep3.patchValue({
             interes: this.data.interes,
@@ -619,5 +710,9 @@ export class EditcreditComponent implements OnInit {
         });
       }
     });
+  }
+
+  get tieneDependientes(): boolean {
+    return this.form.get('dependientesEconomicos')?.value === 'si';
   }
 }
