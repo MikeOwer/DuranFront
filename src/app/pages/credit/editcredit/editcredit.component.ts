@@ -60,6 +60,7 @@ export class EditcreditComponent implements OnInit {
   formStep2!: FormGroup;
   formStep3!: FormGroup;
   formMarca!: FormGroup;
+  formReferencias!: FormGroup;
   activeIndex: number = 0;
   private subs: Subscription[] = [];
   model: any = 'credito';
@@ -267,6 +268,30 @@ export class EditcreditComponent implements OnInit {
       monto: new FormControl('', Validators.required),
     });
 
+    this.formReferencias = this.fb.group({
+      commercial_name: new FormControl('', Validators.required),
+      commercial_phone_number: new FormControl('', Validators.required),
+      second_commercial_name: new FormControl('', Validators.required),
+      second_commercial_phone_number: new FormControl('', Validators.required),
+
+      personal_name: new FormControl('', Validators.required),
+      personal_phone_number: new FormControl('', Validators.required),
+      personal_cellphone_number: new FormControl('', Validators.required),
+      personal_years_known: new FormControl('', Validators.required),
+      second_personal_name: new FormControl('', Validators.required),
+      second_personal_phone_number: new FormControl('', Validators.required),
+      second_personal_cellphone_number: new FormControl('', Validators.required),
+      second_personal_years_known: new FormControl('', Validators.required),
+
+      family_name: new FormControl('', Validators.required),
+      family_phone_number: new FormControl('', Validators.required),
+      family_cellphone_number: new FormControl('', Validators.required),
+      family_relationship: new FormControl('', Validators.required),
+      second_family_name: new FormControl('', Validators.required),
+      second_family_phone_number: new FormControl('', Validators.required),
+      second_family_cellphone_number: new FormControl('', Validators.required),
+      second_family_relationship: new FormControl('', Validators.required),
+    })
   }
 
   nextStep(): void {
@@ -496,49 +521,7 @@ export class EditcreditComponent implements OnInit {
   }
 
   async cargarDatos() {
-    /*this.subs.push(
-      this.servicio.getRecord(this.model, this.idData).subscribe({
-        next: async (data: any) =>{
-          console.log(data);
-          this.data = data;
-          try{
-            const clienteData = await this.servicio.getRecord('clientes', data.idcliente).toPromise();
-            this.data.cliente = clienteData;
-            this.form.patchValue({
-              nombre: clienteData.nombre,
-              direction: clienteData.direccion,
-              telefono: clienteData.telefono,
-              correo: clienteData.email,
-              celular: clienteData.celular,
-            });
-            console.log(data);
-            const avalData = await this.servicio.getRecord('aval_cliente', data.idaval).toPromise();
-            console.log(avalData);
-            this.data.aval = avalData;
-            
-            this.formStep2.patchValue({
-              nombreGuarantor: avalData.nombre,
-              directionGuarantor: avalData.direccion,
-              telefonoGuarantor: avalData.telefono,
-              correoGuarantor: avalData.email,     
-              celularGuarantor: avalData.celular
-            })
-          }catch{
-            console.error('Error cargando cliente o aval')
-          }
-          this.formStep3.patchValue({
-            monto: data.monto,
-            plazo: data.plazo,
-            tasa: data.tasa,
-            enganche: data.enganche
-          })
-
-        },
-        error: (err: any)=>{
-          console.error('Error al cargar', err);
-        }
-      })
-    )*/
+   
     this.servicioGeneral.get(`credito/${this.idData}`, {}, false).subscribe((creditoRes: any) => {
       const credito = creditoRes.data;
 
@@ -550,7 +533,6 @@ export class EditcreditComponent implements OnInit {
           const guaranteesList = guarantees.data;
           const guarantee = guaranteesList.find((g: any) => g.id === credito.customer_guarantee_id);
 
-          // Final: Crédito con cliente y garantía anidados
           this.data = {
             ...credito,
             cliente: cliente || null,
@@ -645,6 +627,38 @@ export class EditcreditComponent implements OnInit {
             fecha_inicial: this.data.fecha_inicial,
             sucursalSeleccionada: this.data.sucursal_id,
             inversionistaSeleccionado: this.data.investor_catalog_id,
+          });
+
+          this.servicioGeneral.get('reference', {}, false).subscribe((referencias: any) => {
+            const referenciasList = referencias.data;
+            const referencia = referenciasList.find((r: any) => r.credit_id === this.idData);
+
+            if (referencia) {
+              this.formReferencias.patchValue({
+                commercial_name: referencia.commercial_name,
+                commercial_phone_number: referencia.commercial_phone_number,
+                second_commercial_name: referencia.second_commercial_name,
+                second_commercial_phone_number: referencia.second_commercial_phone_number,
+
+                personal_name: referencia.personal_name,
+                personal_phone_number: referencia.personal_phone_number,
+                personal_cellphone_number: referencia.personal_cellphone_number,
+                personal_years_known: referencia.personal_years_known,
+                second_personal_name: referencia.second_personal_name,
+                second_personal_phone_number: referencia.second_personal_phone_number,
+                second_personal_cellphone_number: referencia.second_personal_cellphone_number,
+                second_personal_years_known: referencia.second_personal_years_known,
+
+                family_name: referencia.family_name,
+                family_phone_number: referencia.family_phone_number,
+                family_cellphone_number: referencia.family_cellphone_number,
+                family_relationship: referencia.family_relationship,
+                second_family_name: referencia.second_family_name,
+                second_family_phone_number: referencia.second_family_phone_number,
+                second_family_cellphone_number: referencia.second_family_cellphone_number,
+                second_family_relationship: referencia.second_family_relationship
+              });
+            }
           });
         });
       });

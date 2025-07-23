@@ -591,6 +591,170 @@
           </div>
         </form>
       </p-tabPanel>
+      <p-tabPanel header="Referencias">
+        <form [formGroup]="formReferencias">
+          <div class="p-fluid grid">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h5>Referencias comerciales</h5>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-2/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="commercial_name" formControlName="commercial_name" placeholder=" Nombre" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                  <input pInputText id="commercial_phone_number" formControlName="commercial_phone_number" placeholder=" Teléfono" />
+                </p-inputGroup>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-2/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="second_commercial_name" formControlName="second_commercial_name" placeholder=" Nombre" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                  <input pInputText id="second_commercial_phone_number" formControlName="second_commercial_phone_number" placeholder=" Teléfono" />
+                </p-inputGroup>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h5>Referencias personales</h5>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-2/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="personal_name" formControlName="personal_name" placeholder=" Nombre" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                  <input pInputText id="personal_phone_number" formControlName="personal_phone_number" placeholder=" Teléfono" />
+                </p-inputGroup>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                  <input pInputText id="personal_cellphone_number" formControlName="personal_cellphone_number" placeholder=" celular" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
+                  <input pInputText id="personal_years_known" formControlName="personal_years_known" placeholder=" Años de conocerlo" />
+                </p-inputGroup>
+              </div>
+            </div>
+
+             <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-2/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="second_personal_name" formControlName="second_personal_name" placeholder=" Nombre" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                  <input pInputText id="second_personal_phone_number" formControlName="second_personal_phone_number" placeholder=" Teléfono" />
+                </p-inputGroup>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                  <input pInputText id="second_personal_cellphone_number" formControlName="second_personal_cellphone_number" placeholder=" celular" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
+                  <input pInputText id="second_personal_years_known" formControlName="second_personal_years_known" placeholder=" Años de conocerlo" />
+                </p-inputGroup>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h5>Referencias familiares</h5>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-2/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="family_name" formControlName="family_name" placeholder=" Nombre" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                  <input pInputText id="family_phone_number" formControlName="family_phone_number" placeholder=" Teléfono" />
+                </p-inputGroup>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                  <input pInputText id="family_cellphone_number" formControlName="family_cellphone_number" placeholder=" celular" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="family_relationship" formControlName="family_relationship" placeholder=" Parentesco" />
+                </p-inputGroup>
+              </div>
+            </div>
+
+             <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-2/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="second_family_name" formControlName="second_family_name" placeholder=" Nombre" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                  <input pInputText id="second_family_phone_number" formControlName="second_family_phone_number" placeholder=" Teléfono" />
+                </p-inputGroup>
+              </div>
+            </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                  <input pInputText id="second_family_cellphone_number" formControlName="second_family_cellphone_number" placeholder=" celular" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="second_family_relationship" formControlName="second_family_relationship" placeholder=" Parentesco" />
+                </p-inputGroup>
+              </div>
+            </div>
+          </div>
+        </form>
+      </p-tabPanel>
       <!-- Tab 3: Datos de vehiculo -->
       <p-tabPanel header="Datos del Vehículo">
         <form [formGroup]="formMarca">

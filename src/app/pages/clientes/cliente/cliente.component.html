@@ -17,9 +17,8 @@
         <p-tablist>
             <p-tab value="0">Informacion</p-tab>
             <p-tab value="1">Avales</p-tab>
-            <p-tab value="2">Creditos</p-tab>
+            <p-tab value="2" *ngIf="idData">Creditos</p-tab>
             <p-tab value="3">Subir fotos</p-tab>
-            <p-tab value="4">Historial de actividad</p-tab>
         </p-tablist>
         <p-tabpanels>
             <p-tabpanel value="0">
@@ -190,7 +189,7 @@
                 </div>
             </p-tabpanel>
 
-            <p-tabpanel value="2">
+            <p-tabpanel value="2" >
                 <div class="flex justify-between">
                     <div class="font-semibold text-sm flex-col">Crédito</div>
                     <div class="flex gap-2 mb-2">
