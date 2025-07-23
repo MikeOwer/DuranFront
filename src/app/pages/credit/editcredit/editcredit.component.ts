@@ -85,6 +85,7 @@ export class EditcreditComponent implements OnInit {
   possibleGuarantors: any[] = [];
   clienteid: string = "";
   selectedGuarantors: any[] = [];
+
   vehiculoid: string = "";
   vehiculoSeleccionado: any;
   modo: 'nuevo' | 'cotizar' | 'editar' = 'nuevo';
@@ -213,14 +214,40 @@ export class EditcreditComponent implements OnInit {
 
     this.formStep2 = this.fb.group({
       name: new FormControl('', Validators.required),
-      directionGuarantor: new FormControl('', Validators.required),
-      telefonoGuarantor: new FormControl('', Validators.required),
       correoGuarantor: new FormControl('', Validators.required),
+      edad: new FormControl(null),
+      estadoCivilAval: new FormControl(''),
+
+      nombreEsposo: new FormControl(''),
+      lugarMatrimonio: new FormControl(''),
+      regimen: new FormControl(''),
+
+      directionGuarantor: new FormControl('', Validators.required),
+      ciudad: new FormControl(''),
+      estado: new FormControl(''),
+      cp: new FormControl(''),
+      telefonoGuarantor: new FormControl('', Validators.required),
       celularGuarantor: new FormControl('', Validators.required),
-      estadoCivilAval: [''],
-      dependientesEconomicosAvales: [''],
-      numeroDependientesAvales: [''],
-      tipoDeTrabajoAval: [''],
+
+      propia_pagada: new FormControl<string | null>(null),
+      domicilio_pagada: new FormControl(''),
+      propia_pagando: new FormControl<string | null>(null),
+      domicilio_pagando: new FormControl(''),
+
+      fecha_hipoteca: new FormControl(''),
+      comentarios: new FormControl(''),
+
+      empresa: new FormControl(''),
+      tipoDeTrabajoAval: new FormControl(''),
+      domicilio_empresa: new FormControl(''),
+      puesto: new FormControl(''),
+      jefe: new FormControl(''),
+      telefonoJefe: new FormControl(''),
+      giro: new FormControl(''),
+      ingreso: new FormControl(''),
+      otrosIngresos: new FormControl(''),
+      antiguedad: new FormControl(''),
+      telefono_empresa: new FormControl(''),
     });
 
     this.formStep3 = this.fb.group({
@@ -573,13 +600,43 @@ export class EditcreditComponent implements OnInit {
             isOwner: this.data.cliente.isOwner,
           });
 
-          /* this.formStep2.patchValue({
-            nombreGuarantor: this.data.guarantee.name,
-            directionGuarantor: this.data.guarantee.address,
-            telefonoGuarantor: this.data.guarantee.phone_number,
+          this.formStep2.patchValue({
+            name: this.data.guarantee.name + ' ' + this.data.guarantee.last_name,
             correoGuarantor: this.data.guarantee.email,
-            celularGuarantor: this.data.guarantee.cellphone_number
-          }); */
+            edad: this.data.guarantee.age,
+            estadoCivilAval: this.data.guarantee.marital_status,
+
+            nombreEsposo: this.data.guarantee.couple_name,
+            lugarMatrimonio: this.data.guarantee.marriage_place,
+            regimen: this.data.guarantee.marriage_regime,
+
+            directionGuarantor: this.data.guarantee.address,
+            ciudad: this.data.guarantee.city,
+            estado: this.data.guarantee.state,
+            cp: this.data.guarantee.CP,
+            telefonoGuarantor: this.data.guarantee.phone_number,
+            celularGuarantor: this.data.guarantee.cellphone_number,
+
+            propia_pagada: this.data.guarantee.paid_house,
+            domicilio_pagada: this.data.guarantee.paid_house_address,
+            propia_pagando: this.data.guarantee.house_mortgage,
+            domicilio_pagando: this.data.guarantee.house_mortgage_address,
+
+            fecha_hipoteca: this.data.guarantee.mortgage_date,
+            comentarios: this.data.guarantee.comments,
+
+            empresa: this.data.guarantee.company,
+            tipoDeTrabajoAval: this.data.guarantee.job,
+            domicilio_empresa: this.data.guarantee.company_address,
+            puesto: this.data.guarantee.position,
+            jefe: this.data.guarantee.boss,
+            telefonoJefe: this.data.guarantee.boss_phone_number,
+            giro: this.data.guarantee.industry,
+            ingreso: this.data.guarantee.monthly_income,
+            otrosIngresos: this.data.guarantee.another_incomes,
+            antiguedad: this.data.guarantee.job_seniority,
+            telefono_empresa: this.data.guarantee.company_phone_number,
+          });
 
           this.formStep3.patchValue({
             interes: this.data.interes,
