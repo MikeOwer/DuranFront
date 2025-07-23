@@ -548,16 +548,6 @@
               </div>
             </div>
 
-            <div *ngIf="formStep2.get('tipoDeTrabajoAval')?.value === 'empleado'"
-              class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-1/3">
-                <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
-                  <input pInputText id="telefonoJefe" formControlName="telefonoJefe" placeholder=" Teléfono del Jefe" />
-                </p-inputGroup>
-              </div>
-            </div>
-
             <div *ngIf="formStep2.get('tipoDeTrabajoAval')?.value === 'independiente'"
               class="field col-12 md:col-6 mb-3 flex gap-4">
               <p-inputGroup>

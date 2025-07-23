@@ -242,7 +242,6 @@ export class EditcreditComponent implements OnInit {
       domicilio_empresa: new FormControl(''),
       puesto: new FormControl(''),
       jefe: new FormControl(''),
-      telefonoJefe: new FormControl(''),
       giro: new FormControl(''),
       ingreso: new FormControl(''),
       otrosIngresos: new FormControl(''),
@@ -617,25 +616,24 @@ export class EditcreditComponent implements OnInit {
             telefonoGuarantor: this.data.guarantee.phone_number,
             celularGuarantor: this.data.guarantee.cellphone_number,
 
-            propia_pagada: this.data.guarantee.paid_house,
-            domicilio_pagada: this.data.guarantee.paid_house_address,
-            propia_pagando: this.data.guarantee.house_mortgage,
-            domicilio_pagando: this.data.guarantee.house_mortgage_address,
+            propia_pagada: this.data.guarantee.type_housing_paid,
+            domicilio_pagada: this.data.guarantee.address_paid,
+            propia_pagando: this.data.guarantee.type_housing_paying,
+            domicilio_pagando: this.data.guarantee.address_payment,
 
             fecha_hipoteca: this.data.guarantee.mortgage_date,
-            comentarios: this.data.guarantee.comments,
+            comentarios: this.data.guarantee.final_comments,
 
             empresa: this.data.guarantee.company,
-            tipoDeTrabajoAval: this.data.guarantee.job,
+            tipoDeTrabajoAval: this.data.guarantee.isOwner,
             domicilio_empresa: this.data.guarantee.company_address,
-            puesto: this.data.guarantee.position,
-            jefe: this.data.guarantee.boss,
-            telefonoJefe: this.data.guarantee.boss_phone_number,
+            puesto: this.data.guarantee.job,
+            jefe: this.data.guarantee.immediate_supervisor_name,
+            telefono_empresa: this.data.guarantee.company_phone_number,
             giro: this.data.guarantee.industry,
             ingreso: this.data.guarantee.monthly_income,
             otrosIngresos: this.data.guarantee.another_incomes,
             antiguedad: this.data.guarantee.job_seniority,
-            telefono_empresa: this.data.guarantee.company_phone_number,
           });
 
           this.formStep3.patchValue({
