@@ -630,7 +630,7 @@ export class EditcreditComponent implements OnInit {
             puesto: this.data.guarantee.job,
             jefe: this.data.guarantee.immediate_supervisor_name,
             telefono_empresa: this.data.guarantee.company_phone_number,
-            giro: this.data.guarantee.industry,
+            giro: this.data.guarantee.another_job_industry,
             ingreso: this.data.guarantee.monthly_income,
             otrosIngresos: this.data.guarantee.another_incomes,
             antiguedad: this.data.guarantee.job_seniority,
