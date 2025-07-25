@@ -33,8 +33,8 @@
                             <p-inputgroup-addon>
                                 <i class="pi pi-user"></i>
                             </p-inputgroup-addon>
-                            <input pInputText autocomplete="new-password"  
-                                placeholder="Nombre" formControlName="nombre"/>
+                            <input pInputText autocomplete="new-password" placeholder="Nombre"
+                                formControlName="nombre" />
                         </p-inputgroup>
 
                         <p-inputgroup>
@@ -76,7 +76,7 @@
 
                         <p-inputgroup>
                             <p-inputgroup-addon>
-                                <i class="pi pi-mobile"></i>
+                                <i class="pi pi-phone"></i>
                             </p-inputgroup-addon>
                             <input pInputText autocomplete="new-password" formControlName="telefono"
                                 placeholder="Telefono" />
@@ -84,112 +84,70 @@
                     </div>
                 </div>
             </p-tabpanel>
-
+            <!-- Avales Tab -->
             <p-tabpanel value="1">
-                <div class="flex justify-between">
-                    <div class="font-semibold text-sm flex-col">Datos de aval</div>
-                    <!-- <div class="flex gap-2 mb-2">
-                        <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded mr-2" severity="danger">
-                            Cancelar
+                <div class="flex flex-col gap-6 w-full">
+                    <div class="flex justify-between">
+                        <div class="font-semibold text-sm flex-col">Avales {{guarantors.length}}/{{max_guarantors}}
+                        </div>
+                        <button type="button" pButton icon="pi pi-plus" class="p-button-sm p-button-rounded mr-2"
+                            severity="success" (click)="addGuarantor()" [disabled]="!isAgregable()">
+                            Agregar aval
                         </button>
-                        <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
-                            {{'Agregar nuevo aval'}}
-                        </button>
-                    </div> -->
+                    </div>
                 </div>
 
-                <div class="col-span-12 xl:col-span-8">
-                    <p-panel>
-                        <p-fluid [formGroup]="guarantorForm">
-                            <div class="grid grid-cols-2 gap-4">
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Nombre" formControlName="guarantorName"/>
-                                </p-inputgroup>
+                <div *ngFor="let guarantor of guarantors; let i = index" class="col-span-12 xl:col-span-8 mb-4">
+                    <div class="flex justify-between">
+                        <div class="font-semibold text-sm flex-col">Datos del
+                            {{i===0? 'primer' : i===1? 'segundo' : 'tercer'}} aval</div>
+                    </div>
+                    <div class="col-span-12 xl:col-span-8">
+                        <p-panel>
+                            <p-fluid [formGroup]="getGuarantorForm(i)">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                        <input pInputText placeholder="Nombre" formControlName="guarantorName" />
+                                    </p-inputgroup>
 
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Apellido" formControlName="guarantorLastName"/>
-                                </p-inputgroup>
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                        <input pInputText placeholder="Apellido" formControlName="guarantorLastName" />
+                                    </p-inputgroup>
 
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Dirección" formControlName="guarantorDirection"/>
-                                </p-inputgroup>
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                        <input pInputText placeholder="Dirección"
+                                            formControlName="guarantorDirection" />
+                                    </p-inputgroup>
 
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Telefono" formControlName="guarantorcellphone"/>
-                                </p-inputgroup>
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon><i class="pi pi-phone"></i></p-inputgroup-addon>
+                                        <input pInputText placeholder="Telefono" formControlName="guarantorcellphone" />
+                                    </p-inputgroup>
 
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-envelope"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Correo" formControlName="guarantoremail"/>
-                                </p-inputgroup>
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Telefono" formControlName="guarantormovil"/>
-                                </p-inputgroup>
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon><i class="pi pi-envelope"></i></p-inputgroup-addon>
+                                        <input pInputText placeholder="Correo" formControlName="guarantoremail" />
+                                    </p-inputgroup>
 
-                            </div>
-                        </p-fluid>
-                    </p-panel>
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
+                                        <input pInputText placeholder="Telefono" formControlName="guarantormovil" />
+                                    </p-inputgroup>
+                                </div>
+                            </p-fluid>
+                            <button *ngIf="isEliminable()" type="button" pButton icon="pi pi-times"
+                                class="p-button-sm p-button-rounded mr-2 mt-4" severity="danger"
+                                (click)="removeGuarantor(i)">
+                                Eliminar aval
+                            </button>
+                        </p-panel>
+                    </div>
                 </div>
+
             </p-tabpanel>
-
-            <p-tabpanel value="1">
-                <div class="flex justify-between">
-                    <div class="font-semibold text-sm flex-col">Datos del segundo aval</div>
-                    <!-- <div class="flex gap-2 mb-2">
-                        <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded mr-2" severity="danger">
-                            Cancelar
-                        </button>
-                        <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2">
-                            {{'Agregar nuevo aval'}}
-                        </button>
-                    </div> -->
-                </div>
-
-                <div class="col-span-12 xl:col-span-8">
-                    <p-panel>
-                        <p-fluid [formGroup]="guarantorForm2">
-                            <div class="grid grid-cols-2 gap-4">
-
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Nombre" formControlName="guarantorName2"/>
-                                </p-inputgroup>
-
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Apellido" formControlName="guarantorLastName2"/>
-                                </p-inputgroup>
-
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Dirección" formControlName="guarantorDirection2"/>
-                                </p-inputgroup>
-
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Telefono" formControlName="guarantorcellphone2"/>
-                                </p-inputgroup>
-
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-envelope"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Correo" formControlName="guarantoremail2"/>
-                                </p-inputgroup>
-                                <p-inputgroup>
-                                    <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
-                                    <input pInputText placeholder="Telefono" formControlName="guarantormovil2"/>
-                                </p-inputgroup>
-
-                            </div>
-                        </p-fluid>
-                    </p-panel>
-                </div>
-            </p-tabpanel>
-
             <p-tabpanel value="2">
                 <div class="flex justify-between">
                     <div class="font-semibold text-sm flex-col">Crédito</div>
