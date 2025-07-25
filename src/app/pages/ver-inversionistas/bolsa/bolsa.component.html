@@ -6,27 +6,21 @@
         <ng-template #end>
             <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
                 class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
-            <input
-                pInputText
-                class="custom-input mr-2"
-                type="text"
-                name="buscador"
-                placeholder="Buscar"
-                [(ngModel)]="globalFilter"
-                [ngModelOptions]="{standalone: true}"
-                (input)="onFilterGlobal($event)"
-            />
+            <input pInputText class="custom-input mr-2" type="text" name="buscador" placeholder="Buscar"
+                [(ngModel)]="globalFilter" [ngModelOptions]="{standalone: true}" (input)="onFilterGlobal($event)" />
 
 
         </ng-template>
     </p-toolbar>
-    <div #start>
-        <button pButton type="button" icon="pi pi-arrow-left" label="Regresar" class="p-button-secondary" (click)="goBack()"></button>
-    </div>
-    
+    <div #start class="flex justify-between mb-4">
+        <button pButton type="button" icon="pi pi-arrow-left" label="Regresar" class="p-button-secondary"
+            (click)="goBack()"></button>
 
-    <p-table #dt [value]="billing" [paginator]="true" [rows]="10"
-        stripedRows
+        <button pButton type="button" icon="pi pi-money-bill" label="Retirar" class="p-button-primary"
+            (click)="showRetiro()"></button>
+    </div>
+
+    <p-table #dt [value]="billing" [paginator]="true" [rows]="10" stripedRows
         [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
         <ng-template pTemplate="header">
@@ -56,19 +50,18 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="footer">
-        <tr>
-            <td><strong>TOTAL</strong></td>
-            <td></td>
-            <td>{{ getTotal('capital_cobrado') | currency }}</td>
-            <td>{{ getTotal('interes_cobrado') | currency }}</td>
-            <td>{{ getTotal('IVA') | currency }}</td>
-            <td>{{ getTotal('total_cobrado') | currency }}</td>
-        </tr>
-  </ng-template>
+            <tr>
+                <td><strong>TOTAL</strong></td>
+                <td></td>
+                <td>{{ getTotal('capital_cobrado') | currency }}</td>
+                <td>{{ getTotal('interes_cobrado') | currency }}</td>
+                <td>{{ getTotal('IVA') | currency }}</td>
+                <td>{{ getTotal('total_cobrado') | currency }}</td>
+            </tr>
+        </ng-template>
     </p-table>
 
-    <p-table #dt [value]="investments" [paginator]="true" [rows]="10"
-        stripedRows
+    <p-table #dt [value]="investments" [paginator]="true" [rows]="10" stripedRows
         [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
         <ng-template pTemplate="header">
@@ -95,19 +88,18 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="footer">
-        <tr>
-            <td><strong>TOTAL</strong></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{ getTotalInvestments('cantidad') | currency }}</td>
-        </tr>
-  </ng-template>
+            <tr>
+                <td><strong>TOTAL</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ getTotalInvestments('cantidad') | currency }}</td>
+            </tr>
+        </ng-template>
     </p-table>
 
-    <p-table #dt [value]="withdrawals" [paginator]="true" [rows]="10"
-        stripedRows
+    <p-table #dt [value]="withdrawals" [paginator]="true" [rows]="10" stripedRows
         [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
         <ng-template pTemplate="header">
@@ -134,17 +126,47 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="footer">
-        <tr>
-            <td><strong>TOTAL</strong></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{ getTotalWithdrawals('cantidad') | currency }}</td>
-        </tr>
-  </ng-template>
+            <tr>
+                <td><strong>TOTAL</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ getTotalWithdrawals('cantidad') | currency }}</td>
+            </tr>
+        </ng-template>
     </p-table>
 </div>
+
+<p-dialog [(visible)]="showWithdrawalDialog" [closable]="false" [modal]="true" [responsive]="true"
+    [style]="{width: '20vw'}" [dismissableMask]="true">
+    <ng-template pTemplate="header">
+        <div class="flex justify-between items-center w-full">
+            <h2 class="text-lg font-semibold">Retiro de fondos</h2>
+            <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded p-button-secondary"
+                (click)="showWithdrawalDialog = false"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="withdrawalForm" (ngSubmit)="submitWithdrawal()">
+            <div class="field mb-2">
+                <p-inputGroup>
+                    <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                    <input pInputText type="number" id="amount" formControlName="amount"
+                        placeholder=" Cantidad a retirar" />
+                </p-inputGroup>
+            </div>
+            <div class="field mb-4">
+                <p-inputGroup>
+                    <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
+                    <input pInputText type="text" id="concept" formControlName="concept" placeholder=" Concepto" />
+                </p-inputGroup>
+            </div>
+            <p-button label="Retirar" type="submit" class="mt-4"></p-button>
+        </form>
+    </ng-template>
+
+</p-dialog>
 
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>

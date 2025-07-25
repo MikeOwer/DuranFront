@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import {  ButtonModule } from 'primeng/button';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Table, TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -12,26 +15,49 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { ServicioGeneralService } from '../../../layout/service/servicio-general/servicio-general.service';
+import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+
 @Component({
   selector: 'app-bolsa',
-  imports: [CommonModule, TableModule, ConfirmDialogModule, ButtonModule, ToolbarModule, FormsModule, ToastModule],
+  imports: [CommonModule, TableModule, ConfirmDialogModule, ButtonModule, ToolbarModule, FormsModule, ReactiveFormsModule, InputGroupModule, InputTextModule, InputGroupAddonModule, ToastModule, DialogModule],
+  providers: [MessageService],
   templateUrl: './bolsa.component.html',
   styleUrl: './bolsa.component.scss'
 })
-export class BolsaComponent implements OnInit{
+export class BolsaComponent implements OnInit {
   titulo: string = 'Bolsa';
   @ViewChild('dt') table!: Table;
   globalFilter: string = '';
   data: any[] = [];
   inversionistaId: any = '';
-  billing: any[]=[];
-  investments: any[]=[];
-  withdrawals: any[]=[];
-  constructor(private realtimeService: DatarealtimeService, private router: Router, private route: ActivatedRoute, private location: Location, private service: ServicioGeneralService) {}
+  billing: any[] = [];
+  investments: any[] = [];
+  withdrawals: any[] = [];
+
+  showWithdrawalDialog: boolean = false;
+  withdrawalForm!: FormGroup;
+
+  constructor(
+    private realtimeService: DatarealtimeService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
+    private service: ServicioGeneralService,
+    private messageService: MessageService,
+    private fb: FormBuilder,
+  ) { }
 
   ngOnInit(): void {
+    this.withdrawalForm = this.fb.group({
+      cantidad: new FormControl('', Validators.required),
+      concepto: new FormControl('', Validators.required),
+      fecha: [new Date()],
+      inversionista_id: [this.inversionistaId]
+    });
+
     this.inversionistaId = Number(this.route.snapshot.paramMap.get('id'));
-    this.service.get(`cash_closing_table/${this.inversionistaId}`, {}, true).subscribe((data) =>{
+    this.service.get(`cash_closing_table/${this.inversionistaId}`, {}, true).subscribe((data) => {
       this.data = data;
       /* console.log("this data", this.data)
       this.billing = data.data.billing[0];
@@ -58,14 +84,28 @@ export class BolsaComponent implements OnInit{
     return this.billing.reduce((acc, item) => acc + (item[campo] || 0), 0);
   }
 
-  getTotalInvestments(campo: 'cantidad'): number{
-    return this.investments.reduce((acc, item) => acc + (item[campo]|| 0), 0);
+  getTotalInvestments(campo: 'cantidad'): number {
+    return this.investments.reduce((acc, item) => acc + (item[campo] || 0), 0);
   }
 
-  getTotalWithdrawals(campo: 'cantidad'): number{
-    return this.withdrawals.reduce((acc, item) => acc + (item[campo]|| 0), 0);
+  getTotalWithdrawals(campo: 'cantidad'): number {
+    return this.withdrawals.reduce((acc, item) => acc + (item[campo] || 0), 0);
   }
   goBack() {
     this.location.back();
+  }
+
+  showRetiro() {
+    this.showWithdrawalDialog = true;
+
+  }
+
+  submitWithdrawal() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Información',
+      detail: 'Retiro solicitado con éxito',
+      life: 3000
+    });
   }
 }
