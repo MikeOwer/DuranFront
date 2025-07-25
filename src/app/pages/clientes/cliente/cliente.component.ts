@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
@@ -73,8 +73,7 @@ export class ClienteComponent implements OnInit {
   creditForm!: FormGroup;
   data: any = {};
   customerData: any = {};
-  customerGuaranteeData: any = {};
-  customerGuaranteeData2: any = {};
+
   pass: string = '';
   semanas: any = {};
   semanaActiva: number = 0;
@@ -103,6 +102,10 @@ export class ClienteComponent implements OnInit {
   datosCliente: any = null;
   documentMap: { [clave: string]: File } = {};
 
+  guarantors = [{}];
+  max_guarantors: number = 3;
+  guarantorFormArray!: FormArray;
+  customerGuaranteeData: any[] = [];
 
   constructor(
     private router: ActivatedRoute,
@@ -115,7 +118,7 @@ export class ClienteComponent implements OnInit {
     private generalWebsocketService: GeneralWebsocketService,
     private http: HttpClient
   ) {
-    
+
   }
 
   ngOnInit() {
@@ -132,23 +135,8 @@ export class ClienteComponent implements OnInit {
       telefono: new FormControl(''),
     });
 
-    this.guarantorForm = this.fb.group({
-      guarantorName: new FormControl('', Validators.required),
-      guarantorLastName: new FormControl('', Validators.required),
-      guarantorDirection: new FormControl('', Validators.required),
-      guarantorcellphone: new FormControl('', Validators.required),
-      guarantoremail: new FormControl('', Validators.required),
-      guarantormovil: new FormControl('', Validators.required)
-    });
-
-    this.guarantorForm2 = this.fb.group({
-      guarantorName2: new FormControl('', Validators.required),
-      guarantorLastName2: new FormControl('', Validators.required),
-      guarantorDirection2: new FormControl('', Validators.required),
-      guarantorcellphone2: new FormControl('', Validators.required),
-      guarantoremail2: new FormControl('', Validators.required),
-      guarantormovil2: new FormControl('', Validators.required)
-    });
+    //crea un formulario vacio para los avales (aqui luego se cargan los datos de los avales en la bd) 
+    this.guarantorFormArray = this.fb.array([this.createGuarantorForm(null)]);
 
     this.creditForm = this.fb.group({
       monto: new FormControl('', Validators.required),
@@ -178,7 +166,6 @@ export class ClienteComponent implements OnInit {
       }
     ));
   }
-
   onBack() {
     this.routerBack.navigate([this.urlPage]);
   }
@@ -218,7 +205,7 @@ export class ClienteComponent implements OnInit {
     this.servicioGeneral.get(`customers/${this.idData}`, {}, true).subscribe({
       next: (data: any) => {
         this.data = data.data;
-        console.log(this.data)
+        console.log("customer data in cargarDatos: ", this.data)
 
         this.form.patchValue({
           nombre: this.data.name,
@@ -233,19 +220,23 @@ export class ClienteComponent implements OnInit {
               (item: any) => item.customer_id === this.data.id
             );
 
-            const garantee = garanteeList[0];
-            console.log('Relacionados:', garantee);
-            if (garantee) {
-              this.guarantorForm.patchValue({
-                guarantorName: garantee.name,
-                guarantoLastName: garantee.last_name,
-                guarantorDirection: garantee.address,
-                guarantorcellphone: garantee.phone_number,
-                guarantoremail: garantee.email,
-                guarantormovil: garantee.cellphone_number
-              });
-            }
+            console.log('Relacionados:', garanteeList);
 
+            if (garanteeList.length > 0) {
+              //carga los datos de los avales que recibe del filtrado
+              for (let i = 0; i < garanteeList.length; i++) {
+                this.guarantorFormArray.at(i).patchValue({
+                  id: garanteeList[i].id,
+                  guarantorName: garanteeList[i].name,
+                  guarantorLastName: garanteeList[i].last_name,
+                  guarantorDirection: garanteeList[i].address,
+                  guarantorcellphone: garanteeList[i].phone_number,
+                  guarantoremail: garanteeList[i].email,
+                  guarantormovil: garanteeList[i].cellphone_number
+                });
+                this.addGuarantor();
+              }
+            }
           }
         });
 
@@ -254,48 +245,88 @@ export class ClienteComponent implements OnInit {
     })
   }
 
-
-
   submitData() {
 
-    this.customerData = { 
+    this.customerData = {
       name: this.form.value.nombre,
       last_name: this.form.value.apellido,
       email: this.form.value.email,
       cellphone_number: this.form.value.celular,
       address: this.form.value.Direction,
-      phone_number: this.form.value.celular
+      phone_number: this.form.value.telefono,
     };
 
-    this.customerGuaranteeData = {
-      name: this.guarantorForm.value.guarantorName,
-      last_name: this.guarantorForm.value.guarantorLastName,
-      address: this.guarantorForm.value.guarantorDirection,
-      phone_number: this.guarantorForm.value.guarantorcellphone,
-      cellphone_number: this.guarantorForm.value.guarantormovil,
-      email: this.guarantorForm.value.guarantoremail
-    }
+    this.customerGuaranteeData = [];
+    for (let i = 0; i < this.guarantorFormArray.length; i++) {
+      const guarantorFormGroup = this.guarantorFormArray.at(i) as FormGroup;
 
-    this.customerGuaranteeData2 = {
-      name: this.guarantorForm2.value.guarantorName2,
-      last_name: this.guarantorForm2.value.guarantorLastName2,
-      address: this.guarantorForm2.value.guarantorDirection2,
-      phone_number: this.guarantorForm2.value.guarantorcellphone2,
-      cellphone_number: this.guarantorForm2.value.guarantormovil2,
-      email: this.guarantorForm2.value.guarantoremail2
-    }
+      if (guarantorFormGroup && guarantorFormGroup.valid) {
+        const guarantorData: any = {
+          id: guarantorFormGroup.value.id,
+          name: guarantorFormGroup.value.guarantorName,
+          last_name: guarantorFormGroup.value.guarantorLastName,
+          address: guarantorFormGroup.value.guarantorDirection,
+          phone_number: guarantorFormGroup.value.guarantorcellphone,
+          cellphone_number: guarantorFormGroup.value.guarantormovil,
+        };
 
+        // Si el aval no tiene un ID (es un aval nuevo), se asigna el email del formulario
+        // esto porque mandar un email cuando ya existe un aval causa errores por el validador de email unico
+        if (!guarantorData.id) {
+          guarantorData.email = guarantorFormGroup.value.guarantoremail;
+        }
+
+        this.customerGuaranteeData.push(guarantorData);
+      }
+
+    }
     if (!this.pass) {
       delete this.data.password;
     } else {
       this.data.password = this.pass;
       this.data.passwordConfirm = this.pass;
     }
+    // Edicion de cliente
     if (this.idData) {
-      console.log('Entro aqui en edicion');
-      
-      this.servicioGeneral.update(this.model, this.idData, this.data, true).subscribe({
+      this.servicioGeneral.update(this.model, this.idData, this.customerData, true).subscribe({
         next: (data: any) => {
+
+          //se hace update o post de cada aval en los datos
+          this.customerGuaranteeData.forEach((guarantor: any, index: number) => {
+            guarantor.customer_id = this.idData;
+            //edicion del aval
+            if (guarantor.id) {
+              this.servicioGeneral.update('customer_guarantee', guarantor.id, guarantor, true).subscribe({
+                next: (response: any) => {
+                  console.log(`Aval ${index + 1} actualizado exitosamente`, response);
+                },
+                error: (err: any) => {
+                  console.error(`Error al actualizar el aval ${index + 1}`, err);
+                  this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `No se pudo actualizar el aval ${index + 1}`
+                  });
+                }
+              });
+            } else {
+              //aval nuevo
+              this.servicioGeneral.post('customer_guarantee', guarantor, true).subscribe({
+                next: (response: any) => {
+                  console.log(`Aval ${index + 1} creado exitosamente`, response);
+                },
+                error: (err: any) => {
+                  console.error(`Error al crear el aval ${index + 1}`, err);
+                  this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `No se pudo crear el aval ${index + 1}`
+                  });
+                }
+              });
+            }
+
+          });
         },
         error: (err: any) => {
           console.error('Error al cargar', err);
@@ -307,47 +338,38 @@ export class ClienteComponent implements OnInit {
         }
       })
     } else {
-      console.log('datos del cliente antes de cargar',this.customerData);
+      // Cliente nuevo
       this.servicioGeneral.post(this.model, this.customerData, true).subscribe({
         next: (data: any) => {
-          console.log('datos del clientes decuelta por el servidor',data);
-          this.customerGuaranteeData.customer_id = data.data.id;
-          this.customerGuaranteeData2.customer_id = data.data.id;
-          console.log('datos del aval',this.customerGuaranteeData);
-          this.servicioGeneral.post('customer_guarantee', this.customerGuaranteeData).subscribe({
-            next: (data: any) => {
-            },
-            error: (err: any) => {
-              console.error('Error al cargar', err);
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'No se pudo crear el aval'
-              });
-            }
-          })
-          console.log('Data 2:',this.customerGuaranteeData2);
-          
-          this.servicioGeneral.post('customer_guarantee', this.customerGuaranteeData2).subscribe({
-            next: (data: any) => {
-            },
-            error: (err: any) => {
-              console.error('Error al cargar', err);
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'No se pudo crear el aval'
-              });
-            }
-          })
+          console.log('datos del clientes devuelta por el servidor', data);
+
+          console.log('datos avales:', this.customerGuaranteeData.values);
+          this.customerGuaranteeData.forEach((guarantor: any, index: number) => {
+            guarantor.customer_id = data.data.id;
+            this.servicioGeneral.post('customer_guarantee', guarantor).subscribe({
+              next: (response: any) => {
+                console.log(`Aval ${index + 1} creado exitosamente`, response);
+              },
+              error: (err: any) => {
+                console.error(`Error al crear el aval ${index + 1}`, err);
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: `No se pudo crear el aval ${index + 1}`
+                });
+              }
+            });
+          });
+
           const formData = new FormData();
           console.log('DocumentMap:', this.documentMap);
           for (const fileName in this.documentMap) {
             const file = this.documentMap[fileName];
             formData.append(`documents[${fileName}]`, file);
           }
-          console.log('FormData:',formData);
-          this.http.put(`localhost:80/api/customer/${data.data.id}/files`, formData).subscribe({
+          console.log('FormData:', formData);
+          //no implementado en back aun
+          /* this.http.put(`localhost:80/api/customer/${data.data.id}/files`, formData).subscribe({
             next: (data: any) => {
             },
             error: (err: any) => {
@@ -358,27 +380,107 @@ export class ClienteComponent implements OnInit {
                 detail: 'No se pudo crear el aval'
               });
             }
+          }); */
+        },
+        error: (err: any) => {
+          console.error('Error al cargar', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo crear el usuario'
           });
-          },
-          error: (err: any) => {
-            console.error('Error al cargar', err);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'No se pudo crear el usuario'
-            });
-          }
-        })
+        }
+      })
 
-      
+
     }
 
     this.routerBack.navigate(['./dashboard/clientes/lista']);
   }
 
+  /** Crea un formulario para un aval con validaciones
+   * @param guarantorId - ID del aval, si es nuevo se pasa null
+  */
+  createGuarantorForm(guarantorId: any): any {
+    return this.fb.group({
+      id: new FormControl(guarantorId),
+      guarantorName: new FormControl('', Validators.required),
+      guarantorLastName: new FormControl('', Validators.required),
+      guarantorDirection: new FormControl('', Validators.required),
+      guarantorcellphone: new FormControl('', Validators.required),
+      guarantoremail: new FormControl('', [Validators.email]),
+      guarantormovil: new FormControl('', Validators.required)
+    });
+  }
+
+  /** Crea un nuevo formulario aval al array si el maximo de avales no se ha alcanzado.
+   * 
+   */
+  addGuarantor() {
+    if (this.guarantors.length < this.max_guarantors) {
+      this.guarantors.push({});
+      this.guarantorFormArray.push(this.createGuarantorForm(null));
+    }
+  }
+
+  /** Elimina un aval del array, del formulario y de la base de datos si existe (tiene ID).
+   * @param index - Índice del aval a eliminar
+   */
+  removeGuarantor(index: number) {
+    if (this.guarantors.length > 1) {
+      if (this.guarantorFormArray.at(index).value.id) {
+        this.servicioGeneral.delete('customer_guarantee', this.guarantorFormArray.at(index).value.id, true).subscribe({
+          next: (response: any) => {
+            console.log('Aval eliminado exitosamente', response);
+          },
+          error: (err: any) => {
+            console.error('Error al eliminar el aval', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No se pudo eliminar el aval'
+            });
+          }
+        });
+      }
+      this.guarantors.splice(index, 1);
+      this.guarantorFormArray.removeAt(index);
+
+    }
+  }
+
+  /**
+   * @returns true si el número de avales es menor que el máximo permitido, false en caso contrario.
+   */
+  isAgregable() {
+    return this.guarantors.length < this.max_guarantors;
+  }
+
+  /**
+   * @returns true si hay aval para eliminar, false en caso contrario.
+   */
+  isEliminable() {
+    return this.guarantors.length > 1;
+  }
+
+  /**
+   * @param index - Índice del aval para obtener su formulario.
+   * @returns El formulario del aval correspondiente al índice.
+   */
+  getGuarantorForm(index: number): FormGroup {
+    return this.guarantorFormArray.at(index) as FormGroup;
+  }
+
+  /**
+   * @returns Los datos de los avales en el formulario como un array de objetos.
+   */
+  getGuarantorData() {
+    return this.guarantorFormArray.value;
+  }
+
   onFilesSelected(event: any) {
     console.log('Me seleccionaron');
-    
+
     const files: File[] = Array.from(event.files);
 
     /* for (let file of files) {
