@@ -261,7 +261,7 @@ export class EditcreditComponent implements OnInit {
       plazo: new FormControl('', Validators.required),
       iva: new FormControl(false, Validators.required),
       enganche: new FormControl('', Validators.required),
-      tasa_fmd: new FormControl('', Validators.required),
+      tasa_fmd: new FormControl('5.00', Validators.required),
       fecha_inicial: new FormControl('', Validators.required),
       sucursalSeleccionada: new FormControl('1', Validators.required),
       inversionistaSeleccionado: new FormControl('1', Validators.required),
@@ -272,6 +272,7 @@ export class EditcreditComponent implements OnInit {
       modelo: new FormControl('', Validators.required),
       anio: new FormControl('', Validators.required),
       monto: new FormControl('', Validators.required),
+      montoLista: new FormControl('', Validators.required),
     });
 
     this.formReferencias = this.fb.group({
@@ -529,7 +530,8 @@ export class EditcreditComponent implements OnInit {
       marca: vehiculo.brand,
       modelo: vehiculo.model,
       anio: vehiculo.year,
-      monto: vehiculo.price
+      monto: vehiculo.price,
+      montoLista: vehiculo.list_price
     });
     this.vehiculoid = vehiculo.id;
     this.vehiculoDialog = false;
