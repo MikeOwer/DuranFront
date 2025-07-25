@@ -95,6 +95,9 @@ export class EditcreditComponent implements OnInit {
   sucursalSeleccionada: any = null;
   inversionistas: any[] = [];
   inversionistaSeleccionado: any = null;
+  idCustomer: string = "";
+  idGuarantor: string = "";
+  idReference: string = "";
   estadosCiviles = [
     { label: 'Soltero', value: 'soltero' },
     { label: 'Casado', value: 'casado' },
@@ -109,12 +112,12 @@ export class EditcreditComponent implements OnInit {
     { label: 'Viudo', value: 'viudo' }
   ];
   opcionesDependientes = [
-    { label: 'Sí', value: 'si' },
-    { label: 'No', value: 'no' }
+    { label: 'Sí', value: true },
+    { label: 'No', value: false }
   ];
   tiposTrabajo = [
-    { label: 'Empleado', value: 'empleado' },
-    { label: 'Independiente', value: 'independiente' },
+    { label: 'Empleado', value: false },
+    { label: 'Independiente', value: true },
   ];
   constructor(
     private fb: FormBuilder,
@@ -210,12 +213,14 @@ export class EditcreditComponent implements OnInit {
       last_phone_number: new FormControl(''),
       age_of_children: new FormControl(''),
       CP: new FormControl(''),
-      isOwner: new FormControl(false),
+      isOwner: new FormControl(null),
+      immediate_supervisor_name: new FormControl(''),
     });
 
     this.formStep2 = this.fb.group({
       name: new FormControl('', Validators.required),
-      correoGuarantor: new FormControl('', Validators.required),
+      last_name: new FormControl('', Validators.required),
+      email: new FormControl('', Validators.required),
       edad: new FormControl(null),
       estadoCivilAval: new FormControl(''),
 
@@ -223,31 +228,32 @@ export class EditcreditComponent implements OnInit {
       lugarMatrimonio: new FormControl(''),
       regimen: new FormControl(''),
 
-      directionGuarantor: new FormControl('', Validators.required),
-      ciudad: new FormControl(''),
-      estado: new FormControl(''),
-      cp: new FormControl(''),
-      telefonoGuarantor: new FormControl('', Validators.required),
-      celularGuarantor: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
+      city: new FormControl(''),
+      state: new FormControl(''),
+      CP: new FormControl(''),
+      phone_number: new FormControl('', Validators.required),
+      cellphone_number: new FormControl('', Validators.required),
 
-      propia_pagada: new FormControl<string | null>(null),
-      domicilio_pagada: new FormControl(''),
-      propia_pagando: new FormControl<string | null>(null),
-      domicilio_pagando: new FormControl(''),
+      type_housing_paid: new FormControl<string | null>(null),
+      address_paid: new FormControl(''),
+      type_housing_paying: new FormControl<string | null>(null),
+      address_payment: new FormControl(''),
 
-      fecha_hipoteca: new FormControl(''),
-      comentarios: new FormControl(''),
+      mortgage_date: new FormControl(''),
+      final_comments: new FormControl(''),
 
-      empresa: new FormControl(''),
-      tipoDeTrabajoAval: new FormControl(''),
-      domicilio_empresa: new FormControl(''),
-      puesto: new FormControl(''),
-      jefe: new FormControl(''),
-      giro: new FormControl(''),
-      ingreso: new FormControl(''),
-      otrosIngresos: new FormControl(''),
-      antiguedad: new FormControl(''),
-      telefono_empresa: new FormControl(''),
+      company: new FormControl(''),
+      job_type: new FormControl(''),
+      company_address: new FormControl(''),
+      position: new FormControl(''),
+      boss: new FormControl(''),
+      job: new FormControl(''),
+      monthly_income: new FormControl(''),
+      another_incomes: new FormControl(''),
+      job_seniority: new FormControl(''),
+      company_phone_number: new FormControl(''),
+      isOwner: new FormControl(null),
     });
 
     this.formStep3 = this.fb.group({
@@ -332,34 +338,6 @@ export class EditcreditComponent implements OnInit {
       try {
         console.log('Data completa en submitForm de editCreditComponent:', this.data);
 
-        /* // 1. Actualizar cliente
-        await this.servicioGeneral.update('customers', this.data.customer_id, {
-          nombre: this.form.value.nombre,
-          direccion: this.form.value.direction,
-          telefono: this.form.value.telefono,
-          correo: this.form.value.correo,
-          celular: this.form.value.celular,
-        }).toPromise();
-        
-
-        // 2. Actualizar aval
-        await this.servicioGeneral.update('customer_guarantee', this.data.customer_guarantee_id, {
-          nombre: this.formStep2.value.nombreGuarantor,
-          direccion: this.formStep2.value.directionGuarantor,
-          telefono: this.formStep2.value.telefonoGuarantor,
-          correo: this.formStep2.value.correoGuarantor,
-          celular: this.formStep2.value.celularGuarantor,
-        }).toPromise();
-
-        await this.servicioGeneral.update('vehicles', this.data.vehicle_id, {
-          nombre: this.formMarca.value.nombreGuarantor,
-          direccion: this.formMarca.value.directionGuarantor,
-          telefono: this.formMarca.value.telefonoGuarantor,
-          correo: this.formMarca.value.correoGuarantor,
-          celular: this.formMarca.value.celularGuarantor,
-        }).toPromise(); */
-
-        // 3. Actualizar datos de crédito
         this.data = {
           ...this.data,
           interes: this.formStep3.value.interes,
@@ -415,7 +393,7 @@ export class EditcreditComponent implements OnInit {
           })
 
           console.log('El id en editCreditComponent para probar el post', this.data);
-          this.servicioGeneral.post(this.model, this.data, true).subscribe({
+          /* this.servicioGeneral.post(this.model, this.data, true).subscribe({
             next: (data: any) => {
               console.log('Datos completos: ', data);
               this.messageService.add({
@@ -430,6 +408,43 @@ export class EditcreditComponent implements OnInit {
                 severity: 'error',
                 summary: 'Error',
                 detail: 'No se pudo crear el crédito'
+              });
+            }
+          }); */
+
+          this.servicioGeneral.post('customers', this.form.value, true).subscribe({
+            next: (customerData: any) => {
+              console.log('Cliente creado:', customerData);
+              this.idCustomer = customerData.data.id;
+              console.log('ID del cliente:', this.idCustomer);
+              const customerGuarantee = {
+                customer_id: this.idCustomer,
+                ...this.formStep2.value,
+              }
+              this.servicioGeneral.post('customer_guarantee', customerGuarantee, true).subscribe({
+                next: (guarantorData: any) => {
+                  console.log('Aval creado:', guarantorData);
+                  this.idGuarantor = guarantorData.id;
+                  this.servicioGeneral.post('reference', this.formReferencias.value, true).subscribe({
+                    next: (referenceData: any) => {
+                      console.log('Referencia creada:', referenceData);
+                      this.idReference = referenceData.data.id;
+
+                      this.servicioGeneral.post('credit_application', {
+                        customer_id: this.idCustomer,
+                        sucursal_id: 1,
+                        reference_id: this.idReference,
+                        vehicle_id: this.data.vehicle_id,
+
+
+                      }, true).subscribe({
+                        next: (creditApplicationData: any) => {
+                          console.log('Solicitud de crédito creada:', creditApplicationData);
+                        }
+                      });
+                    }
+                  });
+                }
               });
             }
           });
@@ -521,7 +536,7 @@ export class EditcreditComponent implements OnInit {
   }
 
   async cargarDatos() {
-   
+
     this.servicioGeneral.get(`credito/${this.idData}`, {}, false).subscribe((creditoRes: any) => {
       const credito = creditoRes.data;
 
@@ -784,4 +799,34 @@ export class EditcreditComponent implements OnInit {
   get tieneDependientes(): boolean {
     return this.form.get('dependientesEconomicos')?.value === 'si';
   }
+
+  goToNextTab() {
+    if (this.activeIndex < 4) {
+      this.activeIndex++;
+    }
+  }
+
+  goToPreviousTab() {
+    if (this.activeIndex > 0) {
+      this.activeIndex--;
+    }
+  }
+
+  onTabChange(event: any) {
+    if (event.index !== this.activeIndex) {
+      setTimeout(() => {
+        this.activeIndex = this.activeIndex;
+      });
+    }
+  }
+
+  updateClient() {
+    console.log('Actualizando cliente con datos:', this.form.value);
+    this.servicioGeneral.update('customers', this.form.value, true).subscribe({
+      next: (data: any) => {
+        console.log('Cliente actualizado:', data);
+      }
+    });
+  }
+
 }

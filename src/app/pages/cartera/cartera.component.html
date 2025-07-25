@@ -16,18 +16,24 @@
 
         </div>
         <ng-template #end>
-            <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
-                class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()">
-            </button>
+            <div class="flex flex-wrap items-center w-full gap-2">
 
-            <input pInputText class="custom-input mr-2" type="text" name="buscador" placeholder="Buscar"
-                [(ngModel)]="globalFilter" [ngModelOptions]="{ standalone: true }" (input)="onFilterGlobal($event)" />
+                <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
+                    class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()">
+                </button>
+                <input pInputText class="custom-input mr-2" type="text" name="buscador" placeholder="Buscar"
+                    [(ngModel)]="globalFilter" [ngModelOptions]="{ standalone: true }"
+                    (input)="onFilterGlobal($event)" />
 
-            <button pButton label="Aplicar pagos" (click)="onActivarPagos()"></button> <!-- Boton de prueba -->
+                <button pButton label="Aplicar pagos" (click)="onActivarPagos()"></button>
 
-            <p-multiSelect class="w-full md:w-20rem" [options]="columnas" [(ngModel)]="columnasVisibles"
-                optionLabel="header" placeholder="Mostrar columnas" display="chip">
-            </p-multiSelect>
+                <span class="flex-grow"></span>
+
+                <p-multiSelect class="w-full md:w-80 ml-auto" [options]="columnas" [(ngModel)]="columnasVisibles"
+                    optionLabel="header" placeholder="Mostrar columnas" display="chip">
+                </p-multiSelect>
+
+            </div>
         </ng-template>
     </p-toolbar>
 
@@ -59,41 +65,41 @@
                         Día de pago <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('capital')" pSortableColumn="apellido"><span class="th-content">
-                       Capital <p-sortIcon field="nombre"></p-sortIcon>
+                        Capital <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('saldo')" pSortableColumn="saldo_inicial"><span class="th-content">
-                       Saldo inicial <p-sortIcon field="nombre"></p-sortIcon>
+                        Saldo inicial <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('interes')" pSortableColumn="interes"> <span class="th-content">
-                       Interés <p-sortIcon field="nombre"></p-sortIcon>
+                        Interés <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('iva')" pSortableColumn="iva"><span class="th-content">
-                       IVA <p-sortIcon field="nombre"></p-sortIcon>
+                        IVA <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('tm')" pSortableColumn="tm"> <span class="th-content">
-                       TM <p-sortIcon field="nombre"></p-sortIcon>
+                        TM <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('capital_cobrado')" pSortableColumn="capital_cobrado">
                     <span class="th-content">
-                       Capital cobrado <p-sortIcon field="nombre"></p-sortIcon>
+                        Capital cobrado <p-sortIcon field="nombre"></p-sortIcon>
                     </span>
                 </th>
                 <th *ngIf="mostrarColumna('interes_cobrado')" pSortableColumn="interes_cobrado">
                     <span class="th-content">
-                       Interés cobrado <p-sortIcon field="nombre"></p-sortIcon>
+                        Interés cobrado <p-sortIcon field="nombre"></p-sortIcon>
                     </span>
                 </th>
                 <th *ngIf="mostrarColumna('total_cobrado')" pSortableColumn="total_cobrado"><span class="th-content">
-                       Total cobrado  <p-sortIcon field="nombre"></p-sortIcon>
+                        Total cobrado <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('saldo_final')" pSortableColumn="saldo_final"><span class="th-content">
-                       Saldo final <p-sortIcon field="nombre"></p-sortIcon>
+                        Saldo final <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('comprobacion')" pSortableColumn="comprobacion"><span class="th-content">
-                       Comprobación <p-sortIcon field="nombre"></p-sortIcon>
+                        Comprobación <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
                 <th *ngIf="mostrarColumna('observaciones')" pSortableColumn="observaciones"><span class="th-content">
-                       Observaciones <p-sortIcon field="nombre"></p-sortIcon>
+                        Observaciones <p-sortIcon field="nombre"></p-sortIcon>
                     </span></th>
             </tr>
         </ng-template>
