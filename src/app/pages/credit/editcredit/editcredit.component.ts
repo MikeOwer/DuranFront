@@ -599,8 +599,9 @@ export class EditcreditComponent implements OnInit {
           });
 
           this.formStep2.patchValue({
-            name: this.data.guarantee.name + ' ' + this.data.guarantee.last_name,
-            correoGuarantor: this.data.guarantee.email,
+            name: this.data.guarantee.name,
+            last_name: this.data.guarantee.last_name,
+            email: this.data.guarantee.email,
             edad: this.data.guarantee.age,
             estadoCivilAval: this.data.guarantee.marital_status,
 
@@ -608,31 +609,31 @@ export class EditcreditComponent implements OnInit {
             lugarMatrimonio: this.data.guarantee.marriage_place,
             regimen: this.data.guarantee.marriage_regime,
 
-            directionGuarantor: this.data.guarantee.address,
-            ciudad: this.data.guarantee.city,
-            estado: this.data.guarantee.state,
-            cp: this.data.guarantee.CP,
-            telefonoGuarantor: this.data.guarantee.phone_number,
-            celularGuarantor: this.data.guarantee.cellphone_number,
+            address: this.data.guarantee.address,
+            city: this.data.guarantee.city,
+            state: this.data.guarantee.state,
+            CP: this.data.guarantee.CP,
+            phone_number: this.data.guarantee.phone_number,
+            cellphone_number: this.data.guarantee.cellphone_number,
 
             propia_pagada: this.data.guarantee.type_housing_paid,
-            domicilio_pagada: this.data.guarantee.address_paid,
+            address_paid: this.data.guarantee.address_paid,
             propia_pagando: this.data.guarantee.type_housing_paying,
-            domicilio_pagando: this.data.guarantee.address_payment,
+            address_payment: this.data.guarantee.address_payment,
 
-            fecha_hipoteca: this.data.guarantee.mortgage_date,
-            comentarios: this.data.guarantee.final_comments,
+            mortgage_date: this.data.guarantee.mortgage_date,
+            final_comments: this.data.guarantee.final_comments,
 
-            empresa: this.data.guarantee.company,
-            tipoDeTrabajoAval: this.data.guarantee.isOwner,
-            domicilio_empresa: this.data.guarantee.company_address,
-            puesto: this.data.guarantee.job,
+            company: this.data.guarantee.company,
+            isOwner: this.data.guarantee.isOwner,
+            company_address: this.data.guarantee.company_address,
+            job: this.data.guarantee.job,
             jefe: this.data.guarantee.immediate_supervisor_name,
-            telefono_empresa: this.data.guarantee.company_phone_number,
+            company_phone_number: this.data.guarantee.company_phone_number,
             giro: this.data.guarantee.another_job_industry,
-            ingreso: this.data.guarantee.monthly_income,
-            otrosIngresos: this.data.guarantee.another_incomes,
-            antiguedad: this.data.guarantee.job_seniority,
+            monthly_income: this.data.guarantee.monthly_income,
+            another_incomes: this.data.guarantee.another_incomes,
+            job_seniority: this.data.guarantee.job_seniority,
           });
 
           this.formStep3.patchValue({
