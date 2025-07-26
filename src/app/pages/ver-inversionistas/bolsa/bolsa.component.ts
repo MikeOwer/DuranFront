@@ -37,6 +37,7 @@ export class BolsaComponent implements OnInit {
 
   showWithdrawalDialog: boolean = false;
   withdrawalForm!: FormGroup;
+  isConfirmed: boolean = false;
 
   constructor(
     private realtimeService: DatarealtimeService,
@@ -97,6 +98,12 @@ export class BolsaComponent implements OnInit {
 
   showRetiro() {
     this.showWithdrawalDialog = true;
+
+  }
+
+
+  requestWithdrawal() {
+
 
   }
 

@@ -163,9 +163,11 @@
                     <input pInputText type="text" id="concept" formControlName="concept" placeholder=" Concepto" />
                 </p-inputGroup>
             </div>
-            <p-button label="Retirar" type="submit" class="mt-4"></p-button>
+            <p-button label="Solicitar" type="button" (onClick)="requestWithdrawal()" class="mt-4"></p-button>
             <button pButton label="Cancelar" type="button" class="ml-4 p-button-secondary"
                 (click)="showWithdrawalDialog = false"></button>
+
+            <p-button [disabled]="!isConfirmed" label="Solicitar Retiro" type="submit" class="mt-4"></p-button>
         </form>
     </ng-template>
 
