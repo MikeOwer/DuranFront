@@ -17,6 +17,7 @@ import { ToastModule } from 'primeng/toast';
 import { ServicioGeneralService } from '../../../layout/service/servicio-general/servicio-general.service';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+import Pusher from 'pusher-js';
 
 @Component({
   selector: 'app-bolsa',
@@ -71,6 +72,8 @@ export class BolsaComponent implements OnInit {
       this.investments = Array.isArray(data.data.investments) ? data.data.investments : [data.data.investments];
       this.withdrawals = Array.isArray(data.data.withdrawals) ? data.data.withdrawals : [data.data.withdrawals];
     })
+
+    this.getConfirmation();
   }
   clearFilters() {
     this.table.clear();
@@ -101,13 +104,44 @@ export class BolsaComponent implements OnInit {
 
   }
 
+  getConfirmation(){
+    try{
+      const pusher = new Pusher('local', {
+        wsHost: 'localhost',
+        wsPort: 8080,
+        forceTLS: false,
+        disableStats: true,
+        enabledTransports: ['ws'],
+        cluster: 'mt1'
+      });
+
+      const channel = pusher.subscribe('confirmation');
+      console.log('Canal: ',channel);
+
+      channel.bind('confirmations', (data: any) => {
+        console.log('Evento WebSocket:', data);
+
+        this.isConfirmed = data.confirmation;
+        console.log('Confirmación recibida:', this.isConfirmed);
+      });
+    } catch (error){
+      console.error(' Error al inicializar Pusher:', error);
+    }
+  }
 
   requestWithdrawal() {
-
+    const message = {
+      "investor_catalog_id":1, 
+      "mensaje": "Mensajito"
+    }
+    this.service.post('enviar', message, false).subscribe({
+      next: (data: any) => {}
+    });
 
   }
 
   submitWithdrawal() {
+    
     this.messageService.add({
       severity: 'success',
       summary: 'Información',
