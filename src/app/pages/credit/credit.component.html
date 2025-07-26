@@ -8,9 +8,7 @@
         class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
       <input pInputText class="mr-2" type="text" name="buscador" placeholder="Buscar" [(ngModel)]="globalFilter"
         [ngModelOptions]="{standalone: true}" (input)="onFilterGlobal($event)" />
-      <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2" (click)="link()">
-        Nuevo {{texto}}
-      </button>
+     
       <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2" (click)="link(undefined,'cotizar')">
         Cotizar
       </button>
