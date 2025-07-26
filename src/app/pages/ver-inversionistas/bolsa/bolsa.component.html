@@ -138,11 +138,12 @@
     </p-table>
 </div>
 
+<!-- Dialogo de retiro -->
 <p-dialog [(visible)]="showWithdrawalDialog" [closable]="false" [modal]="true" [responsive]="true"
     [style]="{width: '20vw'}" [dismissableMask]="true">
     <ng-template pTemplate="header">
         <div class="flex justify-between items-center w-full">
-            <h2 class="text-lg font-semibold">Retiro de fondos</h2>
+            <h2 class="text-lg font-semibold">Solicitud de Retiro</h2>
             <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded p-button-secondary"
                 (click)="showWithdrawalDialog = false"></button>
         </div>
@@ -153,7 +154,7 @@
                 <p-inputGroup>
                     <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
                     <input pInputText type="number" id="amount" formControlName="amount"
-                        placeholder=" Cantidad a retirar" />
+                        placeholder=" Cantidad a retirar" min="0" />
                 </p-inputGroup>
             </div>
             <div class="field mb-4">

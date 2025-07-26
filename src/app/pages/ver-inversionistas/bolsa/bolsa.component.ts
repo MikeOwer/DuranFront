@@ -50,8 +50,8 @@ export class BolsaComponent implements OnInit {
 
   ngOnInit(): void {
     this.withdrawalForm = this.fb.group({
-      cantidad: new FormControl('', Validators.required),
-      concepto: new FormControl('', Validators.required),
+      amount: new FormControl('', Validators.required),
+      concept: new FormControl('', Validators.required),
       fecha: [new Date()],
       inversionista_id: [this.inversionistaId]
     });
@@ -59,6 +59,7 @@ export class BolsaComponent implements OnInit {
     this.inversionistaId = Number(this.route.snapshot.paramMap.get('id'));
     this.service.get(`cash_closing_table/${this.inversionistaId}`, {}, true).subscribe((data) => {
       this.data = data;
+      console.log("inversionista data", this.data);
       /* console.log("this data", this.data)
       this.billing = data.data.billing[0];
       console.log('billing:',this.billing[0])
@@ -69,7 +70,6 @@ export class BolsaComponent implements OnInit {
       this.investments = Array.isArray(data.data.investments) ? data.data.investments : [data.data.investments];
       this.withdrawals = Array.isArray(data.data.withdrawals) ? data.data.withdrawals : [data.data.withdrawals];
     })
-
   }
   clearFilters() {
     this.table.clear();
