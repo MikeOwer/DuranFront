@@ -273,6 +273,9 @@ export class EditcreditComponent implements OnInit {
       anio: new FormControl('', Validators.required),
       monto: new FormControl('', Validators.required),
       montoLista: new FormControl('', Validators.required),
+      km: new FormControl('', Validators.required),
+      color: new FormControl('', Validators.required),
+      car_plate: new FormControl('', Validators.required),
     });
 
     this.formReferencias = this.fb.group({
@@ -531,7 +534,10 @@ export class EditcreditComponent implements OnInit {
       modelo: vehiculo.model,
       anio: vehiculo.year,
       monto: vehiculo.price,
-      montoLista: vehiculo.list_price
+      montoLista: vehiculo.list_price,
+      km: vehiculo.km,
+      color: vehiculo.color,
+      car_plate: vehiculo.car_plate
     });
     this.vehiculoid = vehiculo.id;
     this.vehiculoDialog = false;
