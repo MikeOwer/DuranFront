@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -8,7 +8,6 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Table, TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
-import { DatarealtimeService } from '../../../layout/service/datarealtime.service';
 import { Router } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +16,6 @@ import { ToastModule } from 'primeng/toast';
 import { ServicioGeneralService } from '../../../layout/service/servicio-general/servicio-general.service';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
-import Pusher from 'pusher-js';
 
 @Component({
   selector: 'app-bolsa',
@@ -36,28 +34,15 @@ export class BolsaComponent implements OnInit {
   investments: any[] = [];
   withdrawals: any[] = [];
 
-  showWithdrawalDialog: boolean = false;
-  withdrawalForm!: FormGroup;
-  isConfirmed: boolean = false;
 
   constructor(
-    private realtimeService: DatarealtimeService,
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
     private service: ServicioGeneralService,
-    private messageService: MessageService,
-    private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
-    this.withdrawalForm = this.fb.group({
-      amount: new FormControl('', Validators.required),
-      concept: new FormControl('', Validators.required),
-      fecha: [new Date()],
-      inversionista_id: [this.inversionistaId]
-    });
-
     this.inversionistaId = Number(this.route.snapshot.paramMap.get('id'));
     this.service.get(`cash_closing_table/${this.inversionistaId}`, {}, true).subscribe((data) => {
       this.data = data;
@@ -72,8 +57,6 @@ export class BolsaComponent implements OnInit {
       this.investments = Array.isArray(data.data.investments) ? data.data.investments : [data.data.investments];
       this.withdrawals = Array.isArray(data.data.withdrawals) ? data.data.withdrawals : [data.data.withdrawals];
     })
-
-    this.getConfirmation();
   }
   clearFilters() {
     this.table.clear();
@@ -97,56 +80,5 @@ export class BolsaComponent implements OnInit {
   }
   goBack() {
     this.location.back();
-  }
-
-  showRetiro() {
-    this.showWithdrawalDialog = true;
-
-  }
-
-  getConfirmation(){
-    try{
-      const pusher = new Pusher('local', {
-        wsHost: 'localhost',
-        wsPort: 8080,
-        forceTLS: false,
-        disableStats: true,
-        enabledTransports: ['ws'],
-        cluster: 'mt1'
-      });
-
-      const channel = pusher.subscribe('confirmation');
-      console.log('Canal: ',channel);
-
-      channel.bind('confirmations', (data: any) => {
-        console.log('Evento WebSocket:', data);
-
-        this.isConfirmed = data.confirmation;
-        console.log('Confirmación recibida:', this.isConfirmed);
-      });
-    } catch (error){
-      console.error(' Error al inicializar Pusher:', error);
-    }
-  }
-
-  requestWithdrawal() {
-    const message = {
-      "investor_catalog_id":1, 
-      "mensaje": "Mensajito"
-    }
-    this.service.post('enviar', message, false).subscribe({
-      next: (data: any) => {}
-    });
-
-  }
-
-  submitWithdrawal() {
-    
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Información',
-      detail: 'Retiro solicitado con éxito',
-      life: 3000
-    });
   }
 }

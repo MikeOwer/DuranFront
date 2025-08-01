@@ -12,12 +12,9 @@
 
         </ng-template>
     </p-toolbar>
-    <div #start class="flex justify-between mb-4">
+    <div #start class="flex justify-between">
         <button pButton type="button" icon="pi pi-arrow-left" label="Regresar" class="p-button-secondary"
             (click)="goBack()"></button>
-
-        <button pButton type="button" icon="pi pi-money-bill" label="Retirar" class="p-button-primary"
-            (click)="showRetiro()"></button>
     </div>
 
     <p-table #dt [value]="billing" [paginator]="true" [rows]="10" stripedRows
@@ -137,44 +134,6 @@
         </ng-template>
     </p-table>
 </div>
-
-<!-- Dialogo de retiro -->
-<p-dialog [(visible)]="showWithdrawalDialog" [closable]="false" [modal]="true" [responsive]="true"
-    [style]="{width: '30vw'}" [dismissableMask]="true">
-    <ng-template pTemplate="header">
-        <div class="flex justify-between items-center w-full mx-8">
-            <h2 class="text-lg font-semibold">Solicitud de Retiro</h2>
-            <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded p-button-secondary"
-                (click)="showWithdrawalDialog = false"></button>
-        </div>
-    </ng-template>
-    <ng-template pTemplate="content">
-        <form [formGroup]="withdrawalForm" (ngSubmit)="submitWithdrawal()" class="mx-8">
-            <div class="field mb-2 w-2/3">
-                <p-inputGroup>
-                    <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                    <input pInputText type="number" id="amount" formControlName="amount"
-                        placeholder=" Cantidad a retirar" min="0" />
-                </p-inputGroup>
-            </div>
-            <div class="field mb-4 w-2/3">
-                <p-inputGroup>
-                    <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
-                    <input pInputText type="text" id="concept" formControlName="concept" placeholder=" Concepto" />
-                </p-inputGroup>
-            </div>
-            <div class="flex align-center mt-4">
-                <p-button label="Solicitar" type="button" (onClick)="requestWithdrawal()" class="w-1/4"></p-button>
-                <p-button label="Cancelar" type="button" severity="secondary" class="w-1/4"
-                    (click)="showWithdrawalDialog = false"></p-button>
-
-                <p-button [disabled]="!isConfirmed" label="Retirar" type="submit" class="w-2/4 text-right"></p-button>
-            </div>
-
-        </form>
-    </ng-template>
-
-</p-dialog>
 
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>
