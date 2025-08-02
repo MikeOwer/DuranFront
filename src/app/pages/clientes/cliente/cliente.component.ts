@@ -132,7 +132,6 @@ export class ClienteComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       Direction: new FormControl(''),
       celular: new FormControl(''),
-      telefono: new FormControl(''),
     });
 
     //crea un formulario vacio para los avales (aqui luego se cargan los datos de los avales en la bd) 
@@ -212,7 +211,6 @@ export class ClienteComponent implements OnInit {
           apellido: this.data.last_name,
           celular: this.data.cellphone_number,
           Direction: this.data.address,
-          telefono: this.data.phone_number
         });
         this.servicioGeneral.get(`customer_guarantee`, {}, true).subscribe({
           next: (response: any) => {
@@ -230,7 +228,6 @@ export class ClienteComponent implements OnInit {
                   guarantorName: garanteeList[i].name,
                   guarantorLastName: garanteeList[i].last_name,
                   guarantorDirection: garanteeList[i].address,
-                  guarantorcellphone: garanteeList[i].phone_number,
                   guarantoremail: garanteeList[i].email,
                   guarantormovil: garanteeList[i].cellphone_number
                 });
@@ -253,7 +250,6 @@ export class ClienteComponent implements OnInit {
       email: this.form.value.email,
       cellphone_number: this.form.value.celular,
       address: this.form.value.Direction,
-      phone_number: this.form.value.telefono,
     };
 
     this.customerGuaranteeData = [];
@@ -266,7 +262,6 @@ export class ClienteComponent implements OnInit {
           name: guarantorFormGroup.value.guarantorName,
           last_name: guarantorFormGroup.value.guarantorLastName,
           address: guarantorFormGroup.value.guarantorDirection,
-          phone_number: guarantorFormGroup.value.guarantorcellphone,
           cellphone_number: guarantorFormGroup.value.guarantormovil,
         };
 
@@ -407,7 +402,6 @@ export class ClienteComponent implements OnInit {
       guarantorName: new FormControl('', Validators.required),
       guarantorLastName: new FormControl('', Validators.required),
       guarantorDirection: new FormControl('', Validators.required),
-      guarantorcellphone: new FormControl('', Validators.required),
       guarantoremail: new FormControl('', [Validators.email]),
       guarantormovil: new FormControl('', Validators.required)
     });
@@ -460,7 +454,7 @@ export class ClienteComponent implements OnInit {
    * @returns true si hay aval para eliminar, false en caso contrario.
    */
   isEliminable() {
-    return this.guarantors.length > 1;
+    return this.guarantors.length > 0;
   }
 
   /**

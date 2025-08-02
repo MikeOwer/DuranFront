@@ -42,21 +42,12 @@
             </div>
 
             <div class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-1/2">
-                <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                  <input pInputText id="phone_number" formControlName="phone_number" placeholder=" Teléfono" />
-                </p-inputGroup>
-              </div>
-              <div class="w-1/2">
+              <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="cellphone_number" formControlName="cellphone_number" placeholder=" Celular" />
                 </p-inputGroup>
               </div>
-            </div>
-
-            <div class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
@@ -67,6 +58,25 @@
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="age" formControlName="age" placeholder=" Edad" />
+                </p-inputGroup>
+              </div>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/3">
+                <p-dropdown [options]="opcionesDependientes" optionLabel="label" optionValue="value"
+                  placeholder="Dependientes económicos" formControlName="economic_dependents" id="economic_dependents"
+                  [showClear]="true" class="w-full">
+                  <ng-template let-option pTemplate="item">
+                    {{ option.label }}
+                  </ng-template>
+                </p-dropdown>
+              </div>
+              <div class="w-1/3" *ngIf="form.get('economic_dependents')?.value === true">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                  <input pInputText id="age_of_children" formControlName="age_of_children"
+                    placeholder=" Edad de los hijos" />
                 </p-inputGroup>
               </div>
               <div class="w-1/3">
@@ -142,24 +152,6 @@
                   <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
                   <input pInputText id="couple_monthly_income" formControlName="couple_monthly_income"
                     placeholder=" Ingreso mensual" />
-                </p-inputGroup>
-              </div>
-            </div>
-            <div class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-1/3">
-                <p-dropdown [options]="opcionesDependientes" optionLabel="label" optionValue="value"
-                  placeholder="Dependientes económicos" formControlName="economic_dependents" id="economic_dependents"
-                  [showClear]="true" class="w-full">
-                  <ng-template let-option pTemplate="item">
-                    {{ option.label }}
-                  </ng-template>
-                </p-dropdown>
-              </div>
-              <div class="w-1/3" *ngIf="form.get('economic_dependents')?.value === true">
-                <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
-                  <input pInputText id="age_of_children" formControlName="age_of_children"
-                    placeholder=" Edad de los hijos" />
                 </p-inputGroup>
               </div>
             </div>
@@ -431,14 +423,7 @@
             </div>
 
             <div class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-1/2">
-                <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
-                  <input pInputText id="phone_number" formControlName="phone_number" placeholder=" Teléfono" />
-                </p-inputGroup>
-              </div>
-
-              <div class="w-1/2">
+              <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
                   <input pInputText id="cellphone_number" formControlName="cellphone_number" placeholder=" Celular" />
