@@ -803,34 +803,87 @@
                 alt="Vehículo seleccionado" class="rounded shadow"
                 style="width: 50rem; height: 30rem; object-fit: cover;">
             </div>
-            <div class="field col-12 md:col-6 mb-3 mt-3">
-              <p-inputGroup>
-                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                <input pInputText id="marca" formControlName="marca" placeholder=" Marca" />
-              </p-inputGroup>
+
+            <div class="field col-12 md:col-6 mb-3 mt-3 flex gap-4">
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="marca" formControlName="marca" placeholder=" Marca" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="modelo" formControlName="modelo" placeholder=" Modelo" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
+                  <input pInputText id="anio" formControlName="anio" placeholder=" Año" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-hashtag"></i></p-inputGroupAddon>
+                  <input pInputText id="numero_serie" formControlName="numero_serie" placeholder=" Número de serie" />
+                </p-inputGroup>
+              </div>
             </div>
+
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-hashtag"></i></p-inputGroupAddon>
+                  <input pInputText id="numero_motor" formControlName="numero_motor" placeholder=" Número de motor" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-truck"></i></p-inputGroupAddon>
+                  <input pInputText id="placas" formControlName="placas" placeholder="Placas" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputgroup>
+                  <p-inputGroupAddon>
+                    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path fill="#94a3b8"
+                          d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z">
+                        </path>
+                        <path fill="#94a3b8"
+                          d="M192 512a320 320 0 1 1 640 0 32 32 0 1 1-64 0 256 256 0 1 0-512 0 32 32 0 0 1-64 0z">
+                        </path>
+                        <path fill="#94a3b8"
+                          d="M570.432 627.84A96 96 0 1 1 509.568 608l60.992-187.776A32 32 0 1 1 631.424 440l-60.992 187.776zM502.08 734.464a32 32 0 1 0 19.84-60.928 32 32 0 0 0-19.84 60.928z">
+                        </path>
+                      </g>
+                    </svg>
+                  </p-inputGroupAddon>
+                  <input pInputText id="km" formControlName="km" placeholder="Kilometraje" />
+                </p-inputgroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-palette"></i></p-inputGroupAddon>
+                  <input pInputText id="color" formControlName="color" placeholder="Color" />
+                </p-inputGroup>
+              </div>
+            </div>
+
             <div class="field col-12 md:col-6 mb-3">
               <p-inputGroup>
-                <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                <input pInputText id="modelo" formControlName="modelo" placeholder=" Modelo" />
-              </p-inputGroup>
-            </div>
-            <div class="field col-12 md:col-6 mb-3">
-              <p-inputGroup>
-                <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
-                <input pInputText id="anio" formControlName="anio" placeholder=" Año" />
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="montoLista" formControlName="montoLista" placeholder=" Precio de Lista" />
               </p-inputGroup>
             </div>
             <div class="field col-12 md:col-6 mb-3">
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
                 <input pInputText id="monto" formControlName="monto" placeholder=" Monto" />
-              </p-inputGroup>
-            </div>
-            <div class="field col-12 md:col-6 mb-3">
-              <p-inputGroup>
-                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                <input pInputText id="montoLista" formControlName="montoLista" placeholder=" Precio de Lista" />
               </p-inputGroup>
             </div>
           </div>
