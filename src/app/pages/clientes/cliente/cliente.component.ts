@@ -103,6 +103,7 @@ export class ClienteComponent implements OnInit {
   documentMap: { [clave: string]: File } = {};
 
   guarantors = [{}];
+  has_guarantor: boolean = false;
   max_guarantors: number = 3;
   guarantorFormArray!: FormArray;
   customerGuaranteeData: any[] = [];
@@ -283,6 +284,10 @@ export class ClienteComponent implements OnInit {
     }
     // Edicion de cliente
     if (this.idData) {
+      this.customerData = {
+        ...this.customerData,
+        has_customer_guarantee: this.has_guarantor,
+      }
       this.servicioGeneral.update(this.model, this.idData, this.customerData, true).subscribe({
         next: (data: any) => {
 
@@ -334,6 +339,12 @@ export class ClienteComponent implements OnInit {
       })
     } else {
       // Cliente nuevo
+
+      this.customerData = {
+        ...this.customerData,
+        has_customer_guarantee: this.has_guarantor,
+      }
+      console.log("mega wtf", this.customerData)
       this.servicioGeneral.post(this.model, this.customerData, true).subscribe({
         next: (data: any) => {
           console.log('datos del clientes devuelta por el servidor', data);
@@ -414,6 +425,7 @@ export class ClienteComponent implements OnInit {
     if (this.guarantors.length < this.max_guarantors) {
       this.guarantors.push({});
       this.guarantorFormArray.push(this.createGuarantorForm(null));
+      this.has_guarantor = true;
     }
   }
 
@@ -421,10 +433,11 @@ export class ClienteComponent implements OnInit {
    * @param index - Índice del aval a eliminar
    */
   removeGuarantor(index: number) {
-    if (this.guarantors.length > 1) {
+    if (this.guarantors.length > 0) {
       if (this.guarantorFormArray.at(index).value.id) {
         this.servicioGeneral.delete('customer_guarantee', this.guarantorFormArray.at(index).value.id, true).subscribe({
           next: (response: any) => {
+            if (this.guarantorFormArray.length == 0) this.has_guarantor = false;
             console.log('Aval eliminado exitosamente', response);
           },
           error: (err: any) => {
@@ -439,7 +452,6 @@ export class ClienteComponent implements OnInit {
       }
       this.guarantors.splice(index, 1);
       this.guarantorFormArray.removeAt(index);
-
     }
   }
 
