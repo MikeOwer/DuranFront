@@ -179,7 +179,6 @@ export class EditcreditComponent implements OnInit {
       name: new FormControl('', Validators.required),
       last_name: new FormControl('', Validators.required),
       address: new FormControl('', Validators.required),
-      phone_number: new FormControl('', Validators.required),
       cellphone_number: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
 
@@ -232,7 +231,6 @@ export class EditcreditComponent implements OnInit {
       city: new FormControl(''),
       state: new FormControl(''),
       CP: new FormControl(''),
-      phone_number: new FormControl('', Validators.required),
       cellphone_number: new FormControl('', Validators.required),
 
       type_housing_paid: new FormControl<string | null>(null),
@@ -519,7 +517,6 @@ export class EditcreditComponent implements OnInit {
     this.form.patchValue({
       nombre: cliente.name,
       direction: cliente.address,
-      telefono: cliente.phone_number,
       correo: cliente.email,
       celular: cliente.cellphone_number,
     });
@@ -571,7 +568,6 @@ export class EditcreditComponent implements OnInit {
             name: this.data.cliente.name,
             last_name: this.data.cliente.last_name,
             address: this.data.cliente.address,
-            phone_number: this.data.cliente.phone_number,
             cellphone_number: this.data.cliente.cellphone_number,
             email: this.data.cliente.email,
 
@@ -623,7 +619,6 @@ export class EditcreditComponent implements OnInit {
             city: this.data.guarantee.city,
             state: this.data.guarantee.state,
             CP: this.data.guarantee.CP,
-            phone_number: this.data.guarantee.phone_number,
             cellphone_number: this.data.guarantee.cellphone_number,
 
             propia_pagada: this.data.guarantee.type_housing_paid,
@@ -701,7 +696,6 @@ export class EditcreditComponent implements OnInit {
     this.formStep2.patchValue({
       nombreGuarantor: avalData[0].name,
       directionGuarantor: avalData[0].address,
-      telefonoGuarantor: avalData[0].phone_number,
       correoGuarantor: avalData[0].email,
       celularGuarantor: avalData[0].cellphone_number
     })
