@@ -46,7 +46,7 @@ export class CajaComponent {
   @ViewChild('dt') table!: Table;
   urlPage: string = './dashboard/caja';
   globalFilter: string = '';
-
+  
 
   showWithdrawalDialog: boolean = false;
   withdrawalForm!: FormGroup;
@@ -132,7 +132,7 @@ export class CajaComponent {
         cluster: 'mt1'
       });
 
-      const channel = pusher.subscribe('confirmation');
+      const channel = pusher.subscribe('confirmations');
       console.log('Canal: ', channel);
 
       channel.bind('confirmations', (data: any) => {
