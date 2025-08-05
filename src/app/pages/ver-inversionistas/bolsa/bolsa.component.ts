@@ -81,4 +81,55 @@ export class BolsaComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
+  showRetiro() {
+    this.showWithdrawalDialog = true;
+
+  }
+
+  getConfirmation(){
+    try{
+      const pusher = new Pusher('local', {
+        wsHost: 'localhost',
+        wsPort: 8080,
+        forceTLS: false,
+        disableStats: true,
+        enabledTransports: ['ws'],
+        cluster: 'mt1'
+      });
+
+      const channel = pusher.subscribe('confirmations');
+      console.log('Canal: ',channel);
+
+      channel.bind('confirmations', (data: any) => {
+        console.log('Evento WebSocket:', data);
+
+        this.isConfirmed = data.confirmation;
+        console.log('Confirmación recibida:', this.isConfirmed);
+      });
+    } catch (error){
+      console.error(' Error al inicializar Pusher:', error);
+    }
+  }
+
+  requestWithdrawal() {
+    const message = {
+      "investor_catalog_id":1, 
+      "mensaje": "Mensajito"
+    }
+    this.service.post('enviar', message, false).subscribe({
+      next: (data: any) => {}
+    });
+
+  }
+
+  submitWithdrawal() {
+    
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Información',
+      detail: 'Retiro solicitado con éxito',
+      life: 3000
+    });
+  }
 }
