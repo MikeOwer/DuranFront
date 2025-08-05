@@ -179,16 +179,15 @@ export class EditcreditComponent implements OnInit {
       name: new FormControl('', Validators.required),
       last_name: new FormControl('', Validators.required),
       address: new FormControl('', Validators.required),
-      phone_number: new FormControl('', Validators.required),
       cellphone_number: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
 
-      marital_status: new FormControl(''),
+      marital_status: new FormControl('', Validators.required),
       marriage_regime: new FormControl(''),
       marriage_place: new FormControl(''),
-      economic_dependents: new FormControl(''),
+      economic_dependents: new FormControl('', Validators.required),
       number_children: new FormControl(''),
-      job: new FormControl(''),
+      job: new FormControl('', Validators.required),
 
       couple_name: new FormControl(''),
       couple_phone_number: new FormControl(''),
@@ -196,24 +195,24 @@ export class EditcreditComponent implements OnInit {
       couple_industry: new FormControl(''),
       couple_monthly_income: new FormControl(''),
 
-      RFC: new FormControl(''),
-      company: new FormControl(''),
-      company_adress: new FormControl(''),
+      RFC: new FormControl('', Validators.required),
+      company: new FormControl('', Validators.required),
+      company_adress: new FormControl('', Validators.required),
       company_phone_number: new FormControl(''),
-      age: new FormControl(null),
-      city: new FormControl(''),
-      state: new FormControl(''),
-      type_housing: new FormControl(''),
+      age: new FormControl(null, Validators.required),
+      city: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      type_housing: new FormControl('', Validators.required),
       residence_time: new FormControl(''),
       monthly_income: new FormControl(''),
       another_incomes: new FormControl(''),
-      job_seniority: new FormControl(''),
+      job_seniority: new FormControl('', Validators.required),
       last_job: new FormControl(''),
       last_job_seniority: new FormControl(''),
       last_phone_number: new FormControl(''),
       age_of_children: new FormControl(''),
-      CP: new FormControl(''),
-      isOwner: new FormControl(null),
+      CP: new FormControl('', Validators.required),
+      isOwner: new FormControl(null, Validators.required),
       immediate_supervisor_name: new FormControl(''),
     });
 
@@ -221,18 +220,17 @@ export class EditcreditComponent implements OnInit {
       name: new FormControl('', Validators.required),
       last_name: new FormControl('', Validators.required),
       email: new FormControl('', Validators.required),
-      edad: new FormControl(null),
-      estadoCivilAval: new FormControl(''),
+      edad: new FormControl(null, Validators.required),
+      estadoCivilAval: new FormControl('', Validators.required),
 
       nombreEsposo: new FormControl(''),
       lugarMatrimonio: new FormControl(''),
       regimen: new FormControl(''),
 
       address: new FormControl('', Validators.required),
-      city: new FormControl(''),
-      state: new FormControl(''),
-      CP: new FormControl(''),
-      phone_number: new FormControl('', Validators.required),
+      city: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      CP: new FormControl('', Validators.required),
       cellphone_number: new FormControl('', Validators.required),
 
       type_housing_paid: new FormControl<string | null>(null),
@@ -243,17 +241,17 @@ export class EditcreditComponent implements OnInit {
       mortgage_date: new FormControl(''),
       final_comments: new FormControl(''),
 
-      company: new FormControl(''),
+      company: new FormControl('', Validators.required),
       job_type: new FormControl(''),
-      company_address: new FormControl(''),
-      position: new FormControl(''),
+      company_address: new FormControl('', Validators.required),
+      position: new FormControl('', Validators.required),
       boss: new FormControl(''),
       job: new FormControl(''),
-      monthly_income: new FormControl(''),
+      monthly_income: new FormControl('', Validators.required),
       another_incomes: new FormControl(''),
-      job_seniority: new FormControl(''),
-      company_phone_number: new FormControl(''),
-      isOwner: new FormControl(null),
+      job_seniority: new FormControl('', Validators.required),
+      company_phone_number: new FormControl('', Validators.required),
+      isOwner: new FormControl(null, Validators.required),
     });
 
     this.formStep3 = this.fb.group({
@@ -279,28 +277,28 @@ export class EditcreditComponent implements OnInit {
     });
 
     this.formReferencias = this.fb.group({
-      commercial_name: new FormControl('', Validators.required),
-      commercial_phone_number: new FormControl('', Validators.required),
-      second_commercial_name: new FormControl('', Validators.required),
-      second_commercial_phone_number: new FormControl('', Validators.required),
+      commercial_name: new FormControl('',),
+      commercial_phone_number: new FormControl(''),
+      second_commercial_name: new FormControl(''),
+      second_commercial_phone_number: new FormControl(''),
 
-      personal_name: new FormControl('', Validators.required),
-      personal_phone_number: new FormControl('', Validators.required),
-      personal_cellphone_number: new FormControl('', Validators.required),
-      personal_years_known: new FormControl('', Validators.required),
-      second_personal_name: new FormControl('', Validators.required),
-      second_personal_phone_number: new FormControl('', Validators.required),
-      second_personal_cellphone_number: new FormControl('', Validators.required),
-      second_personal_years_known: new FormControl('', Validators.required),
+      personal_name: new FormControl(''),
+      personal_phone_number: new FormControl(''),
+      personal_cellphone_number: new FormControl(''),
+      personal_years_known: new FormControl(''),
+      second_personal_name: new FormControl(''),
+      second_personal_phone_number: new FormControl(''),
+      second_personal_cellphone_number: new FormControl(''),
+      second_personal_years_known: new FormControl(''),
 
-      family_name: new FormControl('', Validators.required),
-      family_phone_number: new FormControl('', Validators.required),
-      family_cellphone_number: new FormControl('', Validators.required),
-      family_relationship: new FormControl('', Validators.required),
-      second_family_name: new FormControl('', Validators.required),
-      second_family_phone_number: new FormControl('', Validators.required),
-      second_family_cellphone_number: new FormControl('', Validators.required),
-      second_family_relationship: new FormControl('', Validators.required),
+      family_name: new FormControl(''),
+      family_phone_number: new FormControl(''),
+      family_cellphone_number: new FormControl(''),
+      family_relationship: new FormControl(''),
+      second_family_name: new FormControl(''),
+      second_family_phone_number: new FormControl(''),
+      second_family_cellphone_number: new FormControl(''),
+      second_family_relationship: new FormControl(''),
     })
   }
 
@@ -443,7 +441,27 @@ export class EditcreditComponent implements OnInit {
 
                       }, true).subscribe({
                         next: (creditApplicationData: any) => {
+                          this.data.customer_id = this.idCustomer;
+                          this.data.codigo = 10000;
                           console.log('Solicitud de crédito creada:', creditApplicationData);
+                          this.servicioGeneral.post(this.model, this.data, false).subscribe({
+                            next: (creditData: any) => {
+                              console.log('Crédito creado:', creditData);
+                              this.messageService.add({ 
+                                severity: 'success',
+                                summary: '¡Éxito!',
+                                detail: 'El crédito fue creado correctamente'
+                              });
+                            },
+                            error: (err: any) => {
+                              console.error('Error al crear crédito', err);
+                              this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'No se pudo crear el crédito'
+                              });
+                            }
+                          });
                         }
                       });
                     }
@@ -809,6 +827,21 @@ export class EditcreditComponent implements OnInit {
   }
 
   goToNextTab() {
+    if (this.form.invalid && this.activeIndex === 0) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    if (this.formStep2.invalid && this.activeIndex === 1) {
+      this.formStep2.markAllAsTouched();
+      return;
+    }
+
+    if (this.formMarca.invalid && this.activeIndex === 3) {
+      this.formMarca.markAllAsTouched();
+      return;
+    }
+
     if (this.activeIndex < 4) {
       this.activeIndex++;
     }
