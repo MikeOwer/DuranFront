@@ -180,27 +180,6 @@ export class ClienteComponent implements OnInit {
     this.visible = true;
   }
 
-  /* guardarCalorias() {
-    this.servicio.createRecord('semana_clientes', this.agregarSemana).subscribe({
-      next: (data: any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: '¡Éxito!',
-          detail: 'Los datos fue guardado correctamente'
-        });
-        this.visible = false;
-      },
-      error: (err: any) => {
-        console.error('Error al cargar', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo crear el usuario'
-        });
-      }
-    })
-  } */
-
   async cargarDatos() {
     this.servicioGeneral.get(`customers/${this.idData}`, {}, true).subscribe({
       next: (data: any) => {
@@ -244,6 +223,8 @@ export class ClienteComponent implements OnInit {
   }
 
   submitData() {
+    this.has_guarantor = this.guarantorFormArray.controls.some(form => form.valid);
+    console.log("has guarantoR:", this.has_guarantor)
 
     this.customerData = {
       name: this.form.value.nombre,
@@ -251,6 +232,7 @@ export class ClienteComponent implements OnInit {
       email: this.form.value.email,
       cellphone_number: this.form.value.celular,
       address: this.form.value.Direction,
+      has_customer_guarantee: this.has_guarantor,
     };
 
     this.customerGuaranteeData = [];
@@ -265,13 +247,11 @@ export class ClienteComponent implements OnInit {
           address: guarantorFormGroup.value.guarantorDirection,
           cellphone_number: guarantorFormGroup.value.guarantormovil,
         };
-
         // Si el aval no tiene un ID (es un aval nuevo), se asigna el email del formulario
         // esto porque mandar un email cuando ya existe un aval causa errores por el validador de email unico
         if (!guarantorData.id) {
           guarantorData.email = guarantorFormGroup.value.guarantoremail;
         }
-
         this.customerGuaranteeData.push(guarantorData);
       }
 
@@ -284,12 +264,10 @@ export class ClienteComponent implements OnInit {
     }
     // Edicion de cliente
     if (this.idData) {
-      this.customerData = {
-        ...this.customerData,
-        has_customer_guarantee: this.has_guarantor,
-      }
+      console.log("model:", this.model)
       this.servicioGeneral.update(this.model, this.idData, this.customerData, true).subscribe({
         next: (data: any) => {
+          console.log(`Cliente ${this.idData} actualizado correctamente:`, this.customerData)
 
           //se hace update o post de cada aval en los datos
           this.customerGuaranteeData.forEach((guarantor: any, index: number) => {
@@ -340,11 +318,6 @@ export class ClienteComponent implements OnInit {
     } else {
       // Cliente nuevo
 
-      this.customerData = {
-        ...this.customerData,
-        has_customer_guarantee: this.has_guarantor,
-      }
-      console.log("mega wtf", this.customerData)
       this.servicioGeneral.post(this.model, this.customerData, true).subscribe({
         next: (data: any) => {
           console.log('datos del clientes devuelta por el servidor', data);
@@ -374,19 +347,6 @@ export class ClienteComponent implements OnInit {
             formData.append(`documents[${fileName}]`, file);
           }
           console.log('FormData:', formData);
-          //no implementado en back aun
-          /* this.http.put(`localhost:80/api/customer/${data.data.id}/files`, formData).subscribe({
-            next: (data: any) => {
-            },
-            error: (err: any) => {
-              console.error('Error al cargar', err);
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'No se pudo crear el aval'
-              });
-            }
-          }); */
         },
         error: (err: any) => {
           console.error('Error al cargar', err);
