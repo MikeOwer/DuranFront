@@ -216,6 +216,13 @@
                 </p-dropdown>
               </div>
             </div>
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
+
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                <input pInputText id="company_adress" formControlName="company_adress" placeholder=" Domicilio" />
+              </p-inputGroup>
+            </div>
 
             <div *ngIf="form.get('isOwner')?.value === false" class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/3">
@@ -337,12 +344,12 @@
               <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                  <input pInputText id="edad" formControlName="edad" placeholder=" Edad" />
+                  <input pInputText type="number" id="age" formControlName="age" placeholder=" Edad" min="0" />
                 </p-inputGroup>
               </div>
               <div class="w-1/2">
                 <p-dropdown [options]="estadosCivilesAval" optionLabel="label" optionValue="value"
-                  placeholder="Seleccione estado civil" formControlName="estadoCivilAval" id="estadoCivilAval"
+                  placeholder="Seleccione estado civil" formControlName="marital_status" id="marital_status"
                   [showClear]="true" class="w-full">
                   <ng-template pTemplate="selectedItem" let-selectedOption>
                     <i class="pi pi-user mr-2" *ngIf="selectedOption"></i>
@@ -359,29 +366,30 @@
               </div>
             </div>
 
-            <div *ngIf="formStep2.get('estadoCivilAval')?.value === 'casado'"
+            <div *ngIf="formStep2.get('marital_status')?.value === 'casado'"
               class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
-                  <input pInputText id="nombreEsposo" formControlName="nombreEsposo" placeholder=" Nombre del espos@" />
+                  <input pInputText id="couple_name" formControlName="couple_name" placeholder=" Nombre del espos@" />
                 </p-inputGroup>
               </div>
               <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
-                  <input pInputText id="lugarMatrimonio" formControlName="lugarMatrimonio"
+                  <input pInputText id="marriage_place" formControlName="marriage_place"
                     placeholder=" Lugar del matrimonio" />
                 </p-inputGroup>
               </div>
             </div>
 
-            <div *ngIf="formStep2.get('estadoCivilAval')?.value === 'casado'"
+            <div *ngIf="formStep2.get('marital_status')?.value === 'casado'"
               class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
-                  <input pInputText id="regimen" formControlName="regimen" placeholder=" Regimen del matrimonio" />
+                  <input pInputText id="marriage_regime" formControlName="marriage_regime"
+                    placeholder=" Regimen del matrimonio" />
                 </p-inputGroup>
               </div>
             </div>
@@ -520,24 +528,26 @@
               </div>
             </div>
             <div class="field col-12 md:col-6 mb-3 flex gap-4">
-
-              <p-inputGroup>
-                <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
-                <input pInputText id="company_address" formControlName="company_address" placeholder=" Domicilio" />
-              </p-inputGroup>
-            </div>
-
-            <div *ngIf="formStep2.get('isOwner')?.value === false" class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-2/4">
+              <div class="w-3/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                  <input pInputText id="company_address" formControlName="company_address" placeholder=" Domicilio" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="job" formControlName="job" placeholder=" Puesto" />
                 </p-inputGroup>
               </div>
-              <div class="w-2/4">
+            </div>
+
+            <div *ngIf="formStep2.get('isOwner')?.value === false" class="field col-12 md:col-6 mb-3 flex gap-4">
+
+              <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                  <input pInputText id="jefe" formControlName="jefe" placeholder=" Jefe inmediato" />
+                  <input pInputText id="jefe" formControlName="boss" placeholder=" Jefe inmediato" />
                 </p-inputGroup>
               </div>
             </div>
@@ -545,16 +555,9 @@
             <div *ngIf="formStep2.get('isOwner')?.value === true" class="field col-12 md:col-6 mb-3 flex gap-4">
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
-                <input pInputText id="giro" formControlName="giro" placeholder=" Giro" />
+                <input pInputText id="another_job_industry" formControlName="another_job_industry"
+                  placeholder=" Giro" />
               </p-inputGroup>
-            </div>
-            <div *ngIf="formStep2.get('isOwner')?.value === true" class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-1/2">
-                <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                  <input pInputText id="monthly_income" formControlName="monthly_income" placeholder=" Ingreso" />
-                </p-inputGroup>
-              </div>
 
               <div class="w-1/2">
                 <p-inputGroup>
@@ -566,15 +569,20 @@
             </div>
 
             <div class="field col-12 md:col-6 mb-3 flex gap-4">
-
-              <div class="w-1/4">
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                  <input pInputText id="monthly_income" formControlName="monthly_income" placeholder=" Ingreso" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="job_seniority" formControlName="job_seniority" placeholder=" Antigüedad" />
                 </p-inputGroup>
               </div>
 
-              <div class="w-1/4">
+              <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
                   <input pInputText id="company_phone_number" formControlName="company_phone_number"
@@ -879,27 +887,10 @@
         </div>
       </p-tabPanel>
 
-      <!-- Tab 4: Datos Financieros -->
-      <p-tabPanel header="Datos Financieros" [disabled]="true">
+      <!-- Tab 5: Datos Financieros -->
+      <p-tabPanel header="Datos Crédito" [disabled]="true">
         <form [formGroup]="formStep3">
           <div class="p-fluid grid">
-            <div style="display: flex; justify-content: flex-end;">
-
-              @if(data.etapa === 'cotizacion'){
-              <p-button class="p-button-rounded" label="Aprobacion" (onClick)="onAcceptCredit()"></p-button>
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Cancelar"
-                (onClick)="onCancelCredit()"></p-button>
-              } @else if(data.etapa === 'aprobacion'){
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded " label="Aprobar"
-                (onClick)="onApproveCredit(true)"></p-button>
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Degradar"
-                (onClick)="onApproveCredit(false)"></p-button>
-              } @else if(data.etapa === 'aprobado'){
-              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Cancelar"
-                (onClick)="onCancelCredit()"></p-button>
-              }
-
-            </div>
             <div class="field col-12 md:col-6 mb-3">
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
@@ -920,22 +911,6 @@
                 <label for="tasa" class="ml-2">IVA</label>
               </p-inputgroup>
             </div>
-
-            <!--<div class="field col-12 md:col-6 mb-3">
-              <p-inputgroup>
-                <p-datepicker formControlName="fecha1erPago" [showIcon]="true" [iconDisplay]="'input'"
-                  [inputStyleClass]="'p-inputtext w-full'" dateFormat inputId="fecha1erPago"
-                  placeholder="Fecha de 1er pago" />
-
-              </p-inputgroup>
-            </div>
-
-            <div class="field col-12 md:col-6 mb-3">
-              <p-inputgroup>
-                <input pInputText formControlName="FMD" placeholder="FMD" />
-                <p-inputgroup-addon><i>%</i></p-inputgroup-addon>
-              </p-inputgroup>
-            </div>-->
 
             <div class="field col-12 md:col-6 mb-3">
               <p-inputGroup>
@@ -978,6 +953,109 @@
                 </div>
               </div>
               }
+            </div>
+          </div>
+        </form>
+        <div class="flex justify-between w-full mt-5">
+          <button pButton label="Regresar" (click)="goToPreviousTab()"></button>
+
+          <button pButton label="Siguiente" (click)="goToNextTab()"></button>
+          <button pButton label="Guardar" icon="pi pi-save" (click)="submitForm()" class="p-button-success"></button>
+        </div>
+      </p-tabPanel>
+
+      <!-- Tab 6: Datos Cotización -->
+      <p-tabPanel *ngIf="modo === 'cotizar'" header="Datos Financieros" [disabled]="true">
+        <form [formGroup]="formStep6">
+          <div class="p-fluid grid">
+            <div style="display: flex; justify-content: flex-end;">
+
+              @if(data.etapa === 'cotizacion'){
+              <p-button class="p-button-rounded" label="Aprobacion" (onClick)="onAcceptCredit()"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Cancelar"
+                (onClick)="onCancelCredit()"></p-button>
+              } @else if(data.etapa === 'aprobacion'){
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded " label="Aprobar"
+                (onClick)="onApproveCredit(true)"></p-button>
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Degradar"
+                (onClick)="onApproveCredit(false)"></p-button>
+              } @else if(data.etapa === 'aprobado'){
+              <p-button *ngIf="authService.hasPermission('manage creditos')" class="p-button-rounded" label="Cancelar"
+                (onClick)="onCancelCredit()"></p-button>
+              }
+
+            </div>
+
+            <div class="flex field col-12 md:col-6 mb-3 gap-4">
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
+                  <input pInputText id="fecha_inicial" formControlName="fecha_inicial" placeholder="Fecha de 1er. Pago">
+                </p-inputGroup>
+              </div>
+            </div>
+
+            <div class="flex field col-12 md:col-6 mb-3 gap-4">
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                  <input pInputText id="interes" formControlName="interes" placeholder=" % Interes" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-percentage"></i></p-inputGroupAddon>
+                  <input pInputText id="interes" formControlName="interes" placeholder=" % Interes" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-calendar-clock"></i></p-inputGroupAddon>
+                  <input pInputText id="plazo" formControlName="plazo" placeholder=" Plazo" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/4">
+                <p-inputgroup>
+                  <p-inputGroupAddon><i class="pi pi-percentage"></i></p-inputGroupAddon>
+                  <input pInputText id="iva" formControlName="interes"
+                    placeholder="{{formStep3.value.iva ? 'Aplica' : 'No aplica'}} IVA" />
+                </p-inputgroup>
+              </div>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="pago_interes" formControlName="pago_interes" placeholder=" Pago Interes" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="pago_capital" formControlName="pago_capital" placeholder=" Pago capital" />
+              </p-inputGroup>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="pago_mensual" formControlName="pago_mensual" placeholder=" Pago mensual" />
+              </p-inputGroup>
+            </div>
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="moratorio_mensual" formControlName="moratorio_mensual"
+                  placeholder=" Moratorio mensual" />
+              </p-inputGroup>
+            </div>
+            <div class="field col-12 md:col-6 mb-3">
+              <p-inputGroup>
+                <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                <input pInputText id="moratorio_diario" formControlName="moratorio_diario"
+                  placeholder=" Moratorio diario" />
+              </p-inputGroup>
             </div>
           </div>
         </form>

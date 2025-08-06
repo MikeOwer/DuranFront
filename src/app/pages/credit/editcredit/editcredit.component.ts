@@ -61,6 +61,7 @@ export class EditcreditComponent implements OnInit {
   formStep3!: FormGroup;
   formMarca!: FormGroup;
   formReferencias!: FormGroup;
+  formStep6!: FormGroup;
   activeIndex: number = 0;
   private subs: Subscription[] = [];
   model: any = 'credito';
@@ -96,6 +97,7 @@ export class EditcreditComponent implements OnInit {
   inversionistas: any[] = [];
   inversionistaSeleccionado: any = null;
   idCustomer: string = "";
+  has_guarantor: boolean = false;
   idGuarantor: string = "";
   idReference: string = "";
   estadosCiviles = [
@@ -157,6 +159,7 @@ export class EditcreditComponent implements OnInit {
       this.modo = 'nuevo';
     }
 
+    console.log("modo: ", this.modo)
     this.initializeForms();
     this.subs.push(this.router.params.subscribe(
       response => {
@@ -175,57 +178,62 @@ export class EditcreditComponent implements OnInit {
   }
 
   initializeForms(): void {
+    //form info cliente
     this.form = this.fb.group({
-      name: new FormControl('', Validators.required),
-      last_name: new FormControl('', Validators.required),
-      address: new FormControl('', Validators.required),
-      cellphone_number: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      name: new FormControl('a', Validators.required),
+      last_name: new FormControl('a', Validators.required),
+      address: new FormControl('a', Validators.required),
+      email: new FormControl('a@a.com', [Validators.required, Validators.email]),
+      cellphone_number: new FormControl(1111111111, Validators.required),
+      RFC: new FormControl('a', Validators.required),
+      has_customer_guarantee: this.has_guarantor,
+      documents: (null),
 
-      marital_status: new FormControl(''),
-      marriage_regime: new FormControl(''),
-      marriage_place: new FormControl(''),
-      economic_dependents: new FormControl(''),
-      number_children: new FormControl(''),
-      job: new FormControl(''),
+      marital_status: new FormControl('soltero'),
+      marriage_regime: new FormControl(null),
+      marriage_place: new FormControl(null),
+      economic_dependents: new FormControl(false),
+      number_children: new FormControl(null),
+      age_of_children: new FormControl(null),
 
-      couple_name: new FormControl(''),
-      couple_phone_number: new FormControl(''),
-      couple_job: new FormControl(''),
-      couple_industry: new FormControl(''),
-      couple_monthly_income: new FormControl(''),
+      couple_name: new FormControl(null),
+      couple_phone_number: new FormControl(null),
+      couple_job: new FormControl(null),
+      couple_industry: new FormControl(null),
+      couple_monthly_income: new FormControl(null),
 
-      RFC: new FormControl(''),
-      company: new FormControl(''),
-      company_adress: new FormControl(''),
-      company_phone_number: new FormControl(''),
-      age: new FormControl(null),
-      city: new FormControl(''),
-      state: new FormControl(''),
-      type_housing: new FormControl(''),
-      residence_time: new FormControl(''),
-      monthly_income: new FormControl(''),
-      another_incomes: new FormControl(''),
-      job_seniority: new FormControl(''),
-      last_job: new FormControl(''),
-      last_job_seniority: new FormControl(''),
-      last_phone_number: new FormControl(''),
-      age_of_children: new FormControl(''),
-      CP: new FormControl(''),
-      isOwner: new FormControl(null),
-      immediate_supervisor_name: new FormControl(''),
+      age: new FormControl(20),
+      city: new FormControl('a'),
+      state: new FormControl('a'),
+      type_housing: new FormControl(null),
+      residence_time: new FormControl(null),
+      CP: new FormControl('a'),
+
+      company: new FormControl('a'),
+      company_adress: new FormControl('a'),
+      company_phone_number: new FormControl(1111111111),
+      monthly_income: new FormControl(1),
+      another_incomes: new FormControl(null),
+      job: new FormControl('a'),
+      job_seniority: new FormControl(0),
+      last_job: new FormControl(null),
+      last_job_seniority: new FormControl(null),
+      last_phone_number: new FormControl(null),
+      isOwner: new FormControl(true),
+      immediate_supervisor_name: new FormControl(null),
     });
 
+    //form avales
     this.formStep2 = this.fb.group({
       name: new FormControl('', Validators.required),
       last_name: new FormControl('', Validators.required),
       email: new FormControl('', Validators.required),
-      edad: new FormControl(null),
-      estadoCivilAval: new FormControl(''),
+      age: new FormControl('', Validators.required),
+      marital_status: new FormControl(''),
 
-      nombreEsposo: new FormControl(''),
-      lugarMatrimonio: new FormControl(''),
-      regimen: new FormControl(''),
+      couple_name: new FormControl(''),
+      marriage_place: new FormControl(''),
+      marriage_regime: new FormControl(''),
 
       address: new FormControl('', Validators.required),
       city: new FormControl(''),
@@ -247,6 +255,7 @@ export class EditcreditComponent implements OnInit {
       position: new FormControl(''),
       boss: new FormControl(''),
       job: new FormControl(''),
+      another_job_industry: new FormControl(''),
       monthly_income: new FormControl(''),
       another_incomes: new FormControl(''),
       job_seniority: new FormControl(''),
@@ -254,6 +263,7 @@ export class EditcreditComponent implements OnInit {
       isOwner: new FormControl(null),
     });
 
+    //Form datos crédito
     this.formStep3 = this.fb.group({
       interes: new FormControl('', Validators.required),
       plazo: new FormControl('', Validators.required),
@@ -279,29 +289,45 @@ export class EditcreditComponent implements OnInit {
     });
 
     this.formReferencias = this.fb.group({
-      commercial_name: new FormControl('', Validators.required),
-      commercial_phone_number: new FormControl('', Validators.required),
-      second_commercial_name: new FormControl('', Validators.required),
-      second_commercial_phone_number: new FormControl('', Validators.required),
+      commercial_name: new FormControl('a', Validators.required),
+      commercial_phone_number: new FormControl(2222222223, Validators.required),
+      second_commercial_name: new FormControl('a', Validators.required),
+      second_commercial_phone_number: new FormControl(3333333333, Validators.required),
 
-      personal_name: new FormControl('', Validators.required),
-      personal_phone_number: new FormControl('', Validators.required),
-      personal_cellphone_number: new FormControl('', Validators.required),
-      personal_years_known: new FormControl('', Validators.required),
-      second_personal_name: new FormControl('', Validators.required),
-      second_personal_phone_number: new FormControl('', Validators.required),
-      second_personal_cellphone_number: new FormControl('', Validators.required),
-      second_personal_years_known: new FormControl('', Validators.required),
+      personal_name: new FormControl('a', Validators.required),
+      personal_phone_number: new FormControl(3333333331, Validators.required),
+      personal_cellphone_number: new FormControl(3333333332, Validators.required),
+      personal_years_known: new FormControl(2, Validators.required),
+      second_personal_name: new FormControl('a', Validators.required),
+      second_personal_phone_number: new FormControl(4444444444, Validators.required),
+      second_personal_cellphone_number: new FormControl(4444444441, Validators.required),
+      second_personal_years_known: new FormControl(1, Validators.required),
 
-      family_name: new FormControl('', Validators.required),
-      family_phone_number: new FormControl('', Validators.required),
-      family_cellphone_number: new FormControl('', Validators.required),
-      family_relationship: new FormControl('', Validators.required),
-      second_family_name: new FormControl('', Validators.required),
-      second_family_phone_number: new FormControl('', Validators.required),
-      second_family_cellphone_number: new FormControl('', Validators.required),
-      second_family_relationship: new FormControl('', Validators.required),
-    })
+      family_name: new FormControl('a', Validators.required),
+      family_phone_number: new FormControl(4444444442, Validators.required),
+      family_cellphone_number: new FormControl(4444444443, Validators.required),
+      family_relationship: new FormControl('a', Validators.required),
+      second_family_name: new FormControl('a', Validators.required),
+      second_family_phone_number: new FormControl(5555555555, Validators.required),
+      second_family_cellphone_number: new FormControl(5555555551, Validators.required),
+      second_family_relationship: new FormControl('a', Validators.required),
+    });
+
+
+    this.formStep6 = this.fb.group({
+      fecha_inicial: new FormControl('').disable(),
+
+      monto: new FormControl('').disable(),
+      plazo: new FormControl('').disable(),
+      interes: new FormControl('').disable(),
+      iva: new FormControl('').disable(),
+
+      pago_interes: new FormControl('').disable(),
+      pago_capital: new FormControl('').disable(),
+      pago_mensual: new FormControl('').disable(),
+      moratorio_mensual: new FormControl('').disable(),
+      moratorio_diario: new FormControl('').disable(),
+    });
   }
 
   nextStep(): void {
@@ -331,6 +357,8 @@ export class EditcreditComponent implements OnInit {
   }
 
   async submitForm(): Promise<void> {
+
+    this.has_guarantor = this.formStep2.valid;
     console.log(this.form.value);
     console.log(this.formStep2.value);
     console.log(this.formStep3.value);
@@ -340,7 +368,6 @@ export class EditcreditComponent implements OnInit {
 
     if (this.form.valid && this.formStep2.valid && this.formStep3.valid && this.formMarca.valid) {
       try {
-        console.log('Data completa en submitForm de editCreditComponent:', this.data);
 
         this.data = {
           ...this.data,
@@ -354,9 +381,9 @@ export class EditcreditComponent implements OnInit {
           investor_catalog_id: this.formStep3.value.inversionistaSeleccionado,
         };
 
+        console.log('Data completa en submitForm de editCreditComponent:', this.data);
         // 4. Crear o actualizar el crédito
         if (this.idData) {
-          console.log('El id en editCreditComponent para probar', this.idData);
           this.data.etapa = 'cotizacion'; // Hardcodeo de nuevo, ver como manejarlo despues
           this.servicioGeneral.update(this.model, this.idData, this.data, true).subscribe({
             next: (data: any) => {
@@ -383,7 +410,6 @@ export class EditcreditComponent implements OnInit {
           });
         } else {
           this.modo === 'cotizar' ? this.data.etapa = 'cotizacion' : this.data.etapa = 'aprobacion';
-          this.data.codigo = 10000;
 
           const vehiclePrice = { price: this.formMarca.value.monto }
           console.log('VehicleID en credito', this.data.vehicle_id);
@@ -396,31 +422,10 @@ export class EditcreditComponent implements OnInit {
             }
           })
 
-          console.log('El id en editCreditComponent para probar el post', this.data);
-          /* this.servicioGeneral.post(this.model, this.data, true).subscribe({
-            next: (data: any) => {
-              console.log('Datos completos: ', data);
-              this.messageService.add({
-                severity: 'success',
-                summary: '¡Éxito!',
-                detail: 'El crédito fue creado correctamente'
-              });
-            },
-            error: (err: any) => {
-              console.error('Error al crear crédito', err);
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'No se pudo crear el crédito'
-              });
-            }
-          }); */
-
-          this.servicioGeneral.post('customers', this.form.value, true).subscribe({
+          this.servicioGeneral.post('customers', { ...this.form.value, has_customer_guarantee: this.has_guarantor }, true).subscribe({
             next: (customerData: any) => {
               console.log('Cliente creado:', customerData);
               this.idCustomer = customerData.data.id;
-              console.log('ID del cliente:', this.idCustomer);
               const customerGuarantee = {
                 customer_id: this.idCustomer,
                 ...this.formStep2.value,
@@ -439,11 +444,14 @@ export class EditcreditComponent implements OnInit {
                         sucursal_id: 1,
                         reference_id: this.idReference,
                         vehicle_id: this.data.vehicle_id,
-
-
                       }, true).subscribe({
                         next: (creditApplicationData: any) => {
                           console.log('Solicitud de crédito creada:', creditApplicationData);
+                          console.log("lajbda:", creditApplicationData.data.id)
+                          this.idData = creditApplicationData.data.id;
+
+                          this.cargarDatosFinancieros();
+                          this.goToNextTab();
                         }
                       });
                     }
@@ -453,6 +461,8 @@ export class EditcreditComponent implements OnInit {
             }
           });
         }
+
+
 
       } catch (error) {
         console.error('Error al actualizar cliente o aval', error);
@@ -471,6 +481,14 @@ export class EditcreditComponent implements OnInit {
     }
 
     this.routerBack.navigate(['./dashboard/credito']);
+  }
+
+  async cargarDatosFinancieros() {
+    console.log("kdhabd id: ", this.idData)
+    this.servicioGeneral.get(`credit_application/${this.idData}`, {}, false).subscribe((creditoRes: any) => {
+      console.log("creditoRes:", creditoRes.data)
+      const credito = creditoRes.data;
+    });
   }
 
   onSearch(): void {
@@ -515,11 +533,14 @@ export class EditcreditComponent implements OnInit {
     this.data.customer_id = cliente.id;
 
     this.form.patchValue({
-      nombre: cliente.name,
-      direction: cliente.address,
-      correo: cliente.email,
-      celular: cliente.cellphone_number,
+      name: cliente.name,
+      last_name: cliente.last_name,
+      address: cliente.address,
+      email: cliente.email,
+      cellphone_number: cliente.cellphone_number,
+      has_customer_guarantee: cliente.has_customer_guarantee,
     });
+
     this.clienteid = cliente.id;
     this.clienteDialog = false;
   }
@@ -570,6 +591,7 @@ export class EditcreditComponent implements OnInit {
             address: this.data.cliente.address,
             cellphone_number: this.data.cliente.cellphone_number,
             email: this.data.cliente.email,
+            age: this.data.cliente.age,
 
             marital_status: this.data.cliente.marital_status,
             marriage_regime: this.data.cliente.marriage_regime,
@@ -588,7 +610,6 @@ export class EditcreditComponent implements OnInit {
             company: this.data.cliente.company,
             company_adress: this.data.cliente.company_adress,
             company_phone_number: this.data.cliente.company_phone_number,
-            age: this.data.cliente.age,
             city: this.data.cliente.city,
             state: this.data.cliente.state,
             type_housing: this.data.cliente.type_housing,
@@ -602,18 +623,21 @@ export class EditcreditComponent implements OnInit {
             age_of_children: this.data.cliente.age_of_children,
             CP: this.data.cliente.CP,
             isOwner: this.data.cliente.isOwner,
+
+            has_customer_guarantee: this.data.cliente.has_customer_guarantee,
           });
+          console.log("guarantee data: ", this.data.guarantee)
 
           this.formStep2.patchValue({
             name: this.data.guarantee.name,
             last_name: this.data.guarantee.last_name,
             email: this.data.guarantee.email,
-            edad: this.data.guarantee.age,
-            estadoCivilAval: this.data.guarantee.marital_status,
+            age: this.data.guarantee.age,
+            marital_status: this.data.guarantee.marital_status,
 
-            nombreEsposo: this.data.guarantee.couple_name,
-            lugarMatrimonio: this.data.guarantee.marriage_place,
-            regimen: this.data.guarantee.marriage_regime,
+            couple_name: this.data.guarantee.couple_name,
+            marriage_place: this.data.guarantee.marriage_place,
+            marriage_regime: this.data.guarantee.marriage_regime,
 
             address: this.data.guarantee.address,
             city: this.data.guarantee.city,
@@ -621,9 +645,9 @@ export class EditcreditComponent implements OnInit {
             CP: this.data.guarantee.CP,
             cellphone_number: this.data.guarantee.cellphone_number,
 
-            propia_pagada: this.data.guarantee.type_housing_paid,
+            type_housing_paid: this.data.guarantee.type_housing_paid,
             address_paid: this.data.guarantee.address_paid,
-            propia_pagando: this.data.guarantee.type_housing_paying,
+            type_housing_paying: this.data.guarantee.type_housing_paying,
             address_payment: this.data.guarantee.address_payment,
 
             mortgage_date: this.data.guarantee.mortgage_date,
@@ -635,7 +659,7 @@ export class EditcreditComponent implements OnInit {
             job: this.data.guarantee.job,
             jefe: this.data.guarantee.immediate_supervisor_name,
             company_phone_number: this.data.guarantee.company_phone_number,
-            giro: this.data.guarantee.another_job_industry,
+            another_job_industry: this.data.guarantee.another_job_industry,
             monthly_income: this.data.guarantee.monthly_income,
             another_incomes: this.data.guarantee.another_incomes,
             job_seniority: this.data.guarantee.job_seniority,
@@ -694,10 +718,12 @@ export class EditcreditComponent implements OnInit {
     console.log('avales: ', avalData);
     this.data.customer_guarantee_id = avalData[0].id;
     this.formStep2.patchValue({
-      nombreGuarantor: avalData[0].name,
-      directionGuarantor: avalData[0].address,
-      correoGuarantor: avalData[0].email,
-      celularGuarantor: avalData[0].cellphone_number
+      name: avalData[0].name,
+      last_name: avalData[0].last_name,
+      email: avalData[0].email,
+
+      address: avalData[0].address,
+      cellphone_number: avalData[0].cellphone_number,
     })
     this.showGuarantorDialog = false;
     this.activeIndex++;
@@ -808,7 +834,7 @@ export class EditcreditComponent implements OnInit {
   }
 
   goToNextTab() {
-    if (this.activeIndex < 4) {
+    if (this.activeIndex < 5) {
       this.activeIndex++;
     }
   }
