@@ -447,11 +447,34 @@ export class EditcreditComponent implements OnInit {
                       }, true).subscribe({
                         next: (creditApplicationData: any) => {
                           console.log('Solicitud de crédito creada:', creditApplicationData);
-                          console.log("lajbda:", creditApplicationData.data.id)
-                          this.idData = creditApplicationData.data.id;
+                          console.log("data para crear credit", this.data)
+                          this.data = {
+                            ...this.data,
+                            credit_application_id: creditApplicationData.data.id,
+                            customer_id: creditApplicationData.data.customer_id,
+                          }
+                          this.servicioGeneral.post(this.model, this.data, false).subscribe({
+                            next: (creditData: any) => {
+                              console.log('Crédito creado:', creditData);
+                              this.messageService.add({
+                                severity: 'success',
+                                summary: '¡Éxito!',
+                                detail: 'El crédito fue creado correctamente'
+                              });
+                              this.idData = creditData.data.id;
+                              this.cargarDatosFinancieros();
+                              this.goToNextTab();
+                            },
+                            error: (err: any) => {
+                              console.error('Error al crear crédito', err);
+                              this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'No se pudo crear el crédito'
+                              });
+                            }
+                          });
 
-                          this.cargarDatosFinancieros();
-                          this.goToNextTab();
                         }
                       });
                     }
@@ -480,14 +503,27 @@ export class EditcreditComponent implements OnInit {
       });
     }
 
-    this.routerBack.navigate(['./dashboard/credito']);
+    //this.routerBack.navigate(['./dashboard/credito']);
   }
 
   async cargarDatosFinancieros() {
-    console.log("kdhabd id: ", this.idData)
-    this.servicioGeneral.get(`credit_application/${this.idData}`, {}, false).subscribe((creditoRes: any) => {
+    this.servicioGeneral.get(`credito/${this.idData}`, {}, false).subscribe((creditoRes: any) => {
       console.log("creditoRes:", creditoRes.data)
       const credito = creditoRes.data;
+      this.formStep6.patchValue({
+        fecha_inicial: credito.fecha_inicial,
+
+        monto: credito.monto,
+        plazo: credito.plazo,
+        interes: credito.interes,
+        iva: credito.iva,
+
+        pago_interes: credito.pago_interes,
+        pago_capital: credito.pago_capital,
+        pago_mensual: credito.pago_mensual,
+        moratorio_mensual: (credito.pago_capital + credito.pago_mensual),
+        moratorio_diario: credito.moratorio_diario,
+      })
     });
   }
 
@@ -626,7 +662,6 @@ export class EditcreditComponent implements OnInit {
 
             has_customer_guarantee: this.data.cliente.has_customer_guarantee,
           });
-          console.log("guarantee data: ", this.data.guarantee)
 
           this.formStep2.patchValue({
             name: this.data.guarantee.name,

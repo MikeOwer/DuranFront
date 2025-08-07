@@ -965,7 +965,7 @@
       </p-tabPanel>
 
       <!-- Tab 6: Datos Cotización -->
-      <p-tabPanel *ngIf="modo === 'cotizar'" header="Datos Financieros" [disabled]="true">
+      <p-tabPanel *ngIf="data.etapa === 'cotizacion'" header="Datos Financieros" [disabled]="true">
         <form [formGroup]="formStep6">
           <div class="p-fluid grid">
             <div style="display: flex; justify-content: flex-end;">
@@ -988,73 +988,80 @@
 
             <div class="flex field col-12 md:col-6 mb-3 gap-4">
               <div class="w-1/3">
+                <label for="fecha_inicial">Fecha de 1er. Pago</label>
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
-                  <input pInputText id="fecha_inicial" formControlName="fecha_inicial" placeholder="Fecha de 1er. Pago">
+                  <input pInputText id="fecha_inicial" formControlName="fecha_inicial">
                 </p-inputGroup>
               </div>
             </div>
 
             <div class="flex field col-12 md:col-6 mb-3 gap-4">
               <div class="w-1/4">
+                <label for="monto">Monto a financiar</label>
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                  <input pInputText id="interes" formControlName="interes" placeholder=" % Interes" />
+                  <input pInputText id="monto" formControlName="monto" />
                 </p-inputGroup>
               </div>
               <div class="w-1/4">
+                <label for="interes">% Interes</label>
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-percentage"></i></p-inputGroupAddon>
-                  <input pInputText id="interes" formControlName="interes" placeholder=" % Interes" />
+                  <input pInputText id="interes" formControlName="interes" />
                 </p-inputGroup>
               </div>
               <div class="w-1/4">
+                <label for="plazo">Plazo</label>
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-calendar-clock"></i></p-inputGroupAddon>
-                  <input pInputText id="plazo" formControlName="plazo" placeholder=" Plazo" />
+                  <input pInputText id="plazo" formControlName="plazo" />
                 </p-inputGroup>
               </div>
               <div class="w-1/4">
+                <label for="iva">IVA</label>
                 <p-inputgroup>
                   <p-inputGroupAddon><i class="pi pi-percentage"></i></p-inputGroupAddon>
-                  <input pInputText id="iva" formControlName="interes"
-                    placeholder="{{formStep3.value.iva ? 'Aplica' : 'No aplica'}} IVA" />
+                  <input pInputText id="iva" value="{{formStep3.value.iva ? 'Aplica' : 'No aplica'}} IVA" />
                 </p-inputgroup>
               </div>
             </div>
 
             <div class="field col-12 md:col-6 mb-3">
+              <label for="pago_interes">Pago Interes</label>
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                <input pInputText id="pago_interes" formControlName="pago_interes" placeholder=" Pago Interes" />
+                <input pInputText id="pago_interes" formControlName="pago_interes" />
               </p-inputGroup>
             </div>
 
             <div class="field col-12 md:col-6 mb-3">
+              <label for="pago_capital">Pago capital</label>
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                <input pInputText id="pago_capital" formControlName="pago_capital" placeholder=" Pago capital" />
+                <input pInputText id="pago_capital" formControlName="pago_capital" />
               </p-inputGroup>
             </div>
 
             <div class="field col-12 md:col-6 mb-3">
+              <label for="pago_mensaual">Pago mensual</label>
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                <input pInputText id="pago_mensual" formControlName="pago_mensual" placeholder=" Pago mensual" />
+                <input pInputText id="pago_mensual" formControlName="pago_mensual" />
               </p-inputGroup>
             </div>
             <div class="field col-12 md:col-6 mb-3">
+              <label for="moratorio_mensual">Moratorio mensual</label>
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                <input pInputText id="moratorio_mensual" formControlName="moratorio_mensual"
-                  placeholder=" Moratorio mensual" />
+                <input pInputText id="moratorio_mensual" formControlName="moratorio_mensual" />
               </p-inputGroup>
             </div>
             <div class="field col-12 md:col-6 mb-3">
+              <label for="moratorio_diario">Moratorio diario</label>
               <p-inputGroup>
                 <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-                <input pInputText id="moratorio_diario" formControlName="moratorio_diario"
-                  placeholder=" Moratorio diario" />
+                <input pInputText id="moratorio_diario" formControlName="moratorio_diario" />
               </p-inputGroup>
             </div>
           </div>
