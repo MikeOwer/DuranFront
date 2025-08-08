@@ -314,20 +314,20 @@ export class EditcreditComponent implements OnInit {
       second_family_relationship: new FormControl('a', Validators.required),
     });
 
-
+    //Cotizacion
     this.formStep6 = this.fb.group({
-      fecha_inicial: new FormControl(null).disable(),
+      fecha_inicial: new FormControl({ value: null, disabled: true }),
 
-      monto: new FormControl('').disable(),
-      plazo: new FormControl('').disable(),
-      interes: new FormControl('').disable(),
-      iva: new FormControl('').disable(),
+      monto: new FormControl(''),
+      plazo: new FormControl(''),
+      interes: new FormControl(''),
+      iva: new FormControl(''),
 
-      pago_interes: new FormControl('').disable(),
-      pago_capital: new FormControl('').disable(),
-      pago_mensual: new FormControl('').disable(),
-      moratorio_mensual: new FormControl('').disable(),
-      moratorio_diario: new FormControl('').disable(),
+      pago_interes: new FormControl(''),
+      pago_capital: new FormControl(''),
+      pago_mensual: new FormControl(''),
+      moratorio_mensual: new FormControl(''),
+      moratorio_diario: new FormControl(''),
     });
   }
 
