@@ -121,6 +121,15 @@ export class EditcreditComponent implements OnInit {
     { label: 'Empleado', value: false },
     { label: 'Independiente', value: true },
   ];
+  tiposVivienda = [
+    { label: 'Hipoteca Infonavit', value: 'hipoteca_infonavit' },
+    { label: 'Hipoteca Banco', value: 'hipoteca_banco' },
+    { label: 'Donación', value: 'donacion' },
+    { label: 'Usufructo', value: 'usufructo' },
+    { label: 'Rentada', value: 'rentada' },
+    { label: 'Familiar', value: 'familiar' },
+    { label: 'Otros', value: 'otro' },
+  ];
   constructor(
     private fb: FormBuilder,
     private servicio: DatarealtimeService,
@@ -190,10 +199,10 @@ export class EditcreditComponent implements OnInit {
       has_customer_guarantee: this.has_guarantor,
       documents: (null),
 
-      marital_status: new FormControl(''),
+      marital_status: new FormControl('', Validators.required),
       marriage_regime: new FormControl(null),
       marriage_place: new FormControl(null),
-      economic_dependents: new FormControl(null),
+      economic_dependents: new FormControl(null, Validators.required),
       number_children: new FormControl(null),
       age_of_children: new FormControl(null),
 
@@ -203,44 +212,44 @@ export class EditcreditComponent implements OnInit {
       couple_industry: new FormControl(null),
       couple_monthly_income: new FormControl(null),
 
-      age: new FormControl(null),
-      city: new FormControl(''),
-      state: new FormControl(''),
-      type_housing: new FormControl(null),
-      residence_time: new FormControl(null),
-      CP: new FormControl(''),
+      age: new FormControl(null, Validators.required),
+      city: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      type_housing: new FormControl(null, Validators.required),
+      residence_time: new FormControl(null, Validators.required),
+      CP: new FormControl('', Validators.required),
 
-      company: new FormControl(''),
-      company_adress: new FormControl(''),
-      company_phone_number: new FormControl(),
-      monthly_income: new FormControl(null),
+      company: new FormControl('', Validators.required),
+      company_adress: new FormControl('', Validators.required),
+      company_phone_number: new FormControl(null, Validators.required),
+      monthly_income: new FormControl(null, Validators.required),
       another_incomes: new FormControl(null),
-      job: new FormControl(''),
-      job_seniority: new FormControl(null),
+      job: new FormControl('', Validators.required),
+      job_seniority: new FormControl(null, Validators.required),
       last_job: new FormControl(null),
       last_job_seniority: new FormControl(null),
       last_phone_number: new FormControl(null),
-      isOwner: new FormControl(null),
+      isOwner: new FormControl(null, Validators.required),
       immediate_supervisor_name: new FormControl(null),
     });
 
     //form avales
     this.formStep2 = this.fb.group({
-      name: new FormControl('', Validators.required),
-      last_name: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
-      age: new FormControl(null, Validators.required),
+      name: new FormControl('',),
+      last_name: new FormControl('',),
+      email: new FormControl('',),
+      age: new FormControl(null,),
       marital_status: new FormControl(''),
 
       couple_name: new FormControl(''),
       marriage_place: new FormControl(''),
       marriage_regime: new FormControl(''),
 
-      address: new FormControl('', Validators.required),
+      address: new FormControl('',),
       city: new FormControl(''),
       state: new FormControl(''),
       CP: new FormControl(''),
-      cellphone_number: new FormControl(null, Validators.required),
+      cellphone_number: new FormControl(null,),
 
       type_housing_paid: new FormControl<string | null>(null),
       address_paid: new FormControl(''),
