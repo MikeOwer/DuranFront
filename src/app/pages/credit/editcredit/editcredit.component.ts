@@ -429,7 +429,6 @@ export class EditcreditComponent implements OnInit {
                 this.servicioGeneral.update('customer_guarantee', customerGuarantee.data.id, customerGuarantee).subscribe({
                   next: (guarantorData: any) => {
                     console.log("aval actualizado: ", guarantorData);
-                    this.idGuarantor = guarantorData.id;
 
                     this.servicioGeneral.post('reference', this.formReferencias.value, true).subscribe({
                       next: (referenceData: any) => {
@@ -448,7 +447,6 @@ export class EditcreditComponent implements OnInit {
                               ...this.data,
                               credit_application_id: creditApplicationData.data.id,
                               customer_id: creditApplicationData.data.customer_id,
-                              customer_guarantee_id: creditApplicationData.data.customer_guarantees.id,
 
                             }
                             console.log("data para crear credit", this.data)
@@ -496,7 +494,6 @@ export class EditcreditComponent implements OnInit {
                 this.servicioGeneral.post('customer_guarantee', customerGuarantee, true).subscribe({
                   next: (guarantorData: any) => {
                     console.log('Aval creado:', guarantorData);
-                    this.idGuarantor = guarantorData.id;
                     this.servicioGeneral.post('reference', this.formReferencias.value, true).subscribe({
                       next: (referenceData: any) => {
                         console.log('Referencia creada:', referenceData);
