@@ -39,7 +39,7 @@ export class AppComponent {
         this.generalSocketService.initPusher('pagos-realizados');
         this.generalSocketService.initPusher('investor-catalog');
         this.generalSocketService.initPusher('credito');
-
+        this.generalSocketService.initPusher('investor-withdrawals');
 
     }
 
