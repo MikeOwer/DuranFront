@@ -194,10 +194,50 @@
                     placeholder=" Tiempo de residencia" />
                 </p-inputGroup>
               </div>
+            </div>
+
+            <div *ngIf="form.get('type_housing')?.value === 'rentada'" class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/3">
                 <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
-                  <input pInputText id="CP" formControlName="CP" placeholder=" Código Postal" />
+                  <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                  <input pInputText id="rent_price" formControlName="rent_price" placeholder="Renta" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="extra_name" formControlName="extra_name" placeholder="Nombre arrendador" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                  <input pInputText id="extra_phone_number" formControlName="extra_phone_number"
+                    placeholder="Teléfono arrendador" />
+                </p-inputGroup>
+              </div>
+            </div>
+
+            <div *ngIf="form.get('type_housing')?.value === 'familiar'" class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                  <input pInputText id="extra_name" formControlName="extra_name" placeholder="Nombre" />
+                </p-inputGroup>
+              </div>
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-users"></i></p-inputGroupAddon>
+                  <input pInputText id="familiar_relationship" formControlName="familiar_relationship"
+                    placeholder="Parentesco" />
+                </p-inputGroup>
+              </div>
+
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-mobil"></i></p-inputGroupAddon>
+                  <input pInputText id="extra_phone_number" formControlName="extra_phone_number"
+                    placeholder="Teléfono familiar" />
                 </p-inputGroup>
               </div>
             </div>
@@ -216,7 +256,12 @@
                   <input pInputText id="state" formControlName="state" placeholder=" Estado" />
                 </p-inputGroup>
               </div>
-
+              <div class="w-1/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
+                  <input pInputText id="CP" formControlName="CP" placeholder=" Código Postal" />
+                </p-inputGroup>
+              </div>
             </div>
 
 
