@@ -141,6 +141,7 @@ export class EditcreditComponent implements OnInit {
 
     if (url.includes('cotizar')) {
       this.modo = 'cotizar';
+      this.data.etapa = 'cotizacion'
     } else if (url.includes('editar')) {
       this.modo = 'editar';
       this.servicioGeneral.get('sucursal', {}, false).subscribe({
@@ -180,19 +181,19 @@ export class EditcreditComponent implements OnInit {
   initializeForms(): void {
     //form info cliente
     this.form = this.fb.group({
-      name: new FormControl('a', Validators.required),
-      last_name: new FormControl('a', Validators.required),
-      address: new FormControl('a', Validators.required),
-      email: new FormControl('a@a.com', [Validators.required, Validators.email]),
-      cellphone_number: new FormControl(1111111111, Validators.required),
-      RFC: new FormControl('a', Validators.required),
+      name: new FormControl('', Validators.required),
+      last_name: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      cellphone_number: new FormControl(null, Validators.required),
+      RFC: new FormControl('', Validators.required),
       has_customer_guarantee: this.has_guarantor,
       documents: (null),
 
-      marital_status: new FormControl('soltero'),
+      marital_status: new FormControl(''),
       marriage_regime: new FormControl(null),
       marriage_place: new FormControl(null),
-      economic_dependents: new FormControl(false),
+      economic_dependents: new FormControl(null),
       number_children: new FormControl(null),
       age_of_children: new FormControl(null),
 
@@ -202,24 +203,24 @@ export class EditcreditComponent implements OnInit {
       couple_industry: new FormControl(null),
       couple_monthly_income: new FormControl(null),
 
-      age: new FormControl(20),
-      city: new FormControl('a'),
-      state: new FormControl('a'),
+      age: new FormControl(null),
+      city: new FormControl(''),
+      state: new FormControl(''),
       type_housing: new FormControl(null),
       residence_time: new FormControl(null),
-      CP: new FormControl('a'),
+      CP: new FormControl(''),
 
-      company: new FormControl('a'),
-      company_adress: new FormControl('a'),
-      company_phone_number: new FormControl(1111111111),
-      monthly_income: new FormControl(1),
+      company: new FormControl(''),
+      company_adress: new FormControl(''),
+      company_phone_number: new FormControl(),
+      monthly_income: new FormControl(null),
       another_incomes: new FormControl(null),
-      job: new FormControl('a'),
-      job_seniority: new FormControl(0),
+      job: new FormControl(''),
+      job_seniority: new FormControl(null),
       last_job: new FormControl(null),
       last_job_seniority: new FormControl(null),
       last_phone_number: new FormControl(null),
-      isOwner: new FormControl(true),
+      isOwner: new FormControl(null),
       immediate_supervisor_name: new FormControl(null),
     });
 
@@ -228,7 +229,7 @@ export class EditcreditComponent implements OnInit {
       name: new FormControl('', Validators.required),
       last_name: new FormControl('', Validators.required),
       email: new FormControl('', Validators.required),
-      age: new FormControl('', Validators.required),
+      age: new FormControl(null, Validators.required),
       marital_status: new FormControl(''),
 
       couple_name: new FormControl(''),
@@ -239,7 +240,7 @@ export class EditcreditComponent implements OnInit {
       city: new FormControl(''),
       state: new FormControl(''),
       CP: new FormControl(''),
-      cellphone_number: new FormControl('', Validators.required),
+      cellphone_number: new FormControl(null, Validators.required),
 
       type_housing_paid: new FormControl<string | null>(null),
       address_paid: new FormControl(''),
@@ -256,8 +257,8 @@ export class EditcreditComponent implements OnInit {
       boss: new FormControl(''),
       job: new FormControl(''),
       another_job_industry: new FormControl(''),
-      monthly_income: new FormControl(''),
-      another_incomes: new FormControl(''),
+      monthly_income: new FormControl(null),
+      another_incomes: new FormControl(null),
       job_seniority: new FormControl(''),
       company_phone_number: new FormControl(''),
       isOwner: new FormControl(null),
@@ -270,7 +271,7 @@ export class EditcreditComponent implements OnInit {
       iva: new FormControl(false, Validators.required),
       enganche: new FormControl('', Validators.required),
       tasa_fmd: new FormControl('5.00', Validators.required),
-      fecha_inicial: new FormControl('', Validators.required),
+      fecha_inicial: new FormControl(null, Validators.required),
       sucursalSeleccionada: new FormControl('1', Validators.required),
       inversionistaSeleccionado: new FormControl('1', Validators.required),
     });
@@ -315,7 +316,7 @@ export class EditcreditComponent implements OnInit {
 
 
     this.formStep6 = this.fb.group({
-      fecha_inicial: new FormControl('').disable(),
+      fecha_inicial: new FormControl(null).disable(),
 
       monto: new FormControl('').disable(),
       plazo: new FormControl('').disable(),
@@ -329,26 +330,6 @@ export class EditcreditComponent implements OnInit {
       moratorio_diario: new FormControl('').disable(),
     });
   }
-
-  nextStep(): void {
-
-    if (this.activeIndex === 0 && this.clienteid) {
-      try {
-        this.servicio.listenToCollection('aval_cliente').subscribe(avales => {
-          this.possibleGuarantors = avales.filter((aval: any) => aval.idRel_cliente === this.clienteid);
-        });
-
-      } catch (err) {
-        console.error('Error al buscar avales');
-      }
-
-
-      this.showGuarantorDialog = true;
-    } else if (this.activeIndex < this.items.length - 1) {
-      this.activeIndex++;
-    }
-  }
-
 
   prevStep(): void {
     if (this.activeIndex > 0) {
@@ -368,7 +349,6 @@ export class EditcreditComponent implements OnInit {
 
     if (this.form.valid && this.formStep2.valid && this.formStep3.valid && this.formMarca.valid) {
       try {
-
         this.data = {
           ...this.data,
           interes: this.formStep3.value.interes,
@@ -383,8 +363,8 @@ export class EditcreditComponent implements OnInit {
 
         console.log('Data completa en submitForm de editCreditComponent:', this.data);
         // 4. Crear o actualizar el crédito
+        //Es credito existente
         if (this.idData) {
-          this.data.etapa = 'cotizacion'; // Hardcodeo de nuevo, ver como manejarlo despues
           this.servicioGeneral.update(this.model, this.idData, this.data, true).subscribe({
             next: (data: any) => {
               this.messageService.add({
@@ -408,7 +388,7 @@ export class EditcreditComponent implements OnInit {
               console.log('Datos del crédito actualizado:', data);
             },
           });
-        } else {
+        } else {//crédito nuevo
           this.modo === 'cotizar' ? this.data.etapa = 'cotizacion' : this.data.etapa = 'aprobacion';
 
           const vehiclePrice = { price: this.formMarca.value.monto }
@@ -422,71 +402,140 @@ export class EditcreditComponent implements OnInit {
             }
           })
 
-          this.servicioGeneral.post('customers', { ...this.form.value, has_customer_guarantee: this.has_guarantor }, true).subscribe({
-            next: (customerData: any) => {
-              console.log('Cliente creado:', customerData);
-              this.idCustomer = customerData.data.id;
-              const customerGuarantee = {
-                customer_id: this.idCustomer,
-                ...this.formStep2.value,
-              }
-              this.servicioGeneral.post('customer_guarantee', customerGuarantee, true).subscribe({
-                next: (guarantorData: any) => {
-                  console.log('Aval creado:', guarantorData);
-                  this.idGuarantor = guarantorData.id;
-                  this.servicioGeneral.post('reference', this.formReferencias.value, true).subscribe({
-                    next: (referenceData: any) => {
-                      console.log('Referencia creada:', referenceData);
-                      this.idReference = referenceData.data.id;
-
-                      this.servicioGeneral.post('credit_application', {
-                        customer_id: this.idCustomer,
-                        sucursal_id: 1,
-                        reference_id: this.idReference,
-                        vehicle_id: this.data.vehicle_id,
-                      }, true).subscribe({
-                        next: (creditApplicationData: any) => {
-                          console.log('Solicitud de crédito creada:', creditApplicationData);
-                          console.log("data para crear credit", this.data)
-                          this.data = {
-                            ...this.data,
-                            credit_application_id: creditApplicationData.data.id,
-                            customer_id: creditApplicationData.data.customer_id,
-                          }
-                          this.servicioGeneral.post(this.model, this.data, false).subscribe({
-                            next: (creditData: any) => {
-                              console.log('Crédito creado:', creditData);
-                              this.messageService.add({
-                                severity: 'success',
-                                summary: '¡Éxito!',
-                                detail: 'El crédito fue creado correctamente'
-                              });
-                              this.idData = creditData.data.id;
-                              this.cargarDatosFinancieros();
-                              this.goToNextTab();
-                            },
-                            error: (err: any) => {
-                              console.error('Error al crear crédito', err);
-                              this.messageService.add({
-                                severity: 'error',
-                                summary: 'Error',
-                                detail: 'No se pudo crear el crédito'
-                              });
-                            }
-                          });
-
-                        }
-                      });
-                    }
-                  });
+          //Cotizacion para cliente existente
+          if (this.data.customer_id) {
+            this.servicioGeneral.update('customers', this.data.customer_id, { ...this.form.value, has_customer_guarantee: this.has_guarantor }).subscribe({
+              next: (customerData: any) => {
+                this.idCustomer = customerData.data.id;
+                console.log('cliente actualizado: ', customerData);
+                const customerGuarantee = {
+                  customer_id: this.idCustomer,
+                  ...this.formStep2.value,
                 }
-              });
-            }
-          });
+                this.servicioGeneral.update('customer_guarantee', customerGuarantee.data.id, customerGuarantee).subscribe({
+                  next: (guarantorData: any) => {
+                    console.log("aval actualizado: ", guarantorData);
+                    this.idGuarantor = guarantorData.id;
+
+                    this.servicioGeneral.post('reference', this.formReferencias.value, true).subscribe({
+                      next: (referenceData: any) => {
+                        console.log('Referencia actualizada:', referenceData);
+                        this.idReference = referenceData.data.id;
+
+                        this.servicioGeneral.post('credit_application', {
+                          customer_id: this.idCustomer,
+                          sucursal_id: 1,
+                          reference_id: this.idReference,
+                          vehicle_id: this.data.vehicle_id,
+                        }, true).subscribe({
+                          next: (creditApplicationData: any) => {
+                            console.log('Solicitud de crédito creada:', creditApplicationData);
+                            this.data = {
+                              ...this.data,
+                              credit_application_id: creditApplicationData.data.id,
+                              customer_id: creditApplicationData.data.customer_id,
+                              customer_guarantee_id: creditApplicationData.data.customer_guarantees.id,
+
+                            }
+                            console.log("data para crear credit", this.data)
+
+                            this.servicioGeneral.post(this.model, this.data, false).subscribe({
+                              next: (creditData: any) => {
+                                console.log('Crédito creado:', creditData);
+                                this.messageService.add({
+                                  severity: 'success',
+                                  summary: '¡Éxito!',
+                                  detail: 'El crédito fue creado correctamente'
+                                });
+                                this.idData = creditData.data.id;
+                                this.cargarDatosFinancieros();
+                                this.goToNextTab();
+                              },
+                              error: (err: any) => {
+                                console.error('Error al crear crédito', err);
+                                this.messageService.add({
+                                  severity: 'error',
+                                  summary: 'Error',
+                                  detail: 'No se pudo crear el crédito'
+                                });
+                              }
+                            });
+
+                          }
+                        });
+                      }
+                    });
+                  }
+                })
+              }
+            })
+
+          } else {//credito para cliente nuevo
+            this.servicioGeneral.post('customers', { ...this.form.value, has_customer_guarantee: this.has_guarantor }, true).subscribe({
+              next: (customerData: any) => {
+                console.log('Cliente creado:', customerData);
+                this.idCustomer = customerData.data.id;
+                const customerGuarantee = {
+                  customer_id: this.idCustomer,
+                  ...this.formStep2.value,
+                }
+                this.servicioGeneral.post('customer_guarantee', customerGuarantee, true).subscribe({
+                  next: (guarantorData: any) => {
+                    console.log('Aval creado:', guarantorData);
+                    this.idGuarantor = guarantorData.id;
+                    this.servicioGeneral.post('reference', this.formReferencias.value, true).subscribe({
+                      next: (referenceData: any) => {
+                        console.log('Referencia creada:', referenceData);
+                        this.idReference = referenceData.data.id;
+
+                        this.servicioGeneral.post('credit_application', {
+                          customer_id: this.idCustomer,
+                          sucursal_id: 1,
+                          reference_id: this.idReference,
+                          vehicle_id: this.data.vehicle_id,
+                          customer_guarantee: guarantorData,
+                        }, true).subscribe({
+                          next: (creditApplicationData: any) => {
+                            console.log('Solicitud de crédito creada:', creditApplicationData);
+                            this.data = {
+                              ...this.data,
+                              credit_application_id: creditApplicationData.data.id,
+                              customer_id: creditApplicationData.data.customer_id,
+                            }
+                            console.log("data para crear credit", this.data)
+
+                            this.servicioGeneral.post(this.model, this.data, false).subscribe({
+                              next: (creditData: any) => {
+                                console.log('Crédito creado:', creditData);
+                                this.messageService.add({
+                                  severity: 'success',
+                                  summary: '¡Éxito!',
+                                  detail: 'El crédito fue creado correctamente'
+                                });
+                                this.idData = creditData.data.id;
+                                this.cargarDatosFinancieros();
+                                this.goToNextTab();
+                              },
+                              error: (err: any) => {
+                                console.error('Error al crear crédito', err);
+                                this.messageService.add({
+                                  severity: 'error',
+                                  summary: 'Error',
+                                  detail: 'No se pudo crear el crédito'
+                                });
+                              }
+                            });
+
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
         }
-
-
-
       } catch (error) {
         console.error('Error al actualizar cliente o aval', error);
         this.messageService.add({
@@ -511,8 +560,6 @@ export class EditcreditComponent implements OnInit {
       console.log("creditoRes:", creditoRes.data)
       const credito = creditoRes.data;
       this.formStep6.patchValue({
-        fecha_inicial: credito.fecha_inicial,
-
         monto: credito.monto,
         plazo: credito.plazo,
         interes: credito.interes,
@@ -521,8 +568,10 @@ export class EditcreditComponent implements OnInit {
         pago_interes: credito.pago_interes,
         pago_capital: credito.pago_capital,
         pago_mensual: credito.pago_mensual,
-        moratorio_mensual: (credito.pago_capital + credito.pago_mensual),
+        moratorio_mensual: +credito.pago_capital + +credito.pago_mensual,
         moratorio_diario: credito.moratorio_diario,
+
+        fecha_inicial: credito.fecha_inicial ? new Date(credito.fecha_inicial) : null,
       })
     });
   }
@@ -605,6 +654,7 @@ export class EditcreditComponent implements OnInit {
 
     this.servicioGeneral.get(`credito/${this.idData}`, {}, false).subscribe((creditoRes: any) => {
       const credito = creditoRes.data;
+      this.data.etapa = credito.etapa;
 
       this.servicioGeneral.get('customers', {}, false).subscribe((clientes: any) => {
         const customersList = clientes.data;
@@ -612,8 +662,7 @@ export class EditcreditComponent implements OnInit {
 
         this.servicioGeneral.get('customer_guarantee', {}, false).subscribe((guarantees: any) => {
           const guaranteesList = guarantees.data;
-          const guarantee = guaranteesList.find((g: any) => g.id === credito.customer_guarantee_id);
-
+          const guarantee = guaranteesList.find((g: any) => g.customer_id === credito.customer_id);
           this.data = {
             ...credito,
             cliente: cliente || null,
@@ -632,7 +681,7 @@ export class EditcreditComponent implements OnInit {
             marital_status: this.data.cliente.marital_status,
             marriage_regime: this.data.cliente.marriage_regime,
             marriage_place: this.data.cliente.marriage_place,
-            economic_dependents: this.data.cliente.economic_dependents,
+            economic_dependents: this.data.cliente.economic_dependents == 1 ? true : false,
             number_children: this.data.cliente.number_children,
             job: this.data.cliente.job,
 
@@ -658,7 +707,7 @@ export class EditcreditComponent implements OnInit {
             last_phone_number: this.data.cliente.last_phone_number,
             age_of_children: this.data.cliente.age_of_children,
             CP: this.data.cliente.CP,
-            isOwner: this.data.cliente.isOwner,
+            isOwner: this.data.cliente.isOwner == 1 ? true : false,
 
             has_customer_guarantee: this.data.cliente.has_customer_guarantee,
           });
@@ -680,9 +729,9 @@ export class EditcreditComponent implements OnInit {
             CP: this.data.guarantee.CP,
             cellphone_number: this.data.guarantee.cellphone_number,
 
-            type_housing_paid: this.data.guarantee.type_housing_paid,
+            type_housing_paid: this.data.guarantee.type_housing_paid ? true : false,
             address_paid: this.data.guarantee.address_paid,
-            type_housing_paying: this.data.guarantee.type_housing_paying,
+            type_housing_paying: this.data.guarantee.type_housing_paying ? true : false,
             address_payment: this.data.guarantee.address_payment,
 
             mortgage_date: this.data.guarantee.mortgage_date,
@@ -706,7 +755,7 @@ export class EditcreditComponent implements OnInit {
             plazo: this.data.plazo,
             tasa_fmd: this.data.tasa_fmd,
             enganche: this.data.enganche,
-            fecha_inicial: this.data.fecha_inicial,
+            fecha_inicial: this.data.fecha_inicial ? new Date(this.data.fecha_inicial) : null,
             sucursalSeleccionada: this.data.sucursal_id,
             inversionistaSeleccionado: this.data.investor_catalog_id,
           });
@@ -742,6 +791,9 @@ export class EditcreditComponent implements OnInit {
               });
             }
           });
+          console.log("credito:", credito);
+
+          if (this.data.etapa !== "aprobado") this.cargarDatosFinancieros();
         });
       });
 
@@ -761,7 +813,6 @@ export class EditcreditComponent implements OnInit {
       cellphone_number: avalData[0].cellphone_number,
     })
     this.showGuarantorDialog = false;
-    this.activeIndex++;
   }
 
   onAddNewGuarantor(): void {
@@ -888,13 +939,21 @@ export class EditcreditComponent implements OnInit {
     }
   }
 
-  updateClient() {
+  updateClient(clientId: any) {
     console.log('Actualizando cliente con datos:', this.form.value);
-    this.servicioGeneral.update('customers', this.form.value, true).subscribe({
+    this.servicioGeneral.update('customers', clientId, this.form.value).subscribe({
       next: (data: any) => {
-        console.log('Cliente actualizado:', data);
+        return data;
       }
     });
   }
 
+  updateAval(avalId: any) {
+    console.log('Actualizando aval con datos: ', this.formStep2.value);
+    this.servicioGeneral.update('customer_guarantee', avalId, this.formStep2.value).subscribe({
+      next: (data: any) => {
+        return data;
+      }
+    })
+  }
 }

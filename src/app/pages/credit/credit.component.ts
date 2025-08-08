@@ -150,7 +150,16 @@ export class CreditComponent implements OnInit {
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        await this.realtimeService.deleteRecord(item.collectionName, item.id);
+        this.servicioGeneral.delete('credito', item).subscribe({
+          next: (data) => {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Eliminado',
+              detail: 'Eliminado con exito'
+            });
+          }
+        })
+        /* await this.realtimeService.deleteRecord(item.collectionName, item.id); */
         this.messageService.add({
           severity: 'warn',
           summary: 'Eliminado',
@@ -158,6 +167,7 @@ export class CreditComponent implements OnInit {
         });
       }
     });
+
   }
 
   onClickPlazos(credito: any) {

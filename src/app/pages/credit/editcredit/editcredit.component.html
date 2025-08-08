@@ -6,7 +6,7 @@
 
   <p-card class="clean-card" header="Datos de Crédito">
     <!-- Tabs de PrimeNG -->
-    <p-tabView [(activeIndex)]="activeIndex" (onChange)="onTabChange($event)">
+    <p-tabView class="flex content-center" [(activeIndex)]="activeIndex" (onChange)="onTabChange($event)">
       <!-- Tab 1: Información Básica -->
       <p-tabPanel header="Información cliente" [disabled]="true">
         <form [formGroup]="form">
@@ -217,20 +217,23 @@
               </div>
             </div>
             <div class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-2/3">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                  <input pInputText id="company_adress" formControlName="company_adress" placeholder=" Domicilio" />
+                </p-inputGroup>
+              </div>
 
-              <p-inputGroup>
-                <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
-                <input pInputText id="company_adress" formControlName="company_adress" placeholder=" Domicilio" />
-              </p-inputGroup>
-            </div>
-
-            <div *ngIf="form.get('isOwner')?.value === false" class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                  <input pInputText id="job_seniority" formControlName="job_seniority" placeholder=" Antigüedad" />
+                  <input pInputText id="company_phone_number" formControlName="company_phone_number"
+                    placeholder=" Teléfono de la empresa" />
                 </p-inputGroup>
               </div>
+            </div>
+
+            <div class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
@@ -239,32 +242,20 @@
               </div>
               <div class="w-1/3">
                 <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
-                  <input pInputText id="immediate_supervisor_name" formControlName="immediate_supervisor_name"
-                    placeholder=" Jefe" />
-                </p-inputGroup>
-              </div>
-            </div>
-
-            <div *ngIf="form.get('isOwner')?.value === false" class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-1/3">
-                <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                  <input pInputText id="company_phone_number" formControlName="company_phone_number"
-                    placeholder=" Teléfono del Jefe" />
+                  <input pInputText id="job_seniority" formControlName="job_seniority" placeholder=" Antigüedad" />
                 </p-inputGroup>
               </div>
-            </div>
-
-            <div *ngIf="form.get('isOwner')?.value === true" class="field col-12 md:col-6 mb-3 flex gap-4">
               <div class="w-1/3">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="monthly_income" formControlName="monthly_income" placeholder=" Ingreso" />
                 </p-inputGroup>
               </div>
+            </div>
 
-              <div class="w-1/3">
+            <div *ngIf="form.get('isOwner')?.value === true" class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="another_incomes" formControlName="another_incomes"
@@ -273,29 +264,32 @@
               </div>
             </div>
 
+            <div *ngIf="form.get('isOwner')?.value === false" class="field col-12 md:col-6 mb-3 flex gap-4">
+              <div class="w-1/2">
+                <p-inputGroup>
+                  <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
+                  <input pInputText id="immediate_supervisor_name" formControlName="immediate_supervisor_name"
+                    placeholder=" Jefe" />
+                </p-inputGroup>
+              </div>
+            </div>
             <div class="field col-12 md:col-6 mb-3 flex gap-4">
-              <div class="w-1/3">
+              <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="last_job" formControlName="last_job" placeholder=" Trabajo Anterior" />
                 </p-inputGroup>
               </div>
-
-              <div class="w-1/3">
-                <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
-                  <input pInputText id="job_seniority" formControlName="job_seniority" placeholder=" Antigüedad" />
-                </p-inputGroup>
-              </div>
-
-              <div class="w-1/3">
+              <div class="w-1/2">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
                   <input pInputText id="last_phone_number" formControlName="last_phone_number"
-                    placeholder=" Teléfono" />
+                    placeholder=" Teléfono trabajo anterior" />
                 </p-inputGroup>
               </div>
             </div>
+
+
           </div>
         </form>
         <div class="flex justify-between w-full mt-5">
@@ -930,7 +924,8 @@
               <div class="flex-1">
                 <p-inputGroup>
                   <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
-                  <p-datepicker id="fecha_inicial" formControlName="fecha_inicial" placeholder=" Fecha Inicial" />
+                  <p-datepicker id="fecha_inicial" formControlName="fecha_inicial" placeholder=" Fecha Inicial"
+                    dateFormat="yy.mm.dd" />
                 </p-inputGroup>
               </div>
 
@@ -965,7 +960,7 @@
       </p-tabPanel>
 
       <!-- Tab 6: Datos Cotización -->
-      <p-tabPanel *ngIf="data.etapa === 'cotizacion'" header="Datos Financieros" [disabled]="true">
+      <p-tabPanel *ngIf="data.etapa === 'cotizacion'" header="Datos Cotizacion" [disabled]="true">
         <form [formGroup]="formStep6">
           <div class="p-fluid grid">
             <div style="display: flex; justify-content: flex-end;">
@@ -989,10 +984,8 @@
             <div class="flex field col-12 md:col-6 mb-3 gap-4">
               <div class="w-1/3">
                 <label for="fecha_inicial">Fecha de 1er. Pago</label>
-                <p-inputGroup>
-                  <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
-                  <input pInputText id="fecha_inicial" formControlName="fecha_inicial">
-                </p-inputGroup>
+                <p-datepicker id="fecha_inicial" formControlName="fecha_inicial" placeholder=" Fecha Inicial"
+                  dateFormat="yy.mm.dd" />
               </div>
             </div>
 
