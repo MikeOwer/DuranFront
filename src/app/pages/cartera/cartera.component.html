@@ -91,9 +91,6 @@
                 <th *ngIf="mostrarColumna('saldo_final')" pSortableColumn="saldo_final">
                     Saldo final <p-sortIcon field="saldo_final"></p-sortIcon>
                 </th>
-                <th *ngIf="mostrarColumna('comprobacion')" pSortableColumn="comprobacion">
-                    Comprobación <p-sortIcon field="comprobacion"></p-sortIcon>
-                </th>
                 <th *ngIf="mostrarColumna('observaciones')" pSortableColumn="observaciones">
                     Observaciones <p-sortIcon field="observaciones"></p-sortIcon>
                 </th>
@@ -120,7 +117,6 @@
                 </td>
                 <td *ngIf="mostrarColumna('total_cobrado')" style="white-space: nowrap;">{{ data.total_cobrado }}</td>
                 <td *ngIf="mostrarColumna('saldo_final')" style="white-space: nowrap;">{{ data.saldo_final }}</td>
-                <td *ngIf="mostrarColumna('comprobacion')" style="white-space: nowrap;">{{ data.comprobacion }}</td>
                 <td *ngIf="mostrarColumna('observaciones')" style="white-space: nowrap;">{{ data.observaciones }}</td>
             </tr>
         </ng-template>
