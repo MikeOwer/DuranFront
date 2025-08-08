@@ -870,12 +870,12 @@ export class EditcreditComponent implements OnInit {
 
   onAcceptCredit(): void {
     this.dataApprove = {
-      etapa: 'aprobacion',
-      investor_catalog_id: this.inversionistaSeleccionado ? this.inversionistaSeleccionado.id : 1, // Hardcodeo temporal
-      sucursal_id: this.sucursalSeleccionada ? this.sucursalSeleccionada.id : 1,
+      etapa: 'aprobacion'
     }
+    console.log("this.model on Accept:", this.model)
     this.servicioGeneral.update(this.model, this.data.id, this.dataApprove, true).subscribe({
       next: (data: any) => {
+        console.log("credito a aprobacion:", data)
         this.messageService.add({
           severity: 'success',
           summary: '¡Éxito!',

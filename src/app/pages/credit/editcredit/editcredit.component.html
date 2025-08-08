@@ -954,7 +954,7 @@
         <div class="flex justify-between w-full mt-5">
           <button pButton label="Regresar" (click)="goToPreviousTab()"></button>
 
-          <button pButton label="Siguiente" (click)="goToNextTab()"></button>
+          <button *ngIf="data.etapa == 'aprobacion'" pButton label="Siguiente" (click)="goToNextTab()"></button>
           <button pButton label="Guardar" icon="pi pi-save" (click)="submitForm()" class="p-button-success"></button>
         </div>
       </p-tabPanel>
@@ -963,7 +963,7 @@
       <p-tabPanel *ngIf="data.etapa === 'cotizacion'" header="Datos Cotizacion" [disabled]="true">
         <form [formGroup]="formStep6">
           <div class="p-fluid grid">
-            <div style="display: flex; justify-content: flex-end;">
+            <div class="gap-4" style="display: flex; justify-content: flex-end;">
 
               @if(data.etapa === 'cotizacion'){
               <p-button class="p-button-rounded" label="Aprobacion" (onClick)="onAcceptCredit()"></p-button>
