@@ -15,6 +15,7 @@ import { ServicioGeneralService } from '../../layout/service/servicio-general/se
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import Pusher from 'pusher-js';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-caja',
@@ -62,10 +63,28 @@ export class CajaComponent {
   ) { }
   ngOnInit() {
 
-    /* this.serviciogeneral.get('credito', {}, true).subscribe(data => {
-      this.data = data;
-      console.log('Clientes:', data);
-    }); */
+    this.serviciogeneral.get('credito', {}, true).subscribe(creditos => {
+      forkJoin({
+        customers: this.serviciogeneral.get('customers', {}, true),
+        investors: this.serviciogeneral.get('investor_catalog', {}, true),
+      }).subscribe(({ customers, investors }) => {
+        const customersList = customers.data;
+        const investorsList = investors.data;
+
+        this.data = creditos.data
+          .filter((credito: any) => credito.etapa === 'aprobado')
+          .map((credito: any) => {
+            const cliente = customersList.find((c: any) => c.id === credito.customer_id);
+            const inversionista = investorsList.find((c: any) => c.id === credito.investor_catalog_id);
+            return {
+              ...credito,
+              cliente: cliente || null,
+              inversionista: inversionista || null,
+            };
+          });
+        console.log("Data caja onInit: ", this.data)
+      })
+    });
 
     this.withdrawalForm = this.fb.group({
       amount: new FormControl('', Validators.required),
@@ -75,7 +94,7 @@ export class CajaComponent {
     });
 
 
-    this.realtimeService.listenToCollectionExpand(this.model, 'idcliente,idinversionista').subscribe(data => {
+    /* this.realtimeService.listenToCollectionExpand(this.model, 'idcliente,idinversionista').subscribe(data => {
       this.data = data.map(credito => ({
         ...credito,
         cliente: credito.expand?.idcliente || null,
@@ -83,7 +102,7 @@ export class CajaComponent {
       }));
 
       console.log(this.data);
-    });
+    }); */
 
     this.getConfirmation();
   }

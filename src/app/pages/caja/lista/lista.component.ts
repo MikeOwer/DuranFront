@@ -15,8 +15,8 @@ import { DialogModule } from 'primeng/dialog';
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.scss'
 })
-export class ListaComponent  implements OnInit, OnDestroy {
-  data: any[]=[];
+export class ListaComponent implements OnInit, OnDestroy {
+  data: any[] = [];
   cliente: any;
   creditoId: any;
   title: String = '';
@@ -31,27 +31,27 @@ export class ListaComponent  implements OnInit, OnDestroy {
     date: new Date()
   };
   loading = true;
-  constructor(private route: ActivatedRoute, private realtimeService: DatarealtimeService) {}
+  constructor(private route: ActivatedRoute, private realtimeService: DatarealtimeService) { }
 
   ngOnInit(): void {
-    
+
     this.loadData();
 
   }
 
   loadData(): void {
     const clienteId = this.route.snapshot.params['id'];
-    
+
     // Primero obtenemos el cliente
     this.realtimeService.getRecord('clientes', clienteId).subscribe({
       next: (cliente) => {
         this.cliente = cliente;
-        
+
         // Luego obtenemos ambos tipos de pagos en paralelo
         forkJoin([
-          this.realtimeService.getRecordsWhere('pagos_realizado', 'idcliente',clienteId),
-          this.realtimeService.getRecordsWhere('pagos_pendientes', 'idcliente',clienteId),
-          this.realtimeService.getRecordsWhere('observaciones', 'idcliente',clienteId)
+          this.realtimeService.getRecordsWhere('pagos_realizado', 'idcliente', clienteId),
+          this.realtimeService.getRecordsWhere('pagos_pendientes', 'idcliente', clienteId),
+          this.realtimeService.getRecordsWhere('observaciones', 'idcliente', clienteId)
         ]).subscribe({
           next: ([realizados, pendientes, observaciones]) => {
             this.pagosRealizados = realizados;
@@ -107,10 +107,10 @@ export class ListaComponent  implements OnInit, OnDestroy {
     });
   }
 }
-  
 
 
-  
+
+
 
 
 
