@@ -93,17 +93,6 @@ export class CajaComponent {
       inversionista_id: [this.inversionista]
     });
 
-
-    /* this.realtimeService.listenToCollectionExpand(this.model, 'idcliente,idinversionista').subscribe(data => {
-      this.data = data.map(credito => ({
-        ...credito,
-        cliente: credito.expand?.idcliente || null,
-        inversionista: credito.expand?.idinversionista || null
-      }));
-
-      console.log(this.data);
-    }); */
-
     this.getConfirmation();
   }
 
@@ -113,7 +102,7 @@ export class CajaComponent {
     this.globalFilter = '';
   }
 
-  link(id: any = undefined) {
+  link(id: any) {
     if (id) {
       console.log(this.urlPage + '/detalles/' + id);
       this.router.navigate([this.urlPage + '/detalles/' + id])
@@ -137,7 +126,6 @@ export class CajaComponent {
 
   showRetiro() {
     this.showWithdrawalDialog = true;
-
   }
 
   getConfirmation() {
