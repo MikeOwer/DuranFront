@@ -28,7 +28,7 @@ import { GeneralWebsocketService } from "../../../layout/service/general-websock
     ButtonModule,
     ToolbarModule,
     ConfirmDialogModule,
-    ToastModule, 
+    ToastModule,
     DialogModule
   ],
   providers: [
@@ -66,7 +66,7 @@ export class ListaClientesComponent implements OnInit {
     });*/
     //this.cargarDatos2();
 
-    this.serviciogeneral.get('customers', {}, true).subscribe(data =>{
+    this.serviciogeneral.get('customers', {}, true).subscribe(data => {
       this.data = data.data;
       console.log(this.data);
     })
@@ -75,7 +75,14 @@ export class ListaClientesComponent implements OnInit {
       console.log('Evento recibido desde servicio:', event);
       if (event.action === 'created') {
         this.data = [...this.data, event.data];
+      } else if (event.action === 'deleted') {
+        const idEliminado = event.data.id;
+        this.data = this.data.filter(item => item.id !== idEliminado);
+      } else if (event.action === 'updated') {
+        this.data = [...this.data, event.data];
       }
+
+
     });
   }
 
@@ -122,7 +129,7 @@ export class ListaClientesComponent implements OnInit {
     }); */
 
     this.serviciogeneral.delete('customers', item).subscribe({
-      next: (data)=>{
+      next: (data) => {
         this.messageService.add({
           severity: 'warn',
           summary: 'Eliminado',
@@ -130,15 +137,15 @@ export class ListaClientesComponent implements OnInit {
         });
       }
     });
-        
+
   }
 
-  onRowSelect(event: any){
+  onRowSelect(event: any) {
     this.selectedProduct = event.data;
     this.displayDialog = true;
     console.log('Selected Product:', this.selectedProduct);
   }
-  
+
   onDialogHide() {
     this.selectedProduct = null;
   }
@@ -155,24 +162,24 @@ export class ListaClientesComponent implements OnInit {
 
   }
 
-   cargarDatos2(){
+  cargarDatos2() {
     this.serviciogeneral.get('customers', {}, true).subscribe({
-      next: (data)=>{
+      next: (data) => {
         this.data = data.data;
         console.log(this.data);
       }
     })
   }
 
-  verVehiculos(id: any){
+  verVehiculos(id: any) {
     this.router.navigate([this.urlPage + 'vehiculo/' + id])
   }
 
-  verPagos(id: any){
+  verPagos(id: any) {
     this.router.navigate([this.urlPage + 'pagos/' + id]);
   }
 
-  verObservaciones(id: any){
+  verObservaciones(id: any) {
     this.router.navigate([this.urlPage + 'observaciones/' + id]);
   }
 

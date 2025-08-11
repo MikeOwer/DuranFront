@@ -1,4 +1,4 @@
-<div class="card flex flex-col gap-14">
+<div class="card flex flex-col gap-6">
     <p-toolbar class="gap-10">
         <ng-template #start>
             <h1 class="font-semibold text-xl">{{titulo}}</h1>
@@ -12,23 +12,23 @@
 
         </ng-template>
     </p-toolbar>
+
+    <div class="text-right">
+        <button pButton type="button" icon="pi pi-money-bill" label="Retirar" class="p-button-primary"
+            (click)="showRetiro()"></button>
+    </div>
+
     <p-table #dt [value]="data" [paginator]="true" [rows]="10"
         [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5,10,20]">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-                <th pSortableColumn="cliente">Cleinte <p-sortIcon field="cliente"></p-sortIcon>
+                <th pSortableColumn="id">Crédito <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="cliente">Cliente <p-sortIcon field="cliente"></p-sortIcon>
                     <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'nombre')" class="w-full" /> -->
-                </th>
-                <th pSortableColumn="telefono">Telefono <p-sortIcon field="telefono"></p-sortIcon>
-                    <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'apellido')" class="w-full" /> -->
                 </th>
                 <th pSortableColumn="celular">Celular <p-sortIcon field="celular"></p-sortIcon>
                     <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'email')" class="w-full" /> -->
-                </th>
-                <th pSortableColumn="creado">Creado <p-sortIcon field="creado"></p-sortIcon>
-                    <!-- <input pInputText type="text" (input)="onFilterColumn($event, 'celular')" class="w-full" /> -->
                 </th>
                 <th pSortableColumn="monto">Monto <p-sortIcon field="monto"></p-sortIcon></th>
                 <th pSortableColumn="inversionista">Inversionista</th>
@@ -39,14 +39,12 @@
         <ng-template pTemplate="body" let-data>
             <tr [pSelectableRow]="data">
                 <td>{{ data.id }}</td>
-                <td>{{ data.expand.idcliente.nombre }}</td>
-                <td>{{data.expand.idcliente.telefono}}</td>
-                <td>{{ data.expand.idcliente.celular  }}</td>
-                <td>{{ data.updated }}</td>
+                <td>{{ data.cliente.name }}</td>
+                <td>{{data.cliente.cellphone_number}}</td>
                 <td>{{ data.monto }}</td>
-                <td>{{data.expand.idinversionista.nombre}}</td>
+                <td>{{data.inversionista.name}}</td>
                 <td>
-                    <button pButton icon="pi pi-bars" severity="success" (click)="link(data.idcliente)"
+                    <button pButton icon="pi pi-bars" severity="success" (click)="link(data.id)"
                         class="p-button-sm p-button-rounded  mr-2 p-button-info"></button>
                     <button pButton icon="pi pi-check-square"
                         class="p-button-sm p-button-rounded  mr-2 p-button-info"></button>
@@ -57,6 +55,44 @@
         </ng-template>
     </p-table>
 </div>
+
+<!-- Dialogo de retiro -->
+<p-dialog [(visible)]="showWithdrawalDialog" [closable]="false" [modal]="true" [responsive]="true"
+    [style]="{width: '30vw'}" [dismissableMask]="true">
+    <ng-template pTemplate="header">
+        <div class="flex justify-between items-center w-full mx-8">
+            <h2 class="text-lg font-semibold">Solicitud de Retiro</h2>
+            <button pButton icon="pi pi-times" class="p-button-sm p-button-rounded p-button-secondary"
+                (click)="showWithdrawalDialog = false"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="withdrawalForm" (ngSubmit)="submitWithdrawal()" class="mx-8">
+            <div class="field mb-2">
+                <p-inputGroup>
+                    <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                    <input pInputText type="number" id="amount" formControlName="amount"
+                        placeholder=" Cantidad a retirar" min="0" />
+                </p-inputGroup>
+            </div>
+            <div class="field mb-4">
+                <p-inputGroup>
+                    <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
+                    <input pInputText type="text" id="concept" formControlName="concept" placeholder=" Concepto" />
+                </p-inputGroup>
+            </div>
+            <div class="flex align-center mt-4">
+                <p-button label="Solicitar" type="button" (onClick)="requestWithdrawal()" class="w-1/4"></p-button>
+                <p-button label="Cancelar" type="button" severity="secondary" class="w-1/4"
+                    (click)="showWithdrawalDialog = false"></p-button>
+
+                <p-button [disabled]="!isConfirmed" label="Retirar" type="submit" class="w-2/4 text-right"></p-button>
+            </div>
+
+        </form>
+    </ng-template>
+
+</p-dialog>
 
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>

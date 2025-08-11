@@ -103,6 +103,7 @@ export class ClienteComponent implements OnInit {
   documentMap: { [clave: string]: File } = {};
 
   guarantors = [{}];
+  has_guarantor: boolean = false;
   max_guarantors: number = 3;
   guarantorFormArray!: FormArray;
   customerGuaranteeData: any[] = [];
@@ -132,7 +133,6 @@ export class ClienteComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       Direction: new FormControl(''),
       celular: new FormControl(''),
-      telefono: new FormControl(''),
     });
 
     //crea un formulario vacio para los avales (aqui luego se cargan los datos de los avales en la bd) 
@@ -180,27 +180,6 @@ export class ClienteComponent implements OnInit {
     this.visible = true;
   }
 
-  /* guardarCalorias() {
-    this.servicio.createRecord('semana_clientes', this.agregarSemana).subscribe({
-      next: (data: any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: '¡Éxito!',
-          detail: 'Los datos fue guardado correctamente'
-        });
-        this.visible = false;
-      },
-      error: (err: any) => {
-        console.error('Error al cargar', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo crear el usuario'
-        });
-      }
-    })
-  } */
-
   async cargarDatos() {
     this.servicioGeneral.get(`customers/${this.idData}`, {}, true).subscribe({
       next: (data: any) => {
@@ -212,7 +191,6 @@ export class ClienteComponent implements OnInit {
           apellido: this.data.last_name,
           celular: this.data.cellphone_number,
           Direction: this.data.address,
-          telefono: this.data.phone_number
         });
         this.servicioGeneral.get(`customer_guarantee`, {}, true).subscribe({
           next: (response: any) => {
@@ -230,7 +208,6 @@ export class ClienteComponent implements OnInit {
                   guarantorName: garanteeList[i].name,
                   guarantorLastName: garanteeList[i].last_name,
                   guarantorDirection: garanteeList[i].address,
-                  guarantorcellphone: garanteeList[i].phone_number,
                   guarantoremail: garanteeList[i].email,
                   guarantormovil: garanteeList[i].cellphone_number
                 });
@@ -246,6 +223,8 @@ export class ClienteComponent implements OnInit {
   }
 
   submitData() {
+    this.has_guarantor = this.guarantorFormArray.controls.some(form => form.valid);
+    console.log("has guarantoR:", this.has_guarantor)
 
     this.customerData = {
       name: this.form.value.nombre,
@@ -253,7 +232,7 @@ export class ClienteComponent implements OnInit {
       email: this.form.value.email,
       cellphone_number: this.form.value.celular,
       address: this.form.value.Direction,
-      phone_number: this.form.value.telefono,
+      has_customer_guarantee: this.has_guarantor,
     };
 
     this.customerGuaranteeData = [];
@@ -266,16 +245,13 @@ export class ClienteComponent implements OnInit {
           name: guarantorFormGroup.value.guarantorName,
           last_name: guarantorFormGroup.value.guarantorLastName,
           address: guarantorFormGroup.value.guarantorDirection,
-          phone_number: guarantorFormGroup.value.guarantorcellphone,
           cellphone_number: guarantorFormGroup.value.guarantormovil,
         };
-
         // Si el aval no tiene un ID (es un aval nuevo), se asigna el email del formulario
         // esto porque mandar un email cuando ya existe un aval causa errores por el validador de email unico
         if (!guarantorData.id) {
           guarantorData.email = guarantorFormGroup.value.guarantoremail;
         }
-
         this.customerGuaranteeData.push(guarantorData);
       }
 
@@ -288,8 +264,10 @@ export class ClienteComponent implements OnInit {
     }
     // Edicion de cliente
     if (this.idData) {
+      console.log("model:", this.model)
       this.servicioGeneral.update(this.model, this.idData, this.customerData, true).subscribe({
         next: (data: any) => {
+          console.log(`Cliente ${this.idData} actualizado correctamente:`, this.customerData)
 
           //se hace update o post de cada aval en los datos
           this.customerGuaranteeData.forEach((guarantor: any, index: number) => {
@@ -339,6 +317,7 @@ export class ClienteComponent implements OnInit {
       })
     } else {
       // Cliente nuevo
+
       this.servicioGeneral.post(this.model, this.customerData, true).subscribe({
         next: (data: any) => {
           console.log('datos del clientes devuelta por el servidor', data);
@@ -368,19 +347,6 @@ export class ClienteComponent implements OnInit {
             formData.append(`documents[${fileName}]`, file);
           }
           console.log('FormData:', formData);
-          //no implementado en back aun
-          /* this.http.put(`localhost:80/api/customer/${data.data.id}/files`, formData).subscribe({
-            next: (data: any) => {
-            },
-            error: (err: any) => {
-              console.error('Error al cargar', err);
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'No se pudo crear el aval'
-              });
-            }
-          }); */
         },
         error: (err: any) => {
           console.error('Error al cargar', err);
@@ -407,7 +373,6 @@ export class ClienteComponent implements OnInit {
       guarantorName: new FormControl('', Validators.required),
       guarantorLastName: new FormControl('', Validators.required),
       guarantorDirection: new FormControl('', Validators.required),
-      guarantorcellphone: new FormControl('', Validators.required),
       guarantoremail: new FormControl('', [Validators.email]),
       guarantormovil: new FormControl('', Validators.required)
     });
@@ -420,6 +385,7 @@ export class ClienteComponent implements OnInit {
     if (this.guarantors.length < this.max_guarantors) {
       this.guarantors.push({});
       this.guarantorFormArray.push(this.createGuarantorForm(null));
+      this.has_guarantor = true;
     }
   }
 
@@ -427,10 +393,11 @@ export class ClienteComponent implements OnInit {
    * @param index - Índice del aval a eliminar
    */
   removeGuarantor(index: number) {
-    if (this.guarantors.length > 1) {
+    if (this.guarantors.length > 0) {
       if (this.guarantorFormArray.at(index).value.id) {
         this.servicioGeneral.delete('customer_guarantee', this.guarantorFormArray.at(index).value.id, true).subscribe({
           next: (response: any) => {
+            if (this.guarantorFormArray.length == 0) this.has_guarantor = false;
             console.log('Aval eliminado exitosamente', response);
           },
           error: (err: any) => {
@@ -445,7 +412,6 @@ export class ClienteComponent implements OnInit {
       }
       this.guarantors.splice(index, 1);
       this.guarantorFormArray.removeAt(index);
-
     }
   }
 
@@ -460,7 +426,7 @@ export class ClienteComponent implements OnInit {
    * @returns true si hay aval para eliminar, false en caso contrario.
    */
   isEliminable() {
-    return this.guarantors.length > 1;
+    return this.guarantors.length > 0;
   }
 
   /**

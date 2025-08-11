@@ -1,120 +1,3 @@
-<div *ngIf="prueba" class="card-container">
-  <a type="submit" pButton icon="pi pi-arrow-left" variant="text" severity="secondary" class="p-button-sm mb-4"
-    style="display: inline-flex; align-items: center; gap: 0.5rem">
-    Regresar
-  </a>
-
-  <p-card class="clean-card" header="Subir Información del Auto">
-    <!-- Stepper de PrimeNG -->
-    <p-steps [model]="items" [readonly]="false" [(activeIndex)]="activeIndex"></p-steps>
-
-    <!-- Paso 1: Información Básica -->
-    <div *ngIf="activeIndex === 0" class="step-content">
-      <form [formGroup]="carForm" class="card" [autocomplete]="'off'">
-        <div class="flex flex-col gap-6 w-full">
-          <div class="font-semibold text-xl flex-col">{{titulo}}</div>
-
-        </div>
-
-        <div class="flex flex-col gap-6 w-full">
-          <div class="flex justify-between">
-            <div class="font-semibold text-sm flex-col">Información</div>
-          </div>
-          <div class="flex flex-col md:flex-row gap-6">
-            <p-inputgroup>
-              <p-inputgroup-addon>
-                <i class="pi pi-user"></i>
-              </p-inputgroup-addon>
-              <input pInputText [(ngModel)]="data.marca" formControlName="marca" autocomplete="new-password"
-                placeholder="Marca" />
-            </p-inputgroup>
-            <p-inputgroup>
-              <p-inputgroup-addon>
-                <i class="pi pi-user"></i>
-              </p-inputgroup-addon>
-              <input pInputText [(ngModel)]="data.modelo" formControlName="modelo" autocomplete="new-password"
-                placeholder="Modelo" />
-            </p-inputgroup>
-            <p-inputgroup>
-              <p-inputgroup-addon>
-                <i class="pi pi-user"></i>
-              </p-inputgroup-addon>
-              <input pInputText [(ngModel)]="data.anio" formControlName="anio" autocomplete="new-password"
-                placeholder="Año" />
-            </p-inputgroup>
-          </div>
-          
-          <div class="flex flex-col md:flex-row gap-6">
-            <p-inputgroup>
-              <input pInputText [(ngModel)]="data.nombre_ultimo_duenio" formControlName="nombre_ultimo_duenio"
-                autocomplete="new-password" placeholder="Ultimo dueño" />
-            </p-inputgroup>
-            <p-inputgroup>
-              <input pInputText [(ngModel)]="data.origen" formControlName="origen" autocomplete="new-password"
-                placeholder="Origen" />
-            </p-inputgroup>
-            <p-inputgroup>
-              <p-select [options]="estatus" [(ngModel)]="data.disabled" formControlName="disabled" optionLabel="name"
-                optionValue="value" placeholder="Estatus" />
-            </p-inputgroup>
-          </div>
-          <div class="flex flex-col md:flex-row gap-6">
-            <p-inputgroup>
-                <input pInputText [(ngModel)]="data.km" formControlName="km"
-                    autocomplete="new-password" placeholder="Kilometraje" />
-            </p-inputgroup>
-            <p-inputgroup>
-                <input pInputText [(ngModel)]="data.precio" formControlName="precio" autocomplete="new-password"
-                    placeholder="Precio sugerido" />
-            </p-inputgroup>
-          </div>
-          <div class="flex flex-col md:flex-row gap-6">
-              <p-inputgroup>
-                  <input pInputText [(ngModel)]="data.numero_motor" formControlName="numero_motor"
-                      autocomplete="new-password" placeholder="Numero de motor" />
-              </p-inputgroup>
-              <p-inputgroup>
-                  <input pInputText [(ngModel)]="data.numero_serie" formControlName="numero_serie"
-                      autocomplete="new-password" placeholder="Numero de serie" />
-              </p-inputgroup>
-          </div>
-          <p-button label="Siguiente" class="align-end bottom-0 right-0"></p-button>
-        </div>
-      </form>
-
-    </div>
-
-    <!-- Paso 2: Características Técnicas -->
-    <div *ngIf="activeIndex === 1" class="step-content">
-      <div class="card">
-        <h2>Subir fotos de carros</h2>
-
-        <p-fileUpload name="carImages" accept="image/*" maxFileSize="5000000" [auto]="false" [multiple]="true"
-          [customUpload]="true" (uploadHandler)="uploadFiles($event)" chooseLabel="Seleccionar fotos"
-          uploadLabel="Subir" cancelLabel="Cancelar" styleClass="custom-uploader">
-          <ng-template pTemplate="content">
-            <div *ngIf="uploadedFiles.length === 0" class="upload-placeholder">
-              <i class="pi pi-cloud-upload icon"></i>
-              <p>Arrastra las fotos aquí o haz clic para seleccionarlas</p>
-            </div>
-          </ng-template>
-        </p-fileUpload>
-
-        <div *ngIf="uploadedFiles.length > 0" class="uploaded-images">
-          <h3>Fotos subidas:</h3>
-          <div class="p-grid">
-            <div class="p-col-4" *ngFor="let file of uploadedFiles">
-              <img [src]="file.objectURL" alt="Foto de carro" style="width: 100%; border-radius: 8px;" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  </p-card>
-
-</div>
 <p-tabView *ngIf="!prueba" [(activeIndex)]="activeIndex">
   <!-- Tab 1: Información Básica -->
   <p-tabPanel header="Información Básica">
@@ -155,38 +38,38 @@
 
         <!-- Segunda fila -->
         <div class="flex flex-col md:flex-row gap-6">
-            <p-inputgroup>
-                <input pInputText [(ngModel)]="data.numero_serie" formControlName="numero_serie"
-                    autocomplete="new-password" placeholder="Numero de serie" />
-            </p-inputgroup>
+          <p-inputgroup>
+            <input pInputText [(ngModel)]="data.numero_serie" formControlName="numero_serie" autocomplete="new-password"
+              placeholder="Numero de serie" />
+          </p-inputgroup>
 
-            <p-inputgroup>
-                <input pInputText [(ngModel)]="data.placas" formControlName="placas"
-                    autocomplete="new-password" placeholder="Placas" />
-            </p-inputgroup>
+          <p-inputgroup>
+            <input pInputText [(ngModel)]="data.placas" formControlName="placas" autocomplete="new-password"
+              placeholder="Placas" />
+          </p-inputgroup>
 
-            <p-inputgroup>
-              <input pInputText [(ngModel)]="data.km" formControlName="km"
-                  autocomplete="new-password" placeholder="Kilometraje" />
-            </p-inputgroup>
+          <p-inputgroup>
+            <input pInputText [(ngModel)]="data.km" formControlName="km" autocomplete="new-password"
+              placeholder="Kilometraje" />
+          </p-inputgroup>
         </div>
 
         <!-- Tercera fila -->
         <div class="flex flex-col md:flex-row gap-6">
 
           <p-inputgroup>
-              <input pInputText [(ngModel)]="data.numero_motor" formControlName="numero_motor"
-                  autocomplete="new-password" placeholder="Numero de motor" />
+            <input pInputText [(ngModel)]="data.numero_motor" formControlName="numero_motor" autocomplete="new-password"
+              placeholder="Numero de motor" />
           </p-inputgroup>
 
           <p-inputgroup>
-              <input pInputText [(ngModel)]="data.color" formControlName="color"
-                  autocomplete="new-password" placeholder="Color" />
+            <input pInputText [(ngModel)]="data.color" formControlName="color" autocomplete="new-password"
+              placeholder="Color" />
           </p-inputgroup>
 
           <p-inputgroup>
             <input pInputText [(ngModel)]="data.precio" formControlName="precio" autocomplete="new-password"
-                placeholder="Precio sugerido" />
+              placeholder="Precio sugerido" />
           </p-inputgroup>
         </div>
         <p-button label="Siguiente" (onClick)="BotonSiguiente()" class="align-end bottom-0 right-0"></p-button>

@@ -8,7 +8,7 @@
         class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
       <input pInputText class="mr-2" type="text" name="buscador" placeholder="Buscar" [(ngModel)]="globalFilter"
         [ngModelOptions]="{standalone: true}" (input)="onFilterGlobal($event)" />
-     
+
       <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded mr-2" (click)="link(undefined,'cotizar')">
         Cotizar
       </button>
@@ -139,7 +139,6 @@
         </h3>
         <div class="space-y-1">
           <p class="m-0"> <strong>Nombre:</strong> {{ cliente?.name }}</p>
-          <p><strong>Teléfono:</strong> {{ cliente?.phone_number }}</p>
           <p><strong>Celular:</strong> {{ cliente?.cellphone_number }}</p>
           <p><strong>Email:</strong> {{ cliente?.email }}</p>
           <p><strong>Dirección:</strong> {{ cliente?.address }}</p>
@@ -153,7 +152,6 @@
         </h3>
         <div class="space-y-1">
           <p class="m-0"><strong>Nombre:</strong> {{ aval?.name }}</p>
-          <p><strong>Teléfono:</strong> {{ aval?.phone_number }}</p>
           <p><strong>Celular:</strong> {{ aval?.cellphone_number }}</p>
           <p><strong>Email:</strong> {{ aval?.email }}</p>
           <p><strong>Dirección:</strong> {{ aval?.address }}</p>
