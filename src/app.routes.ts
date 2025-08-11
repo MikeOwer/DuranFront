@@ -19,6 +19,7 @@ export const appRoutes: Routes = [
             { path: 'pagos-extraordinarios', loadChildren:()=> import('./app/pages/pagos-extraordinarios/pagepago-extraordinarios.routes')},
             { path: 'historial', loadChildren:()=> import('./app/pages/historial/historial.routes')},
             { path: 'cartera', loadChildren:()=> import('./app/pages/cartera/cartera.routes')},
+            { path: 'total-cartera', loadChildren: () => import('./app/pages/total-cartera/total-cartera.routes') },
             { path: 'ver-inversionistas', loadChildren: () => import('./app/pages/ver-inversionistas/ver-inversionista.routes') },
             { path: 'bancos', loadChildren: () => import('./app/pages/bancos/bancos.routes') },
             { path: 'pagos', loadChildren: () => import('./app/pages/pagos/pagos.routes') },

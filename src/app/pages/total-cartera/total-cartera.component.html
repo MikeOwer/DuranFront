@@ -1,0 +1,89 @@
+
+<div class="card flex flex-col gap-14">
+
+    <p-table #dt [value]="data" stripedRows [paginator]="true" [rows]="10"
+        [globalFilterFields]="['cliente', 'codigo', 'monto', 'credito_inicial', 'tipo_credito', 'plazo', 'dia_pago']"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}"
+        [rowsPerPageOptions]="[5, 10, 20]" [scrollable]="true" scrollDirection="horizontal" scrollHeight="flex">
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngIf="mostrarColumna('cliente')" pSortableColumn="cliente" pFrozenColumn style="width: 100px;">
+                    Cliente <p-sortIcon field="cliente"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('codigo')" pSortableColumn="codigo">
+                    Código <p-sortIcon field="codigo"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('credito_inicial')" pSortableColumn="credito_inicial">
+                    Crédito inicial <p-sortIcon field="credito_inicial"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('tipo_credito')" pSortableColumn="tipo_credito">
+                    Tipo de crédito <p-sortIcon field="tipo_credito"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('plazo')" pSortableColumn="plazo">
+                    Plazo <p-sortIcon field="plazo"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('dia_pago')" pSortableColumn="dia_pago">
+                    Día de pago <p-sortIcon field="dia_pago"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('capital')" pSortableColumn="capital">
+                    Capital <p-sortIcon field="capital"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('interes')" pSortableColumn="interes">
+                    Interés <p-sortIcon field="interes"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('iva')" pSortableColumn="iva">
+                    IVA <p-sortIcon field="iva"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('saldo_inicial')" pSortableColumn="saldo_inicial">
+                    Saldo inicial <p-sortIcon field="saldo_inicial"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('tm')" pSortableColumn="tm">
+                    TM <p-sortIcon field="tm"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('capital_cobrado')" pSortableColumn="capital_cobrado">
+                    Capital cobrado <p-sortIcon field="capital_cobrado"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('interes_cobrado')" pSortableColumn="interes_cobrado">
+                    Interés cobrado <p-sortIcon field="interes_cobrado"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('total_cobrado')" pSortableColumn="total_cobrado">
+                    Total cobrado <p-sortIcon field="total_cobrado"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('saldo_final')" pSortableColumn="saldo_final">
+                    Saldo final <p-sortIcon field="saldo_final"></p-sortIcon>
+                </th>
+                <th *ngIf="mostrarColumna('observaciones')" pSortableColumn="observaciones">
+                    Observaciones <p-sortIcon field="observaciones"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-data>
+            <tr>
+                <td *ngIf="mostrarColumna('cliente')" pFrozenColumn style="white-space: nowrap;">{{ data.cliente }}</td>
+                <td *ngIf="mostrarColumna('codigo')" style="white-space: nowrap;">{{ data.codigo }}</td>
+                <td *ngIf="mostrarColumna('credito_inicial')" style="white-space: nowrap;">{{ data.credito_inicial }}
+                </td>
+                <td *ngIf="mostrarColumna('tipo_credito')" style="white-space: nowrap;">{{ data.tipo_credito }}</td>
+                <td *ngIf="mostrarColumna('plazo')" style="white-space: nowrap;">{{ data.plazo }}</td>
+                <td *ngIf="mostrarColumna('dia_pago')" style="white-space: nowrap;">{{ data.dia_pago }}</td>
+                <td *ngIf="mostrarColumna('capital')" style="white-space: nowrap;">{{ data.capital }}</td>
+                <td *ngIf="mostrarColumna('interes')" style="white-space: nowrap;">{{ data.interes }}</td>
+                <td *ngIf="mostrarColumna('iva')" style="white-space: nowrap;">{{ data.iva }}</td>
+                <td *ngIf="mostrarColumna('saldo_inicial')" style="white-space: nowrap;">{{ data.saldo_inicial }}</td>
+                <td *ngIf="mostrarColumna('tm')" style="white-space: nowrap;">{{ data.tm }}</td>
+                <td *ngIf="mostrarColumna('capital_cobrado')" style="white-space: nowrap;">{{ data.capital_cobrado }}
+                </td>
+                <td *ngIf="mostrarColumna('interes_cobrado')" style="white-space: nowrap;">{{ data.interes_cobrado }}
+                </td>
+                <td *ngIf="mostrarColumna('total_cobrado')" style="white-space: nowrap;">{{ data.total_cobrado }}</td>
+                <td *ngIf="mostrarColumna('saldo_final')" style="white-space: nowrap;">{{ data.saldo_final }}</td>
+                <td *ngIf="mostrarColumna('observaciones')" style="white-space: nowrap;">{{ data.observaciones }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

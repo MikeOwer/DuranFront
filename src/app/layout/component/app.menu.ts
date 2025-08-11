@@ -33,6 +33,7 @@ export class AppMenu {
                     { label: 'Credito', icon: 'pi pi-credit-card', routerLink: ['./credito'] },
                     { label: 'Historial de actividades', icon: 'pi pi-history', routerLink: ['./historial'] },
                     { label: 'Historial de cartera', icon: 'pi pi-wallet', routerLink: ['./cartera'] },
+                    { label: 'Total Cartera', icon: 'pi pi-wallet', routerLink: ['./total-cartera'] },
                     { label: 'Inversionistas', icon: 'pi pi-building', routerLink: ['./ver-inversionistas'] },
                     { label: 'Bancos', icon: 'pi pi-money-bill', routerLink: ['./bancos'] },
                     {
