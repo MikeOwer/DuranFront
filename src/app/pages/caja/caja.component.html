@@ -45,11 +45,12 @@
                 <td>{{data.inversionista.name}}</td>
                 <td>
                     <button pButton icon="pi pi-bars" severity="success" (click)="link(data.id)"
-                        class="p-button-sm p-button-rounded  mr-2 p-button-info"></button>
-                    <button pButton icon="pi pi-check-square"
-                        class="p-button-sm p-button-rounded  mr-2 p-button-info"></button>
+                        class="p-button-sm p-button-rounded  mr-2 p-button-info" pTooltip="Detalles"
+                        tooltipPosition="top"></button>
+                    <button pButton icon="pi pi-check-square" class="p-button-sm p-button-rounded  mr-2 p-button-info"
+                        pTooltip="Liquidar" tooltipPosition="top"></button>
                     <button pButton icon="pi pi-flag" class="p-button-sm p-button-rounded  mr-2 p-button-info"
-                        tooltip="Reportar" (click)="reportarPago(data.id)"></button>
+                        pTooltip="Reportar" tooltipPosition="top" (click)="reportarPago(data.id)"></button>
                 </td>
             </tr>
         </ng-template>
@@ -69,6 +70,7 @@
     <ng-template pTemplate="content">
         <form [formGroup]="withdrawalForm" (ngSubmit)="submitWithdrawal()" class="mx-8">
             <div class="field mb-2">
+                <label for="amount">Cantidad</label>
                 <p-inputGroup>
                     <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
                     <input pInputText type="number" id="amount" formControlName="amount"
@@ -76,10 +78,20 @@
                 </p-inputGroup>
             </div>
             <div class="field mb-4">
+                <label for="concept">Concepto</label>
                 <p-inputGroup>
                     <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
                     <input pInputText type="text" id="concept" formControlName="concept" placeholder=" Concepto" />
                 </p-inputGroup>
+            </div>
+            <div class="field mb-4">
+                <label for="inversionistas">Inversionista</label>
+                <p-dropdown [options]="inversionistas" optionLabel="name" optionValue="id" placeholder="Inversionista"
+                    formControlName="inversionista" id="inversionista" [showClear]="true" class="w-full">
+                    <ng-template let-option pTemplate="item">
+                        {{ option.name }}
+                    </ng-template>
+                </p-dropdown>
             </div>
             <div class="flex align-center mt-4">
                 <p-button label="Solicitar" type="button" (onClick)="requestWithdrawal()" class="w-1/4"></p-button>

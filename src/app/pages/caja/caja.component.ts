@@ -10,12 +10,14 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, FormControl, 
 import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 import { Router } from '@angular/router';
 import { ServicioGeneralService } from '../../layout/service/servicio-general/servicio-general.service';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import Pusher from 'pusher-js';
 import { forkJoin } from 'rxjs';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-caja',
@@ -31,7 +33,9 @@ import { forkJoin } from 'rxjs';
     DialogModule,
     ReactiveFormsModule,
     InputGroupAddonModule,
-    InputTextModule],
+    InputTextModule,
+    DropdownModule,
+    TooltipModule,],
   providers: [MessageService],
   templateUrl: './caja.component.html',
   styleUrl: './caja.component.scss'
@@ -41,7 +45,7 @@ export class CajaComponent {
   model: any = 'credito';
   titulo: string = 'Caja';
   texto: string = 'cliente';
-  inversionista: any[] = [];
+  inversionistas: any[] = [];
   cliente: any[] = [];
   selectedCredit: any = null;
   @ViewChild('dt') table!: Table;
@@ -71,6 +75,12 @@ export class CajaComponent {
         const customersList = customers.data;
         const investorsList = investors.data;
 
+        this.inversionistas = investorsList.map((i: any) => ({
+          id: i.id,
+          name: i.name
+        }));
+        console.log("asdasd: ", this.inversionistas)
+
         this.data = creditos.data
           .filter((credito: any) => credito.etapa === 'aprobado')
           .map((credito: any) => {
@@ -90,7 +100,7 @@ export class CajaComponent {
       amount: new FormControl('', Validators.required),
       concept: new FormControl('', Validators.required),
       fecha: [new Date()],
-      inversionista_id: [this.inversionista]
+      inversionista: new FormControl('', Validators.required),
     });
 
     this.getConfirmation();
@@ -139,7 +149,7 @@ export class CajaComponent {
         cluster: 'mt1'
       });
 
-      const channel = pusher.subscribe('confirmation');
+      const channel = pusher.subscribe('confirmations');
       console.log('Canal: ', channel);
 
       channel.bind('confirmations', (data: any) => {
@@ -155,13 +165,14 @@ export class CajaComponent {
 
   requestWithdrawal() {
     const message = {
-      "investor_catalog_id": 1,
-      "mensaje": "Mensajito"
+      "investor_catalog_id": this.withdrawalForm.value.inversionista,
+      "mensaje": "Mensajito",
+      "payment_description": this.withdrawalForm.value.concept,
+      "amount": this.withdrawalForm.value.amount,
     }
     this.serviciogeneral.post('enviar', message, false).subscribe({
       next: (data: any) => { }
     });
-
   }
 
   submitWithdrawal() {
