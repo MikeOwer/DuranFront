@@ -176,12 +176,21 @@ export class CajaComponent {
   }
 
   submitWithdrawal() {
+    this.serviciogeneral.post('investor_withdrawal', {
+      investor_catalog_id: this.withdrawalForm.value.inversionista,
+      amount: this.withdrawalForm.value.amount,
+      payment_description: this.withdrawalForm.value.concept
+    }).subscribe({
+      next: (data) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Información',
+          detail: `Retiro solicitado con éxito`,
+          life: 3000
+        });
+      }
+    })
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Información',
-      detail: 'Retiro solicitado con éxito',
-      life: 3000
-    });
+
   }
 }
