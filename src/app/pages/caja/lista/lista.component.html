@@ -38,8 +38,7 @@
         </p-table>
 
         <div class="mt-2 text-right">
-          <button pButton label="Pagar" icon="pi pi-dollar" class="p-button-primary"
-            (click)="displayPagoDialog = true"></button>
+          <button pButton label="Pagar" icon="pi pi-dollar" class="p-button-primary" (click)="openPago()"></button>
         </div>
       </p-card>
     </div>
@@ -121,6 +120,7 @@
   </ng-template>
 </p-dialog>
 
+<!--Dialogo pago-->
 <p-dialog header="Pago" [(visible)]="displayPagoDialog" [modal]="true"
   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '70vw' }" [closable]="true"
   [dismissableMask]="true">
@@ -132,7 +132,7 @@
           <label for="importe">Importe</label>
           <p-inputGroup>
             <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-            <input pInputText id="importe" formControlName="importe" />
+            <input pInputText id="importe" formControlName="importe" [readOnly]="true" />
           </p-inputGroup>
         </div>
 
@@ -180,7 +180,7 @@
           <label for="cambio">Cambio</label>
           <p-inputGroup>
             <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
-            <input pInputText id="cambio" formControlName="cambio" [readOnly]="true" />
+            <p-inputnumber id="cambio" formControlName="cambio" [readonly]="true" />
           </p-inputGroup>
         </div>
       </form>
@@ -214,13 +214,10 @@
         <h3>Total: </h3>
       </div>
     </div>
-
   </div>
-
-
 
   <ng-template pTemplate="footer">
     <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="closeDialog()"></button>
-    <button pButton label="Guardar" icon="pi pi-check"></button>
+    <button pButton label="Pagar" icon="pi pi-check"></button>
   </ng-template>
 </p-dialog>

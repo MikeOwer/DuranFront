@@ -14,10 +14,25 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputNumber } from "primeng/inputnumber";
+import { InputNumberModule } from 'primeng/inputnumber';
+
 
 @Component({
   selector: 'app-lista',
-  imports: [CommonModule, TableModule, ButtonModule, CardModule, FormsModule, DialogModule, InputGroupModule, InputGroupAddonModule, ReactiveFormsModule, InputTextModule, DropdownModule,],
+  imports: [CommonModule,
+    TableModule,
+    ButtonModule,
+    CardModule,
+    FormsModule,
+    DialogModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    InputNumberModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    DropdownModule,
+    InputNumber],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.scss'
 })
@@ -58,8 +73,12 @@ export class ListaComponent implements OnInit {
     private fb: FormBuilder,) { }
 
   ngOnInit(): void {
-    this.initializeForm();
     this.loadData();
+    this.initializeForm();
+    this.pagoForm.get('recibido')?.valueChanges.subscribe(value => {
+      const cambio = -1 * (this.pagosPendientes[0].monto - value) || 0;
+      this.pagoForm.get('cambio')?.setValue(cambio > 0 ? cambio : 0, { emitEvent: false });
+    });
   }
 
   initializeForm() {
@@ -69,7 +88,7 @@ export class ListaComponent implements OnInit {
       formaPago: new FormControl(null, Validators.required),
       tipoPago: new FormControl(null, Validators.required),
       cuentaDestino: new FormControl('', Validators.required),
-      cambio: new FormControl(''),
+      cambio: new FormControl(0),
     })
   }
   /** carga los datos de todas las tablas con base en credito
@@ -125,6 +144,14 @@ export class ListaComponent implements OnInit {
    */
   onBack() {
     this.routerBack.navigate([this.urlPage]);
+  }
+
+  openPago() {
+    console.log(this.pagosPendientes[0]);
+    this.pagoForm.patchValue({
+      importe: this.pagosPendientes[0].monto,
+    })
+    this.displayPagoDialog = true;
   }
 
   /** Abre dialogo de observaciones
