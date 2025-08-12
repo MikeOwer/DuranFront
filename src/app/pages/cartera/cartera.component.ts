@@ -69,6 +69,7 @@ export class CarteraComponent implements OnInit {
 
   ngOnInit() {
     this.cargarInversionistas();
+    this.loadAllPortfolios();
   }
 
   clearFilters() {
@@ -96,9 +97,36 @@ export class CarteraComponent implements OnInit {
     });
   }
 
+  loadAllPortfolios() {
+    this.servicio.get('credito/portfolios/get_all', {}, true).subscribe({
+      next: (data) => {
+        this.data = data.data.map((item: any) => ({
+          cliente: item.cliente,
+          codigo: item.codigo,
+          credito_inicial: item.credito_inicial,
+          tipo_credito: item.tipo_credito,
+          plazo: item.plazo,
+          dia_pago: item.dia_pago,
+          capital: item.capital,
+          interes: item.interes,
+          iva: item.iva,
+          saldo_inicial: item.saldo_inicial,
+          tm: item.tm,
+          capital_cobrado: item.capital_cobrado,
+          interes_cobrado: item.interes_cobrado,
+          total_cobrado: item.total_cobrado,
+          saldo_final: item.saldo_final,
+          comprobacion: item.comprobacion,
+          observaciones: item.observaciones
+        }))
+      }
+    })
+  }
+
   filtrarClientesPorInversionista() {
     if (!this.inversionistaSeleccionado) {
       this.limpiarInversionista();
+      this.loadAllPortfolios();
       return;
     }
 
@@ -108,7 +136,6 @@ export class CarteraComponent implements OnInit {
         this.data = data.data.original.map((item: any) => ({
           cliente: item.cliente,
           codigo: item.codigo,
-          monto: item.monto,
           credito_inicial: item.credito_inicial,
           tipo_credito: item.tipo_credito,
           plazo: item.plazo,

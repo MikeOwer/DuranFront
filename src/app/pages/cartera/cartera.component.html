@@ -41,7 +41,7 @@
     </p-toolbar>
 
     <p-table #dt [value]="data" stripedRows [paginator]="true" [rows]="10"
-        [globalFilterFields]="['cliente', 'codigo', 'monto', 'credito_inicial', 'tipo_credito', 'plazo', 'dia_pago']"
+        [globalFilterFields]="['cliente', 'codigo', 'credito_inicial', 'tipo_credito', 'plazo', 'dia_pago']"
         [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}"
         [rowsPerPageOptions]="[5, 10, 20]" [scrollable]="true" scrollDirection="horizontal" scrollHeight="flex">
         <ng-template pTemplate="header">
