@@ -13,59 +13,59 @@ export class GeneralWebsocketService {
 
   private channels: Record<string, Channel> = {};
 
-  public initPusher(chName: string) {
+  public initPusher(chName: string, chDisplayName: string) {
 
     if (this.channels[chName]) {
       // Ya está inicializado
       return;
     }
-    try{
+    try {
       const pusher = new Pusher('local', {
-      wsHost: 'localhost',
-      wsPort: 8080,
-      forceTLS: false,
-      disableStats: true,
-      enabledTransports: ['ws'],
-      cluster: 'mt1'
-    });
-
-    const channel = pusher.subscribe(chName+'-channel');
-    this.channels[chName] = channel;
-    console.log('Canal: ',channel);
-
-    channel.bind('TableUpdated', (data: any) => {
-      console.log('Evento WebSocket:', data);
-
-      const actionVerbs = {
-        created: 'cread',
-        updated: 'editad',
-        deleted: 'eliminad'
-      };
-
-      const modelData = data.data;
-      const action = data.action as 'created' | 'updated' | 'deleted';
-      const isWithA = chName === 'sucursal';
-      const article = isWithA ? 'Una ' : 'Un ';
-      const finalVowel = isWithA ? 'a' : 'o';
-      
-
-      const verb = actionVerbs[action];
-      if (!verb) return;
-
-      var message = `${article} ${chName} ha sido ${verb}${finalVowel}`;
-      var title = `${modelData.display_name ?? 'Elemento'} ${verb}${finalVowel}`;
-
-      this.messageService.add({
-        severity: 'info',
-        summary: message,
-        detail: title,
-        life: 4000
+        wsHost: 'localhost',
+        wsPort: 8080,
+        forceTLS: false,
+        disableStats: true,
+        enabledTransports: ['ws'],
+        cluster: 'mt1'
       });
-    });
-    } catch (error){
+
+      const channel = pusher.subscribe(chName + '-channel');
+      this.channels[chName] = channel;
+      console.log('Canal: ', channel);
+
+      channel.bind('TableUpdated', (data: any) => {
+        console.log('Evento WebSocket:', data);
+
+        const actionVerbs = {
+          created: 'cread',
+          updated: 'editad',
+          deleted: 'eliminad'
+        };
+
+        const modelData = data.data;
+        const action = data.action as 'created' | 'updated' | 'deleted';
+        const isWithA = chName === 'sucursal';
+        const article = isWithA ? 'Una ' : 'Un ';
+        const finalVowel = isWithA ? 'a' : 'o';
+
+
+        const verb = actionVerbs[action];
+        if (!verb) return;
+
+        var message = `${article} ${chDisplayName} ha sido ${verb}${finalVowel}`;
+        var title = `${modelData.display_name ?? 'Elemento'} ${verb}${finalVowel}`;
+
+        this.messageService.add({
+          severity: 'info',
+          summary: message,
+          detail: title,
+          life: 4000
+        });
+      });
+    } catch (error) {
       console.error(' Error al inicializar Pusher:', error);
     }
-    
+
   }
 
   public onEvent(
@@ -83,9 +83,9 @@ export class GeneralWebsocketService {
   }
 
   public offEvent(chName: string) {
-  const channel = this.channels[chName];
-  if (channel) {
-    channel.unbind('TableUpdated');
+    const channel = this.channels[chName];
+    if (channel) {
+      channel.unbind('TableUpdated');
+    }
   }
-}
 }

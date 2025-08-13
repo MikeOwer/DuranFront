@@ -63,8 +63,6 @@ export class ClienteComponent implements OnInit {
   titulo: string = 'Clientes';
   texto: string = 'cliente';
   model: string = 'customers';
-  clienteChannelName: string = 'customer';
-  avalChannelName: string = 'customer-guarantee';
   inputGroupValue: any;
   idData?: number = undefined;
   form!: FormGroup;
@@ -123,9 +121,6 @@ export class ClienteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.generalWebsocketService.initPusher(this.clienteChannelName);
-    this.generalWebsocketService.initPusher(this.avalChannelName);
-
     this.form = this.fb.group({
       disabled: new FormControl(''),
       nombre: new FormControl('', Validators.required),
@@ -150,11 +145,9 @@ export class ClienteComponent implements OnInit {
     this.anio = year;
     this.semanas = this.servicioCliente.getWeeksOfYear(year);
     this.semanaActiva = this.semanas.currentWeek;
-    console.log(this.semanas);
     this.subs.push(this.router.params.subscribe(
       response => {
         if (response['id']) {
-          console.log(response['id']);
           this.idData = response['id'];
           this.cargarDatos();
         } else {
@@ -184,7 +177,6 @@ export class ClienteComponent implements OnInit {
     this.servicioGeneral.get(`customers/${this.idData}`, {}, true).subscribe({
       next: (data: any) => {
         this.data = data.data;
-        console.log("customer data in cargarDatos: ", this.data)
 
         this.form.patchValue({
           nombre: this.data.name,
@@ -197,8 +189,6 @@ export class ClienteComponent implements OnInit {
             const garanteeList = response.data.filter(
               (item: any) => item.customer_id === this.data.id
             );
-
-            console.log('Relacionados:', garanteeList);
 
             if (garanteeList.length > 0) {
               //carga los datos de los avales que recibe del filtrado
@@ -224,7 +214,6 @@ export class ClienteComponent implements OnInit {
 
   submitData() {
     this.has_guarantor = this.guarantorFormArray.controls.some(form => form.valid);
-    console.log("has guarantoR:", this.has_guarantor)
 
     this.customerData = {
       name: this.form.value.nombre,
@@ -264,10 +253,8 @@ export class ClienteComponent implements OnInit {
     }
     // Edicion de cliente
     if (this.idData) {
-      console.log("model:", this.model)
       this.servicioGeneral.update(this.model, this.idData, this.customerData, true).subscribe({
         next: (data: any) => {
-          console.log(`Cliente ${this.idData} actualizado correctamente:`, this.customerData)
 
           //se hace update o post de cada aval en los datos
           this.customerGuaranteeData.forEach((guarantor: any, index: number) => {

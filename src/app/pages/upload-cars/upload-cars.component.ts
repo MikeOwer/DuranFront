@@ -40,7 +40,6 @@ export class UploadCarsComponent {
   model: any = 'vehicles';
   idData?: number = undefined;
   carForm!: FormGroup;
-  vehiculoChannelName: string = 'vehicle';
   data: any = {
     brand: '',
     model: '',
@@ -57,24 +56,23 @@ export class UploadCarsComponent {
     { name: "Suspendido", value: 1 }
   ];
   duenios = [
-  { name: "1 dueño", value: "1" },
-  { name: "2 dueños", value: "2" },
-  { name: "3 dueños", value: "3" },
-  { name: "4 dueños", value: "4" },
-  { name: "5 dueños", value: "5" },
-]
+    { name: "1 dueño", value: "1" },
+    { name: "2 dueños", value: "2" },
+    { name: "3 dueños", value: "3" },
+    { name: "4 dueños", value: "4" },
+    { name: "5 dueños", value: "5" },
+  ]
   private subs: Subscription[] = [];
   constructor(private fb: FormBuilder, private realtimeService: DatarealtimeService, private router: Router, private cdr: ChangeDetectorRef, private servicioGeneral: ServicioGeneralService, private activeRouter: ActivatedRoute, private generalSocketService: GeneralWebsocketService) { }
 
   ngOnInit(): void {
-    this.generalSocketService.initPusher(this.vehiculoChannelName);
-    
+
     this.carForm = this.fb.group({
       marca: ['', Validators.required],
       modelo: ['', Validators.required],
       anio: ['', Validators.required],
       color: ['', Validators.required],
-      precio_sugerido: ['',Validators.required],
+      precio_sugerido: ['', Validators.required],
       disabled: [false],
       km: ['', Validators.required],
       precio: ['', Validators.required],

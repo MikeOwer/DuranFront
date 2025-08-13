@@ -145,7 +145,6 @@ export class EditcreditComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.generalWebsocketService.initPusher(this.creditoChannelName);
     const url = this.routerUrl.url;
 
     if (url.includes('cotizar')) {

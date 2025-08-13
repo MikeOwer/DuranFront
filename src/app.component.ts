@@ -31,16 +31,15 @@ export class AppComponent {
 
     constructor(private wsService: WebsocketService, private generalSocketService: GeneralWebsocketService, private apiService: ApiServiceService, private router: Router) {
         console.log('AppComponent inicializado ✅', wsService);
-        this.generalSocketService.initPusher('sucursal');
-        this.generalSocketService.initPusher('customer');
-        this.generalSocketService.initPusher('vehicle');
-        this.generalSocketService.initPusher('bank');
-        this.generalSocketService.initPusher('customer-guarantee');
-        this.generalSocketService.initPusher('pagos-realizados');
-        this.generalSocketService.initPusher('investor-catalog');
-        this.generalSocketService.initPusher('credito');
-        this.generalSocketService.initPusher('investor-withdrawals');
-
+        this.generalSocketService.initPusher('sucursal', 'sucursal');
+        this.generalSocketService.initPusher('customer', 'cliente');
+        this.generalSocketService.initPusher('vehicle', 'vehiculo');
+        this.generalSocketService.initPusher('bank', 'banco');
+        this.generalSocketService.initPusher('customer-guarantee', 'aval');
+        this.generalSocketService.initPusher('pagos-realizados', 'pago realizado');
+        this.generalSocketService.initPusher('investor-catalog', 'inversionista');
+        this.generalSocketService.initPusher('credito', 'credito');
+        this.generalSocketService.initPusher('investor-withdrawals', 'retiro');
     }
 
     ngOnInit() {

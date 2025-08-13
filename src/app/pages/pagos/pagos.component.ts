@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ServicioGeneralService } from '../../layout/service/servicio-general/servicio-general.service'; // Ajusta la ruta si es necesario
@@ -13,14 +13,13 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-pagos',
   templateUrl: './pagos.component.html',
   styleUrls: ['./pagos.component.scss'],
-  imports: [FormsModule, ReactiveFormsModule, InputGroupModule, InputGroupAddonModule, InputTextModule,ButtonModule],
+  imports: [FormsModule, ReactiveFormsModule, InputGroupModule, InputGroupAddonModule, InputTextModule, ButtonModule],
 })
 export class PagosComponent implements OnInit {
 
   data: any = {};
   form!: FormGroup;
   urlPage: string = './dashboard/catalogos/inversionistas/lista';
-  pagoChannelName: string = 'pagos-realizados';
 
   constructor(
     private fb: FormBuilder,
@@ -28,10 +27,9 @@ export class PagosComponent implements OnInit {
     private servicio: ServicioGeneralService,
     private messageService: MessageService,
     private generalSocketService: GeneralWebsocketService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.generalSocketService.initPusher(this.pagoChannelName);
 
     this.form = this.fb.group({
       monto: new FormControl('', [Validators.required]),
@@ -62,9 +60,9 @@ export class PagosComponent implements OnInit {
         this.servicio.post('concepto_pago', concepto_data).subscribe({
           next: (res: any) => {
             this.messageService.add({
-            severity: 'success',
-            summary: 'Pago aplicado',
-            detail: 'El concepto fue procesado correctamente.'
+              severity: 'success',
+              summary: 'Pago aplicado',
+              detail: 'El concepto fue procesado correctamente.'
             });
           },
           error: (err: any) => {
