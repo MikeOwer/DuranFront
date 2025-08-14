@@ -39,6 +39,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class ListaComponent implements OnInit {
   data: any[] = [];
   cliente: any;
+  credito: any;
   vehicle: any;
   creditoId: any;
   urlPage: string = './dashboard/caja';
@@ -61,9 +62,9 @@ export class ListaComponent implements OnInit {
   { label: 'Nota de Crédito', value: 'NOTA' }
   ]
   tiposPago = [{ label: 'Letra Vencida', value: 'VENCIDA' },
-  { label: 'Letra Anticipada', value: 'ANTICIPADA' },
   { label: 'Letra Adelantada', value: 'ADELANTADA' }
   ]
+  cuentasDestino = []
 
   loading = true;
   constructor(
@@ -81,6 +82,9 @@ export class ListaComponent implements OnInit {
     });
   }
 
+  /** Inicializa los formularios
+   * 
+   */
   initializeForm() {
     this.pagoForm = this.fb.group({
       importe: new FormControl('', Validators.required),
@@ -98,18 +102,26 @@ export class ListaComponent implements OnInit {
 
     //Obtenemos el credito y los datos de las tablas relacionadas al credito
     this.servicioGeneral.get(`credito/${this.creditoId}`, {}, true).subscribe(credito => {
+      this.credito = credito.data;
       forkJoin({
         payments_paid: this.servicioGeneral.get(`pago_realizado`, {}, true),
         payments_pending: this.servicioGeneral.get(`pago_pendiente`, {}, true),
         customer: this.servicioGeneral.get(`customers/${credito.data.customer_id}`),
         vehicles: this.servicioGeneral.get(`vehicles/${credito.data.vehicle_id}`),
         sucursales: this.servicioGeneral.get('sucursal'),
-        observaciones: this.servicioGeneral.get('observacion', {}, true),
-      }).subscribe(({ payments_paid, payments_pending, customer, vehicles, sucursales, observaciones }) => {
+        observaciones: this.servicioGeneral.get('observacion'),
+        cuentas: this.servicioGeneral.get('bank'),
+      }).subscribe(({ payments_paid, payments_pending, customer, vehicles, sucursales, observaciones, cuentas }) => {
         const payment_paidList = payments_paid.data;
         const payment_pendingList = payments_pending.data;
         const sucursalesList = sucursales.data;
         const observacionList = observaciones.data;
+        this.cuentasDestino = cuentas.data.map((cuenta: any) => {
+          return {
+            label: cuenta.account_name + " " + cuenta.account_last_name + " " + cuenta.name + " " + cuenta.account_number,
+            value: cuenta.account_number,
+          }
+        });
 
         this.cliente = customer.data;
         this.vehicle = vehicles.data
@@ -131,6 +143,7 @@ export class ListaComponent implements OnInit {
         console.log("pagado: ", payment_paid);
         console.log("pendiente: ", payment_pending);
         console.log("cliente: ", customer)
+        console.log("cuentas: ", this.cuentasDestino)
 
         this.pagosPendientes = payment_pending || null;
         this.pagosRealizados = payment_paid || null;
@@ -146,12 +159,37 @@ export class ListaComponent implements OnInit {
     this.routerBack.navigate([this.urlPage]);
   }
 
+  /** Abre el dialogo de pago
+   * @todo: refactor el importe para agregar montos pasados al importe actual
+   */
   openPago() {
-    console.log(this.pagosPendientes[0]);
+    const pago = this.pagosPendientes.find((p: any) => (p.monto > 0 && p.dias_vencido == 0))
+
     this.pagoForm.patchValue({
-      importe: this.pagosPendientes[0].monto,
+      importe: pago.monto,
     })
     this.displayPagoDialog = true;
+  }
+
+  /** Crea un nuevo pago
+   * 
+   */
+  submitPago() {
+    console.log("form: ", this.pagoForm.value)
+    this.servicioGeneral.post('pago_realizado', { customer_id: this.cliente.id, sucursal_id: 1, monto: this.pagoForm.value.recibido, tipo_pago: 0, pendiente: 0 }, true).subscribe({
+      next: (data) => {
+        const conceptoData = {
+          pagos_realizados_id: data.data.id,
+          concepto: "Pago de letra " + this.pagoForm.value.tipo_pago + " del cliente " + this.cliente.name + " por el vehículo " + this.vehicle.model + " - " + this.vehicle.year,
+          monto: data.data.monto,
+        }
+        this.servicioGeneral.post('concepto_pago', conceptoData, true).subscribe({
+          next: (data) => {
+            console.log("concepto generado: ", data);
+          }
+        })
+      },
+    })
   }
 
   /** Abre dialogo de observaciones
@@ -190,16 +228,6 @@ export class ListaComponent implements OnInit {
         console.error('Error al crear la obsrvacion: ', err)
       }
     })
-
-    /* this.realtimeService.createRecord('observaciones', data).subscribe({
-      next: (res) => {
-        console.log('Observación creada:', res);
-        this.closeDialog();
-      },
-      error: (err) => {
-        console.error('Error al crear observación:', err);
-      }
-    }); */
   }
 }
 
