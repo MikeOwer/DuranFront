@@ -1,4 +1,4 @@
-<div class="card flex flex-col gap-14">
+<div class="card flex flex-col gap-6">
     <p-toolbar class="gap-10">
         <ng-template #start>
             <div class="flex flex-col">
@@ -7,33 +7,48 @@
             </div>
         </ng-template>
         <ng-template #end>
-            <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
-                class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
-            <button pButton [routerLink]="['transaccion']" label="Crear una transacción"></button>
-            <button pButton [routerLink]="['crear']" label="Crear un banco"></button>
-            
-            <input
-                pInputText
-                class="custom-input mr-2"
-                type="text"
-                name="buscador"
-                placeholder="Buscar"
-                [(ngModel)]="globalFilter"
-                [ngModelOptions]="{standalone: true}"
-                (input)="onFilterGlobal($event)"
-            />
-            
+            <div class="flex gap-2">
+                <button pButton variant="text" severity="secondary" label="Limpiar filtros" icon="pi pi-filter-slash"
+                    class="p-button-sm p-button-rounded mr-2" (click)="clearFilters()"></button>
+                <button pButton [routerLink]="['transaccion']" label="Crear una transacción"></button>
+                <button pButton [routerLink]="['crear']" label="Crear un banco"></button>
+
+                <input pInputText class="custom-input mr-2" type="text" name="buscador" placeholder="Buscar"
+                    [(ngModel)]="globalFilter" [ngModelOptions]="{standalone: true}" (input)="onFilterGlobal($event)" />
+            </div>
+
+
         </ng-template>
     </p-toolbar>
+
+    <div>
+        <p-table #dt [value]="bancos" [paginator]="true" [rows]="10"
+            [globalFilterFields]="['nombre', 'banco', 'cuenta']" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5, 10, 15]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="nombre">Cuentahabiente <p-sortIcon field="nombre" /></th>
+                    <th pSortableColumn="banco">Banco <p-sortIcon field="banco" /></th>
+                    <th pSortableColumn="cuenta">Número de cuenta <p-sortIcon field="cuenta" /></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr>
+                    <td>{{data.account_name}} {{data.account_last_name}}</td>
+                    <td>{{data.name}}</td>
+                    <td>{{data.account_number}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div class="flex flex-col">
+        <h1 class="font-semibold text-xl">Movimientos</h1>
+    </div>
+
     <div class="w-72">
-        <p-dropdown 
-            [options]="bancos" 
-            optionLabel="account_number" 
-            placeholder="Selecciona un banco"
-            [(ngModel)]="bancoSeleccionado"
-            [showClear]="true"
-            (onChange)="onBancoChange($event)"
-        ></p-dropdown>
+        <p-dropdown [options]="bancos" optionLabel="account_number" placeholder="Selecciona un banco"
+            [(ngModel)]="bancoSeleccionado" [showClear]="true" (onChange)="onBancoChange($event)"></p-dropdown>
     </div>
     <p-table #dt [value]="data" [paginator]="true" [rows]="10"
         [globalFilterFields]="['nombre', 'apellido', 'email', 'celular']" [showCurrentPageReport]="true"
@@ -52,7 +67,7 @@
                 <td>{{ data.transaction_type }}</td>
                 <td>{{ data.amount }}</td>
                 <td>
-                    <button pButton icon="pi pi-pencil" ></button>
+                    <button pButton icon="pi pi-pencil"></button>
                 </td>
             </tr>
         </ng-template>

@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, 
 import { MessageService } from 'primeng/api';
 import { ServicioGeneralService } from '../../../layout/service/servicio-general/servicio-general.service';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common'; 
+import { Location } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { GeneralWebsocketService } from '../../../layout/service/general-websocket.service';
 import { TabsModule } from 'primeng/tabs';
@@ -16,10 +16,10 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-crear-banco',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, ButtonModule,TabsModule,InputGroup,InputGroupAddon,InputGroup,InputTextModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, ButtonModule, TabsModule, InputGroup, InputGroupAddon, InputGroup, InputTextModule],
   templateUrl: './crear-banco.component.html',
   styleUrl: './crear-banco.component.scss',
-  providers: [ MessageService],
+  providers: [MessageService],
   standalone: true
 })
 
@@ -29,14 +29,14 @@ export class CrearBancoComponent {
   data: any = {};
   bancoChannelName: string = 'bank';
 
-  constructor(private fb: FormBuilder, private serviciogeneral: ServicioGeneralService,  private router: Router,  private location: Location, private generalSocketService: GeneralWebsocketService) {}
+  constructor(private fb: FormBuilder, private serviciogeneral: ServicioGeneralService, private router: Router, private location: Location, private generalSocketService: GeneralWebsocketService) { }
 
   ngOnInit() {
 
     this.form = this.fb.group({
       name: ['', Validators.required],
       account_name: ['', Validators.required],
-      account_last_name: [true, Validators.required],
+      account_last_name: ['', Validators.required],
       account_number: ['', Validators.required],
       balance: ['', Validators.required]
     });
@@ -59,7 +59,7 @@ export class CrearBancoComponent {
           summary: '¡Éxito!',
           detail: 'El banco fue creado correctamente'
         }); */
-        this.router.navigate(['/bancos']); 
+        this.router.navigate(['/bancos']);
       },
       error: (error) => {
         this.messageService.add({
@@ -72,6 +72,6 @@ export class CrearBancoComponent {
   }
 
   goBack() {
-    this.location.back(); 
+    this.location.back();
   }
 }
