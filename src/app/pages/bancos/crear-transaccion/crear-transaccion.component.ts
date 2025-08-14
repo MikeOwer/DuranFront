@@ -67,9 +67,9 @@ export class CrearTransaccionComponent {
     private messageService: MessageService,
     private servicioGeneral: ServicioGeneralService,
     private generalSocketService: GeneralWebsocketService
-  ) {}
+  ) { }
 
-  mostrarCambio(){
+  mostrarCambio() {
     console.log(this.form.value)
   }
 
@@ -78,15 +78,15 @@ export class CrearTransaccionComponent {
     this.form = this.fb.group({
       descripcion: new FormControl(''),
       cantidad: new FormControl('', [
-      Validators.required,
-      Validators.min(0),
-      Validators.pattern(/^(0|[1-9]\d*)(\.\d+)?$/)
+        Validators.required,
+        Validators.min(0),
+        Validators.pattern(/^(0|[1-9]\d*)(\.\d+)?$/)
       ]),
       tipo: new FormControl('', Validators.required),
-      vehiculoSeleccionado: ['', Validators.required]
+      bancoSeleccionado: ['', Validators.required]
     });
 
-    this.servicioGeneral.get('bank',{}, false).subscribe({
+    this.servicioGeneral.get('bank', {}, false).subscribe({
       next: (data) => {
         this.bancos = data.data;
         console.log(this.bancos);
@@ -107,7 +107,7 @@ export class CrearTransaccionComponent {
       bank_id: this.form.value.bancoSeleccionado
     }
 
-    console.log('Transaccion:',this.data);
+    console.log('Transaccion:', this.data);
 
     this.servicioGeneral.post(this.model, this.data).subscribe({
       next: (data: any) => {
@@ -122,7 +122,7 @@ export class CrearTransaccionComponent {
       }
     })
 
-    this.routerBack.navigate(['./auth/login'])
+    this.routerBack.navigate([this.urlPage])
   }
-  
+
 }
