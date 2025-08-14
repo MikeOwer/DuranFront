@@ -60,15 +60,8 @@ export class ListaClientesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    /*this.realtimeService.listenToCollection(this.model).subscribe(data => {
-      this.data = data;
-      console.log(this.data);
-    });*/
-    //this.cargarDatos2();
-
     this.serviciogeneral.get('customers', {}, true).subscribe(data => {
       this.data = data.data;
-      console.log(this.data);
     })
 
     this.generalSocketService.onEvent('customer', (event: any) => {
@@ -114,30 +107,22 @@ export class ListaClientesComponent implements OnInit {
   }
 
   confirmDelete(item: any) {
-    /* this.confirmationService.confirm({
+    this.confirmationService.confirm({
       message: '¿Estás seguro de eliminar?',
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        await this.serviciogeneral.delete(this.model, item);
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Eliminado',
-          detail: 'Eliminado con exito'
-        });
-      }
-    }); */
-
-    this.serviciogeneral.delete('customers', item).subscribe({
-      next: (data) => {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Eliminado',
-          detail: 'Eliminado con exito'
-        });
+        await this.serviciogeneral.delete(this.model, item).subscribe({
+          next: (data) => {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Eliminado',
+              detail: 'Eliminado con exito'
+            });
+          }
+        })
       }
     });
-
   }
 
   onRowSelect(event: any) {
