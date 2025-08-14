@@ -66,8 +66,6 @@ export class ClienteComponent implements OnInit {
   inputGroupValue: any;
   idData?: number = undefined;
   form!: FormGroup;
-  guarantorForm!: FormGroup;
-  guarantorForm2!: FormGroup;
   creditForm!: FormGroup;
   data: any = {};
   customerData: any = {};
@@ -89,16 +87,41 @@ export class ClienteComponent implements OnInit {
     value: i + 1
   }));
   fecha1erPago: Date | null = null;
-  ajuste: any = {
-    proteina: 0,
-    grasas: 0,
-    carb: 0,
-    calorias: 0,
-  }
   categorias: any = [];
   uploadedFiles: any[] = [];
   datosCliente: any = null;
   documentMap: { [clave: string]: File } = {};
+
+  estadosCiviles = [
+    { label: 'Soltero', value: 'soltero' },
+    { label: 'Casado', value: 'casado' },
+    { label: 'Divorciado', value: 'divorciado' },
+    { label: 'Viudo', value: 'viudo' }
+  ];
+
+  estadosCivilesAval = [
+    { label: 'Soltero', value: 'soltero' },
+    { label: 'Casado', value: 'casado' },
+    { label: 'Divorciado', value: 'divorciado' },
+    { label: 'Viudo', value: 'viudo' }
+  ];
+  opcionesDependientes = [
+    { label: 'Sí', value: true },
+    { label: 'No', value: false }
+  ];
+  tiposTrabajo = [
+    { label: 'Empleado', value: false },
+    { label: 'Independiente', value: true },
+  ];
+  tiposVivienda = [
+    { label: 'Hipoteca Infonavit', value: 'hipoteca_infonavit' },
+    { label: 'Hipoteca Banco', value: 'hipoteca_banco' },
+    { label: 'Donación', value: 'donacion' },
+    { label: 'Usufructo', value: 'usufructo' },
+    { label: 'Rentada', value: 'rentada' },
+    { label: 'Familiar', value: 'familiar' },
+    { label: 'Otros', value: 'otro' },
+  ];
 
   guarantors = [{}];
   has_guarantor: boolean = false;
@@ -122,12 +145,52 @@ export class ClienteComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      disabled: new FormControl(''),
-      nombre: new FormControl('', Validators.required),
-      apellido: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.required),
+      last_name: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
-      Direction: new FormControl(''),
-      celular: new FormControl(''),
+      cellphone_number: new FormControl(null, Validators.required),
+      RFC: new FormControl('', Validators.required),
+      has_customer_guarantee: this.has_guarantor,
+      documents: (null),
+
+      marital_status: new FormControl('', Validators.required),
+      marriage_regime: new FormControl(null),
+      marriage_place: new FormControl(null),
+      economic_dependents: new FormControl(null, Validators.required),
+      number_children: new FormControl(null),
+      age_of_children: new FormControl(null),
+
+      couple_name: new FormControl(null),
+      couple_phone_number: new FormControl(null),
+      couple_job: new FormControl(null),
+      couple_industry: new FormControl(null),
+      couple_monthly_income: new FormControl(null),
+
+      age: new FormControl(null, Validators.required),
+      city: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      type_housing: new FormControl(null, Validators.required),
+      residence_time: new FormControl(null, Validators.required),
+      CP: new FormControl('', Validators.required),
+
+      rent_price: new FormControl(''),
+      extra_name: new FormControl(''),
+      extra_phone_number: new FormControl(''),
+      familiar_relationship: new FormControl(''),
+
+      company: new FormControl('', Validators.required),
+      company_adress: new FormControl('', Validators.required),
+      company_phone_number: new FormControl(null, Validators.required),
+      monthly_income: new FormControl(null, Validators.required),
+      another_incomes: new FormControl(null),
+      job: new FormControl('', Validators.required),
+      job_seniority: new FormControl(null, Validators.required),
+      last_job: new FormControl(null),
+      last_job_seniority: new FormControl(null),
+      last_phone_number: new FormControl(null),
+      isOwner: new FormControl(null, Validators.required),
+      immediate_supervisor_name: new FormControl(null),
     });
 
     //crea un formulario vacio para los avales (aqui luego se cargan los datos de los avales en la bd) 
@@ -177,12 +240,54 @@ export class ClienteComponent implements OnInit {
     this.servicioGeneral.get(`customers/${this.idData}`, {}, true).subscribe({
       next: (data: any) => {
         this.data = data.data;
+        console.log(this.data)
 
         this.form.patchValue({
-          nombre: this.data.name,
-          apellido: this.data.last_name,
-          celular: this.data.cellphone_number,
-          Direction: this.data.address,
+          name: this.data.name,
+          last_name: this.data.last_name,
+          address: this.data.address,
+          cellphone_number: this.data.cellphone_number,
+          email: this.data.email,
+          age: this.data.age,
+
+          marital_status: this.data.marital_status,
+          marriage_regime: this.data.marriage_regime,
+          marriage_place: this.data.marriage_place,
+          economic_dependents: this.data.economic_dependents == 1 ? true : false,
+          number_children: this.data.number_children,
+          job: this.data.job,
+
+          couple_name: this.data.couple_name,
+          couple_phone_number: this.data.couple_phone_number,
+          couple_job: this.data.couple_job,
+          couple_industry: this.data.couple_industry,
+          couple_monthly_income: this.data.couple_monthly_income,
+
+          RFC: this.data.RFC,
+          city: this.data.city,
+          state: this.data.state,
+          type_housing: this.data.type_housing,
+          residence_time: this.data.residence_time,
+          rent_price: this.data.rent_price,
+          extra_name: this.data.extra_name,
+          extra_phone_number: this.data.extra_phone_number,
+          familiar_relationship: this.data.familiar_relationship,
+
+          company: this.data.company,
+          company_adress: this.data.company_adress,
+          company_phone_number: this.data.company_phone_number,
+          monthly_income: this.data.monthly_income,
+          another_incomes: this.data.another_incomes,
+          immediate_supervisor_name: this.data.immediate_supervisor_name,
+          job_seniority: this.data.job_seniority,
+          last_job: this.data.last_job,
+          last_job_seniority: this.data.last_job_seniority,
+          last_phone_number: this.data.last_phone_number,
+          age_of_children: this.data.age_of_children,
+          CP: this.data.CP,
+          isOwner: this.data.isOwner == 1 ? true : false,
+
+          has_customer_guarantee: this.data.has_customer_guarantee,
         });
         this.servicioGeneral.get(`customer_guarantee`, {}, true).subscribe({
           next: (response: any) => {
@@ -192,23 +297,23 @@ export class ClienteComponent implements OnInit {
 
             if (garanteeList.length > 0) {
               //carga los datos de los avales que recibe del filtrado
-              for (let i = 0; i < garanteeList.length; i++) {
-                this.guarantorFormArray.at(i).patchValue({
-                  id: garanteeList[i].id,
-                  guarantorName: garanteeList[i].name,
-                  guarantorLastName: garanteeList[i].last_name,
-                  guarantorDirection: garanteeList[i].address,
-                  guarantoremail: garanteeList[i].email,
-                  guarantormovil: garanteeList[i].cellphone_number
+              garanteeList.forEach((guarantee: any, index: number) => {
+                this.guarantorFormArray.at(index).patchValue({
+                  id: guarantee.id,
+                  guarantorName: guarantee.name,
+                  guarantorLastName: guarantee.last_name,
+                  guarantorDirection: guarantee.address,
+                  guarantoremail: guarantee.email,
+                  guarantormovil: guarantee.cellphone_number
                 });
-                this.addGuarantor();
-              }
+              })
+              this.has_guarantor = true;
+            } else {
+              this.addGuarantor();
             }
           }
         });
-
       }
-
     })
   }
 
@@ -216,11 +321,50 @@ export class ClienteComponent implements OnInit {
     this.has_guarantor = this.guarantorFormArray.controls.some(form => form.valid);
 
     this.customerData = {
-      name: this.form.value.nombre,
-      last_name: this.form.value.apellido,
+      name: this.form.value.name,
+      last_name: this.form.value.last_name,
       email: this.form.value.email,
-      cellphone_number: this.form.value.celular,
-      address: this.form.value.Direction,
+      cellphone_number: this.form.value.cellphone_number,
+      address: this.form.value.address,
+      age: this.form.value.age,
+
+      marital_status: this.form.value.marital_status,
+      marriage_regime: this.form.value.marriage_regime,
+      marriage_place: this.form.value.marriage_place,
+      economic_dependents: this.form.value.economic_dependents == 1 ? true : false,
+      number_children: this.form.value.number_children,
+      job: this.form.value.job,
+
+      couple_name: this.form.value.couple_name,
+      couple_phone_number: this.form.value.couple_phone_number,
+      couple_job: this.form.value.couple_job,
+      couple_industry: this.form.value.couple_industry,
+      couple_monthly_income: this.form.value.couple_monthly_income,
+
+      RFC: this.form.value.RFC,
+      city: this.form.value.city,
+      state: this.form.value.state,
+      type_housing: this.form.value.type_housing,
+      residence_time: this.form.value.residence_time,
+      rent_price: this.form.value.rent_price,
+      extra_name: this.form.value.extra_name,
+      extra_phone_number: this.form.value.extra_phone_number,
+      familiar_relationship: this.form.value.familiar_relationship,
+
+      company: this.form.value.company,
+      company_adress: this.form.value.company_adress,
+      company_phone_number: this.form.value.company_phone_number,
+      monthly_income: this.form.value.monthly_income,
+      another_incomes: this.form.value.another_incomes,
+      immediate_supervisor_name: this.form.value.immediate_supervisor_name,
+      job_seniority: this.form.value.job_seniority,
+      last_job: this.form.value.last_job,
+      last_job_seniority: this.form.value.last_job_seniority,
+      last_phone_number: this.form.value.last_phone_number,
+      age_of_children: this.form.value.age_of_children,
+      CP: this.form.value.CP,
+      isOwner: this.form.value.isOwner == 1 ? true : false,
+
       has_customer_guarantee: this.has_guarantor,
     };
 
@@ -235,6 +379,43 @@ export class ClienteComponent implements OnInit {
           last_name: guarantorFormGroup.value.guarantorLastName,
           address: guarantorFormGroup.value.guarantorDirection,
           cellphone_number: guarantorFormGroup.value.guarantormovil,
+          age: guarantorFormGroup.value.age,
+
+          marital_status: guarantorFormGroup.value.marital_status,
+          marital_regime: guarantorFormGroup.value.marital_regime,
+          marriage_place: guarantorFormGroup.value.marriage_place,
+          economic_dependents: guarantorFormGroup.value.economic_dependents,
+          number_children: guarantorFormGroup.value.number_children,
+          job: guarantorFormGroup.value.job,
+
+          couple_name: guarantorFormGroup.value.couple_name,
+          couple_phone_number: guarantorFormGroup.value.couple_phone_number,
+          couple_job: guarantorFormGroup.value.couple_job,
+          couple_industry: guarantorFormGroup.value.couple_industry,
+          couple_monthly_income: guarantorFormGroup.value.couple_monthly_income,
+
+          city: guarantorFormGroup.value.city,
+          state: guarantorFormGroup.value.state,
+          type_housing: guarantorFormGroup.value.type_housing,
+          residence_time: guarantorFormGroup.value.residence_time,
+          CP: guarantorFormGroup.value.CP,
+
+          rent_price: guarantorFormGroup.value.rent_price,
+          extra_name: guarantorFormGroup.value.extra_name,
+          extra_phone_number: guarantorFormGroup.value.extra_phone_number,
+          familiar_relationship: guarantorFormGroup.value.familiar_relationship,
+
+          company: guarantorFormGroup.value.company,
+          company_address: guarantorFormGroup.value.company_adress,
+          company_phone_number: guarantorFormGroup.value.company_phone_number,
+          monthly_income: guarantorFormGroup.value.monthly,
+          another_incomes: guarantorFormGroup.value.another_incomes,
+          job_seniority: guarantorFormGroup.value.job_seniority,
+          last_job: guarantorFormGroup.value.last_job,
+          last_job_seniority: guarantorFormGroup.value.last_job_seniority,
+          last_phone_number: guarantorFormGroup.value.last_phone_number,
+          isOwner: guarantorFormGroup.value.isOwner == 1 ? true : false,
+          immediate_supervisor_name: guarantorFormGroup.value.immediate_supervisor_name,
         };
         // Si el aval no tiene un ID (es un aval nuevo), se asigna el email del formulario
         // esto porque mandar un email cuando ya existe un aval causa errores por el validador de email unico
@@ -357,11 +538,42 @@ export class ClienteComponent implements OnInit {
   createGuarantorForm(guarantorId: any): any {
     return this.fb.group({
       id: new FormControl(guarantorId),
-      guarantorName: new FormControl('', Validators.required),
-      guarantorLastName: new FormControl('', Validators.required),
-      guarantorDirection: new FormControl('', Validators.required),
-      guarantoremail: new FormControl('', [Validators.email]),
-      guarantormovil: new FormControl('', Validators.required)
+      guarantorName: new FormControl('',),
+      guarantorLastName: new FormControl('',),
+      guarantorDirection: new FormControl('',),
+      guarantoremail: new FormControl('',),
+      age: new FormControl(''),
+      marital_status: new FormControl(''),
+
+      couple_name: new FormControl(''),
+      marriage_place: new FormControl(''),
+      marriage_regime: new FormControl(''),
+
+      city: new FormControl(''),
+      state: new FormControl(''),
+      CP: new FormControl(''),
+      guarantormovil: new FormControl('',),
+
+      type_housing_paid: new FormControl<string | null>(''),
+      address_paid: new FormControl(''),
+      type_housing_paying: new FormControl<string | null>(''),
+      address_payment: new FormControl(''),
+
+      mortgage_date: new FormControl(''),
+      final_comments: new FormControl(''),
+
+      company: new FormControl(''),
+      job_type: new FormControl(''),
+      company_address: new FormControl(''),
+      position: new FormControl(''),
+      immediate_supervisor_name: new FormControl(''),
+      job: new FormControl(''),
+      another_job_industry: new FormControl(''),
+      monthly_income: new FormControl(null),
+      another_incomes: new FormControl(null),
+      job_seniority: new FormControl(''),
+      company_phone_number: new FormControl(''),
+      isOwner: new FormControl(null),
     });
   }
 

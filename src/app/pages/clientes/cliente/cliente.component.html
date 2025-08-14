@@ -21,59 +21,377 @@
             <p-tab value="3">Subir fotos</p-tab>
         </p-tablist>
         <p-tabpanels>
-            <p-tabpanel value="0">
-                <div class="flex flex-col gap-6 w-full">
-                    <div class="flex justify-between">
-                        <div class="font-semibold text-sm flex-col">Información</div>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <p-inputgroup>
-                            <p-inputgroup-addon>
-                                <i class="pi pi-user"></i>
-                            </p-inputgroup-addon>
-                            <input pInputText autocomplete="new-password" placeholder="Nombre"
-                                formControlName="nombre" />
-                        </p-inputgroup>
-
-                        <p-inputgroup>
-                            <p-inputgroup-addon>
-                                <i class="pi pi-user"></i>
-                            </p-inputgroup-addon>
-                            <input pInputText autocomplete="new-password" formControlName="apellido"
-                                placeholder="Apellido" />
-                        </p-inputgroup>
-
-                        <p-inputgroup>
-                            <p-inputgroup-addon>
-                                <i class="pi pi-envelope"></i>
-                            </p-inputgroup-addon>
-                            <input pInputText autocomplete="new-password" formControlName="email" placeholder="Email" />
-                        </p-inputgroup>
-                    </div>
-                    <p-inputgroup>
-                        <p-inputgroup-addon>
-                            <i class="pi pi-user"></i>
-                        </p-inputgroup-addon>
-                        <input pInputText autocomplete="new-password" formControlName="Direction"
-                            placeholder="Dirección" />
-                    </p-inputgroup>
-
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <div *ngIf="idData" class="w-full">
-                            <p-dropdown [options]="estatus" optionLabel="name" optionValue="value"
-                                placeholder="Selecciona un estatus" inputId="estatus" />
+            <p-tabpanel value="0" header="Información cliente">
+                <form [formGroup]="form">
+                    <div class="p-fluid grid">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <div>
+                                <h5>Información básica</h5>
+                            </div>
                         </div>
 
-                        <p-inputgroup>
-                            <p-inputgroup-addon>
-                                <i class="pi pi-mobile"></i>
-                            </p-inputgroup-addon>
-                            <input pInputText autocomplete="new-password" formControlName="celular"
-                                placeholder="Celular" />
-                        </p-inputgroup>
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="name" formControlName="name" placeholder=" Nombre" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="last_name" formControlName="last_name"
+                                        placeholder=" Apellido" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
+                                    <input pInputText id="email" formControlName="email" placeholder=" Correo" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                                    <input pInputText id="cellphone_number" formControlName="cellphone_number"
+                                        placeholder=" Celular" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="RFC" formControlName="RFC" placeholder=" RFC" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="age" formControlName="age" placeholder=" Edad" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-dropdown [options]="opcionesDependientes" optionLabel="label" optionValue="value"
+                                    placeholder="Dependientes económicos" formControlName="economic_dependents"
+                                    id="economic_dependents" [showClear]="true" class="w-full">
+                                    <ng-template let-option pTemplate="item">
+                                        {{ option.label }}
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                            <div class="w-1/3" *ngIf="form.get('economic_dependents')?.value === true">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                                    <input pInputText id="age_of_children" formControlName="age_of_children"
+                                        placeholder=" Edad de los hijos" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-dropdown [options]="estadosCiviles" optionLabel="label" optionValue="value"
+                                    placeholder="Seleccione estado civil" formControlName="marital_status"
+                                    id="marital_status" [showClear]="true" class="w-full">
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <i class="pi pi-user mr-2" *ngIf="selectedOption"></i>
+                                        <span *ngIf="selectedOption">{{ selectedOption.label }}</span>
+                                        <span *ngIf="!selectedOption">Seleccione estado civil</span>
+                                    </ng-template>
+
+                                    <ng-template let-option pTemplate="item">
+                                        <i class="pi pi-user mr-2"></i>
+                                        {{ option.label }}
+                                    </ng-template>
+                                </p-dropdown>
+
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="form.get('marital_status')?.value === 'casado'"
+                            class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="marriage_regime" formControlName="marriage_regime"
+                                        placeholder=" Regimen del matrimonio" />
+                                </p-inputGroup>
+                            </div>
+
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="marriage_place" formControlName="marriage_place"
+                                        placeholder=" Lugar del matrimonio" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div *ngIf="form.get('marital_status')?.value === 'casado'"
+                            class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="couple_name" formControlName="couple_name"
+                                        placeholder=" Nombre del espos@" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="couple_job" formControlName="couple_job"
+                                        placeholder=" Ocupación" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4"
+                            [ngStyle]="{ display: form.get('marital_status')?.value === 'casado' ? 'flex' : 'none' }">
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                                    <input pInputText id="couple_phone_number" formControlName="couple_phone_number"
+                                        placeholder=" Teléfono del cónyuge" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="couple_industry" formControlName="couple_industry"
+                                        placeholder=" Giro" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="couple_monthly_income" formControlName="couple_monthly_income"
+                                        placeholder=" Ingreso mensual" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; margin-top: 1rem;">
+                            <div>
+                                <h5>Domicilio actual</h5>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <p-inputGroup>
+                                <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                <input pInputText id="address" formControlName="address" placeholder=" Dirección" />
+                            </p-inputGroup>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-dropdown [options]="tiposVivienda" optionLabel="label" optionValue="value"
+                                    placeholder="Seleccione el tipo de vivienda" formControlName="type_housing"
+                                    id="type_housing" [showClear]="true" class="w-full">
+                                    <ng-template pTemplate="selectedItem" let-selectedOption>
+                                        <i class="pi pi-home mr-2" *ngIf="selectedOption"></i>
+                                        <span *ngIf="selectedOption">{{ selectedOption.label }}</span>
+                                        <span *ngIf="!selectedOption">Seleccione tipo vivienda</span>
+                                    </ng-template>
+
+                                    <ng-template let-option pTemplate="item">
+                                        <i class="pi pi-home mr-2"></i>
+                                        {{ option.label }}
+                                    </ng-template>
+                                </p-dropdown>
+
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-clock"></i></p-inputGroupAddon>
+                                    <input pInputText id="residence_time" formControlName="residence_time"
+                                        placeholder=" Tiempo de residencia" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div *ngIf="form.get('type_housing')?.value === 'rentada'"
+                            class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                                    <input pInputText id="rent_price" formControlName="rent_price"
+                                        placeholder="Renta" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="extra_name" formControlName="extra_name"
+                                        placeholder="Nombre arrendador" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-mobile"></i></p-inputGroupAddon>
+                                    <input pInputText id="extra_phone_number" formControlName="extra_phone_number"
+                                        placeholder="Teléfono arrendador" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div *ngIf="form.get('type_housing')?.value === 'familiar'"
+                            class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="extra_name" formControlName="extra_name"
+                                        placeholder="Nombre" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-users"></i></p-inputGroupAddon>
+                                    <input pInputText id="familiar_relationship" formControlName="familiar_relationship"
+                                        placeholder="Parentesco" />
+                                </p-inputGroup>
+                            </div>
+
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-mobil"></i></p-inputGroupAddon>
+                                    <input pInputText id="extra_phone_number" formControlName="extra_phone_number"
+                                        placeholder="Teléfono familiar" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="city" formControlName="city" placeholder=" Ciudad" />
+                                </p-inputGroup>
+                            </div>
+
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="state" formControlName="state" placeholder=" Estado" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-envelope"></i></p-inputGroupAddon>
+                                    <input pInputText id="CP" formControlName="CP" placeholder=" Código Postal" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+
+
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; margin-top: 1rem;">
+                            <div>
+                                <h5>Datos laborales del comprador</h5>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-2/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="company" formControlName="company" placeholder=" Empresa" />
+                                </p-inputGroup>
+                            </div>
+
+                            <div class="w-1/3">
+                                <p-dropdown [options]="tiposTrabajo" optionLabel="label" optionValue="value"
+                                    placeholder="Tipo de trabajo" formControlName="isOwner" id="isOwner"
+                                    [showClear]="true" class="w-full">
+                                    <ng-template let-option pTemplate="item">
+                                        {{ option.label }}
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-2/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                    <input pInputText id="company_adress" formControlName="company_adress"
+                                        placeholder=" Domicilio" />
+                                </p-inputGroup>
+                            </div>
+
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                                    <input pInputText id="company_phone_number" formControlName="company_phone_number"
+                                        placeholder=" Teléfono de la empresa" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-briefcase"></i></p-inputGroupAddon>
+                                    <input pInputText id="job" formControlName="job" placeholder=" Puesto" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-clock"></i></p-inputGroupAddon>
+                                    <input pInputText id="job_seniority" formControlName="job_seniority"
+                                        placeholder=" Antigüedad" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/3">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                                    <input pInputText id="monthly_income" formControlName="monthly_income"
+                                        placeholder=" Ingreso" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div *ngIf="form.get('isOwner')?.value === true" class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                                    <input pInputText id="another_incomes" formControlName="another_incomes"
+                                        placeholder=" Otros Ingresos" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+
+                        <div *ngIf="form.get('isOwner')?.value === false" class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                    <input pInputText id="immediate_supervisor_name"
+                                        formControlName="immediate_supervisor_name" placeholder=" Jefe" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-briefcase"></i></p-inputGroupAddon>
+                                    <input pInputText id="last_job" formControlName="last_job"
+                                        placeholder=" Trabajo Anterior" />
+                                </p-inputGroup>
+                            </div>
+                            <div class="w-1/2">
+                                <p-inputGroup>
+                                    <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                                    <input pInputText id="last_phone_number" formControlName="last_phone_number"
+                                        placeholder=" Teléfono trabajo anterior" />
+                                </p-inputGroup>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </p-tabpanel>
             <!-- Avales Tab -->
             <p-tabpanel value="1">
@@ -96,32 +414,261 @@
                     <div class="col-span-12 xl:col-span-8">
                         <p-panel>
                             <p-fluid [formGroup]="getGuarantorForm(i)">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <p-inputgroup>
-                                        <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                        <input pInputText placeholder="Nombre" formControlName="guarantorName" />
-                                    </p-inputgroup>
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h5>Información básica</h5>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/3">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Nombre" formControlName="guarantorName" />
+                                        </p-inputgroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Apellido"
+                                                formControlName="guarantorLastName" />
+                                        </p-inputgroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-envelope"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Correo" formControlName="guarantoremail" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
 
-                                    <p-inputgroup>
-                                        <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
-                                        <input pInputText placeholder="Apellido" formControlName="guarantorLastName" />
-                                    </p-inputgroup>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/2">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Edad" formControlName="age" />
+                                        </p-inputgroup>
+                                    </div>
 
+                                    <div class="w-1/2">
+                                        <p-dropdown [options]="estadosCiviles" optionLabel="label" optionValue="value"
+                                            placeholder="Seleccione estado civil" formControlName="marital_status"
+                                            id="marital_status" [showClear]="true" class="w-full">
+                                            <ng-template pTemplate="selectedItem" let-selectedOption>
+                                                <i class="pi pi-user mr-2" *ngIf="selectedOption"></i>
+                                                <span *ngIf="selectedOption">{{ selectedOption.label }}</span>
+                                                <span *ngIf="!selectedOption">Seleccione estado civil</span>
+                                            </ng-template>
+
+                                            <ng-template let-option pTemplate="item">
+                                                <i class="pi pi-user mr-2"></i>
+                                                {{ option.label }}
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h5>Domicilio actual</h5>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
                                     <p-inputgroup>
                                         <p-inputgroup-addon><i class="pi pi-user"></i></p-inputgroup-addon>
                                         <input pInputText placeholder="Dirección"
                                             formControlName="guarantorDirection" />
                                     </p-inputgroup>
+                                </div>
 
-                                    <p-inputgroup>
-                                        <p-inputgroup-addon><i class="pi pi-envelope"></i></p-inputgroup-addon>
-                                        <input pInputText placeholder="Correo" formControlName="guarantoremail" />
-                                    </p-inputgroup>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/3">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-map-marker"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Ciudad" formControlName="city" />
+                                        </p-inputgroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-map-marker"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Estado" formControlName="state" />
+                                        </p-inputgroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-map-marker"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Código Postal" formControlName="CP" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
 
-                                    <p-inputgroup>
-                                        <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
-                                        <input pInputText placeholder="Telefono" formControlName="guarantormovil" />
-                                    </p-inputgroup>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/3">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon><i class="pi pi-mobile"></i></p-inputgroup-addon>
+                                            <input pInputText placeholder="Celular" formControlName="guarantormovil" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
+
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h5>Datos tipo de propiedad del aval</h5>
+                                    </div>
+                                </div>
+
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/4">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                            <input pInputText id="propia_pagada" placeholder=" Propia Pagada"
+                                                [readOnly]="true" />
+                                            <p-inputGroupAddon>
+                                                <p-checkbox formControlName="type_housing_paid" name="type_housing_paid"
+                                                    value="propia_pagada" [binary]="true" />
+                                            </p-inputGroupAddon>
+                                        </p-inputGroup>
+                                    </div>
+                                    <div *ngIf="getGuarantorForm(i).get('type_housing_paid')?.value" class="w-3/4">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                            <input pInputText id="address_paid" formControlName="address_paid"
+                                                placeholder=" Domicilio" />
+                                        </p-inputGroup>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/4">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                            <input pInputText id="propia_pagando" placeholder=" Propia Pagandola"
+                                                [readOnly]="true" />
+                                            <p-inputGroupAddon>
+                                                <p-checkbox formControlName="type_housing_paying"
+                                                    name="type_housing_paying" value="propia_pagando" [binary]="true" />
+                                            </p-inputGroupAddon>
+
+                                        </p-inputGroup>
+                                    </div>
+                                    <div *ngIf="getGuarantorForm(i).get('type_housing_paying')?.value" class="w-3/4">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                            <input pInputText id="address_payment" formControlName="address_payment"
+                                                placeholder=" Domicilio" />
+                                        </p-inputGroup>
+                                    </div>
+                                </div>
+                                <div *ngIf="getGuarantorForm(i).get('type_housing_paying')?.value"
+                                    class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/4">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-calendar"></i></p-inputGroupAddon>
+                                            <p-datepicker id="mortgage_date" formControlName="mortgage_date"
+                                                placeholder=" Fecha Hipoteca" />
+                                        </p-inputGroup>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <p-inputGroup>
+                                        <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                        <input pInputText id="final_comments" formControlName="final_comments"
+                                            placeholder=" Comentarios adicionales" />
+                                    </p-inputGroup>
+                                </div>
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h5>Datos laborales del aval</h5>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-2/3">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                            <input pInputText id="company" formControlName="company"
+                                                placeholder="Empresa" />
+                                        </p-inputGroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-dropdown [options]="tiposTrabajo" optionLabel="label" optionValue="value"
+                                            placeholder="Tipo de trabajo" formControlName="isOwner" id="isOwner"
+                                            [showClear]="true" class="w-full">
+                                            <ng-template let-option pTemplate="item">
+                                                {{ option.label }}
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-2/3">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-map-marker"></i></p-inputGroupAddon>
+                                            <input pInputText id="company_address" formControlName="company_address"
+                                                placeholder="Domicilio empresa" />
+                                        </p-inputGroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                            <input pInputText id="job" formControlName="job" placeholder="Puesto" />
+                                        </p-inputGroup>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="getGuarantorForm(i).get('isOwner')?.value === false"
+                                    class="field col-12 md:col-6 mb-3 flex gap-4">
+
+                                    <div class="w-1/2">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                            <input pInputText id="immediate_supervisor_name"
+                                                formControlName="immediate_supervisor_name"
+                                                placeholder=" Jefe inmediato" />
+                                        </p-inputGroup>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="getGuarantorForm(i).get('isOwner')?.value === true"
+                                    class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <p-inputGroup>
+                                        <p-inputGroupAddon><i class="pi pi-info-circle"></i></p-inputGroupAddon>
+                                        <input pInputText id="another_job_industry"
+                                            formControlName="another_job_industry" placeholder=" Giro" />
+                                    </p-inputGroup>
+
+                                    <div class="w-1/2">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                                            <input pInputText id="another_incomes" formControlName="another_incomes"
+                                                placeholder=" Otros Ingresos" />
+                                        </p-inputGroup>
+                                    </div>
+                                </div>
+
+                                <div class="field col-12 md:col-6 mb-3 flex gap-4">
+                                    <div class="w-1/3">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-dollar"></i></p-inputGroupAddon>
+                                            <input pInputText id="monthly_income" formControlName="monthly_income"
+                                                placeholder="Ingreso mensual" />
+                                        </p-inputGroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-user"></i></p-inputGroupAddon>
+                                            <input pInputText id="job_seniority" formControlName="job_seniority"
+                                                placeholder="Antigüedad" />
+                                        </p-inputGroup>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <p-inputGroup>
+                                            <p-inputGroupAddon><i class="pi pi-phone"></i></p-inputGroupAddon>
+                                            <input pInputText id="company_phone_number"
+                                                formControlName="company_phone_number" placeholder="Teléfono" />
+                                        </p-inputGroup>
+                                    </div>
                                 </div>
                             </p-fluid>
                             <button *ngIf="isEliminable()" type="button" pButton icon="pi pi-times"
